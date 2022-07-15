@@ -1,0 +1,62 @@
+{
+  "name": "soliface",
+  "author": {
+    "name": "Demid Mosko",
+    "email": "demid.mosko@gmail.com"
+  },
+  "version": "0.1.0",
+  "dependencies": {
+    "@emotion/react": "latest",
+    "@emotion/styled": "latest",
+    "@mui/lab": "^5.0.0-alpha.90",
+    "@mui/material": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "ajv": "^8.11.0",
+    "assert": "^2.0.0",
+    "buffer": "^6.0.3",
+    "crypto-browserify": "^3.12.0",
+    "https-browserify": "^1.0.0",
+    "os-browserify": "^0.3.0",
+    "process": "^0.11.10",
+    "react": "latest",
+    "react-dom": "latest",
+    "react-hook-form": "^7.33.1",
+    "react-router-dom": "^6.3.0",
+    "react-scripts": "latest",
+    "react-use": "^17.4.0",
+    "stream-browserify": "^3.0.0",
+    "stream-http": "^3.2.0",
+    "typescript": "latest",
+    "url": "^0.11.0",
+    "web3": "^1.7.4",
+    "web3-react": "^5.0.5"
+  },
+  "scripts": {
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
+    "eject": "craco eject"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@craco/craco": "^7.0.0-alpha.7",
+    "@material-ui/lab": "^4.0.0-alpha.61",
+    "@mui/icons-material": "^5.8.4",
+    "@mui/x-data-grid": "^5.13.0",
+    "@mui/x-date-pickers": "^5.0.0-beta.0",
+    "crypto-hash": "^2.0.1",
+    "react-hook-form-mui": "^5.1.0"
+  }
+}
