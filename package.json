@@ -5,6 +5,7 @@
     "email": "demid.mosko@gmail.com"
   },
   "version": "0.1.0",
+  "homepage": "https://djomaa.github.io/soliface",
   "dependencies": {
     "@emotion/react": "latest",
     "@emotion/styled": "latest",
@@ -33,6 +34,8 @@
     "web3-react": "^5.0.5"
   },
   "scripts": {
+    "predeploy": "yarn build",
+    "deploy": "gh-pages -d build",
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",
@@ -57,6 +60,7 @@
     "@mui/x-data-grid": "^5.13.0",
     "@mui/x-date-pickers": "^5.0.0-beta.0",
     "crypto-hash": "^2.0.1",
+    "gh-pages": "^4.0.0",
     "react-hook-form-mui": "^5.1.0"
   }
 }
