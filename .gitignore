@@ -8,8 +8,8 @@
 # testing
 /coverage
 
-# production
-/build
+# # production
+# /build
 
 # IDEs and editors
 /.idea
