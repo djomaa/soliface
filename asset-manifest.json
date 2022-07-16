@@ -1,0 +1,10 @@
+{
+  "files": {
+    "main.js": "/soliface/static/js/main.c846e8e5.js",
+    "index.html": "/soliface/index.html",
+    "main.c846e8e5.js.map": "/soliface/static/js/main.c846e8e5.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.c846e8e5.js"
+  ]
+}
