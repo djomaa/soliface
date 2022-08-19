@@ -3,6 +3,8 @@ import { Button, ListItem, ListItemButton, Menu, MenuItem, TextField } from '@mu
 import { useChainCtx } from 'contexts/web3';
 import { useChainList } from 'hooks/use-chain-list';
 import { Chain } from 'types/chain';
+import { useWeb3React } from '@web3-react/core';
+import { useAuthMethod } from '../../hooks/useAuth';
 
 function search(chains: Chain[], value: string) {
   if (!value) {
@@ -32,6 +34,9 @@ function search(chains: Chain[], value: string) {
 
 export const ChainSelector: React.FC = () => {
   const [searchValue, setSearchValue] = useState<string>('');
+  const { chainId } = useWeb3React();
+  const { connectMetaMask } = useAuthMethod() as any;
+  console.log(chainId)
 
   const { chainList } = useChainList();
   const ctx = useChainCtx();
@@ -73,7 +78,8 @@ export const ChainSelector: React.FC = () => {
           setAnchorEl(event.currentTarget);
         }}
       >
-        {network?.name ?? "Not connected"}
+        {chainId ? `Connect ${chainId}`: 'Not connected'}
+       {/* {network?.name ?? "Not connected"}*/}
       </Button>
       <Menu
         anchorEl={anchorEl}
@@ -81,13 +87,8 @@ export const ChainSelector: React.FC = () => {
         onClose={() => setAnchorEl(null)}
         autoFocus={false}
       >
-        <MenuItem>
-          <TextField
-            value={searchValue}
-            onChange={(e) => {
-              return setSearchValue(e.target.value);
-            }}
-          ></TextField>
+        <MenuItem onClick={connectMetaMask}>
+         MetaMask
         </MenuItem>
         {options}
       </Menu>
