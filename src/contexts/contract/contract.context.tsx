@@ -10,6 +10,7 @@ import { useArtifactCtx } from 'contexts/artifact';
 enum SearchParam {
   Address = 'address',
   Artifact = 'artifact',
+  ArtifactHash = 'artifactHash',
 }
 
 interface IState {
@@ -42,6 +43,15 @@ export const ContractCtxProvider: React.FC<iProps> = ({ children }) => {
   const initial = useMemo(() => {
     const address = search.get(SearchParam.Address);
     let artifact: Artifact = artifacts[0]
+    if (search.has(SearchParam.ArtifactHash)) {
+      const searchHash = search.get(SearchParam.ArtifactHash);
+      const fArtifact = artifacts.find((i) => i.hash === searchHash);
+      if (fArtifact) {
+        artifact = fArtifact;
+      } else {
+        logger.log('Artifact not found by search hash', searchHash, artifacts)
+      }
+    }
     if (search.has(SearchParam.Artifact)) {
       const b64Artifact = search.get(SearchParam.Artifact)!;
       const strArtifact = decodeB64(b64Artifact);
@@ -64,7 +74,8 @@ export const ContractCtxProvider: React.FC<iProps> = ({ children }) => {
 
   useEffect(() => {
     search.set(SearchParam.Address, address);
-    search.set(SearchParam.Artifact, encodeB64(artifact.toString()));
+    search.set(SearchParam.ArtifactHash, artifact.hash);
+    // search.set(SearchParam.Artifact, encodeB64(artifact.toString()));
     setSearch(search);
   }, [address, artifact])
 

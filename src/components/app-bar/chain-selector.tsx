@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Button, ListItem, ListItemButton, Menu, MenuItem, TextField } from '@mui/material';
+import { Button, Menu, MenuItem, TextField, Tooltip } from '@mui/material';
 import { useChainCtx } from 'contexts/web3';
 import { useChainList } from 'hooks/use-chain-list';
 import { Chain } from 'types/chain';
@@ -35,8 +35,9 @@ export const ChainSelector: React.FC = () => {
 
   const { chainList } = useChainList();
   const ctx = useChainCtx();
+  const isWallet = !!ctx.wallet;
 
-  const network = chainList.find((n) => n.chainId === ctx.networkId);
+  const network = chainList.find((n) => n.chainId === ctx.chainId);
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -47,7 +48,7 @@ export const ChainSelector: React.FC = () => {
     if (!chain) {
       throw new Error('Unexpected error: cannot find chain by chainId');
     }
-    ctx.setConnector(chain.rpc[0]);
+    ctx.changeChain(chain);
   };
 
   const filtered = useMemo(() => {
@@ -58,13 +59,27 @@ export const ChainSelector: React.FC = () => {
     return (
       <MenuItem
         key={chain.chainId}
-        selected={chain.chainId === ctx.networkId}
+        selected={chain.chainId === ctx.chainId}
         onClick={() => changeChain(chain.chainId)}
       >
        {chain.name}
       </MenuItem>
     )
   })
+
+  if (isWallet) {
+    return (
+      <>
+        <Tooltip title='Chain is controlled by wallet'>
+          <span>
+            <Button>
+              {network?.name ?? 'Not connected'}
+            </Button>
+          </span>
+        </Tooltip>
+      </>
+    );
+  }
 
   return (
     <div>

@@ -1,23 +1,24 @@
 import Web3 from 'web3';
-import { useCallback } from 'react';
+import { useCallback, useContext } from 'react';
 import { useWeb3Context } from 'web3-react';
-import { Web3Context } from 'web3-react/dist/context';
+// import { Web3Context } from 'web3-react/dist/context';
 import { EncodeFailedAbiCoderError } from './abi-coder.errors';
 import { abiCoder } from 'helpers/abi';
+import { Web3Context } from './web3.context';
 
 type EncodeFunctionCall = Web3['eth']['abi']['encodeFunctionCall'];
 
-interface IWeb3Context extends Web3Context {
-  library: Web3;
-}
-
 export const useChainCtx = () => {
-  return useWeb3Context() as IWeb3Context;
+  const ctx = useContext(Web3Context!)
+  if (!ctx) {
+    throw new Error('useChainCtx: Web3Context is null');
+  }
+  return ctx;
 }
 
 export const useWeb3 = () => {
   const ctx = useChainCtx();
-  return ctx.library;
+  return ctx.web3;
 }
 
 export const useBaseAbiCoder = () => {

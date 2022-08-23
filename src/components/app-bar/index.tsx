@@ -1,11 +1,12 @@
 import React from 'react';
-import { AppBar as MuiAppBar, Button, CircularProgress, Toolbar } from '@mui/material';
+import { AppBar as MuiAppBar, Toolbar, Box } from '@mui/material';
+
 import { State } from './state';
 import { ChainSelector } from './chain-selector';
-import { useChainCtx } from 'contexts/web3';
+import { WalletSelector } from './wallet-selector';
 
 export const AppBar: React.FC = () => {
-  const ctx = useChainCtx();
+
   return (
     <MuiAppBar
       position="static"
@@ -14,14 +15,10 @@ export const AppBar: React.FC = () => {
       >
       <Toolbar>
         <State />
-        <ChainSelector />
-        <Button
-          onClick={() => {
-            ctx.setConnector('metamask');
-          }}
-        >
-          Connect MetaMask
-        </Button>
+        <Box sx={{ flexGrow: 1 }}>
+          <ChainSelector />
+        </Box>
+        <WalletSelector />
       </Toolbar>
     </MuiAppBar>
   )
