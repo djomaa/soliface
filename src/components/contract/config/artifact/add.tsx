@@ -89,6 +89,19 @@ export const AddArtifactDialog: React.FC<iProps> = (props) => {
           error={!!error}
         />
       </DialogContent>
+      <DialogActions>
+        <Button
+          autoFocus
+          onClick={() => {
+            window.scroll(0, 0)
+            document.body.scrollTo({ top: 0 });
+            console.log('scroll!!!');
+          }
+          }
+        >
+          Go to the top!
+        </Button>
+      </DialogActions>
     </Dialog>
   )
 }

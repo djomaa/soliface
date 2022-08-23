@@ -3,6 +3,7 @@ import { DefaultAbi } from 'constants/abi'
 import { AbiItem } from 'types/abi';
 import { Artifact } from 'helpers/abi';
 import { useLogger } from 'hooks/use-logger';
+import { useArtifactStore } from 'hooks/use-artifact-store';
 
 const DefaultArtifacts = Object.keys(DefaultAbi).map((name) => new Artifact(name, () => DefaultAbi[name]));
 
@@ -21,17 +22,19 @@ export const ArtifactCtxProvider: React.FC<iProps> = (props) => {
 
   const [logger, { logState }] = useLogger(ArtifactCtxProvider);
 
-  const [artifacts, setArtifacts] = useState(DefaultArtifacts);
-  const addArtifact = useCallback((artifact: Artifact) => {
-    setArtifacts((p) => {
-      for (const item of p) {
-        if (item.hash === artifact.hash && item.name === artifact.name) {
-          return p;
-        }
-      }
-      return [...artifacts, artifact];
-    });
-  }, []);
+  const [artifacts, addArtifact] = useArtifactStore();
+
+  // const [artifacts, setArtifacts] = useState(DefaultArtifacts);
+  // const addArtifact = useCallback((artifact: Artifact) => {
+  //   setArtifacts((p) => {
+  //     for (const item of p) {
+  //       if (item.hash === artifact.hash && item.name === artifact.name) {
+  //         return p;
+  //       }
+  //     }
+  //     return [...artifacts, artifact];
+  //   });
+  // }, []);
 
   logState('artifacts', artifacts);
 
