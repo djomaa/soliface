@@ -1,10 +1,14 @@
 {
   "files": {
-    "main.js": "/soliface/static/js/main.35562655.js",
+    "main.css": "/soliface/static/css/main.527e6d0b.css",
+    "main.js": "/soliface/static/js/main.4e25fa9e.js",
+    "static/media/metamask.svg": "/soliface/static/media/metamask.a622bbd390fb63631ba1016291fece1c.svg",
     "index.html": "/soliface/index.html",
-    "main.35562655.js.map": "/soliface/static/js/main.35562655.js.map"
+    "main.527e6d0b.css.map": "/soliface/static/css/main.527e6d0b.css.map",
+    "main.4e25fa9e.js.map": "/soliface/static/js/main.4e25fa9e.js.map"
   },
   "entrypoints": [
-    "static/js/main.35562655.js"
+    "static/css/main.527e6d0b.css",
+    "static/js/main.4e25fa9e.js"
   ]
 }
