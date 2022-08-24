@@ -1,0 +1,10 @@
+.AlertSuccessContentFullWidth {
+  & .MuiAlert-message {
+    width: 100%;
+  }
+}
+
+.ClickableText {
+  cursor: pointer;
+  color: #1976d2;
+}

@@ -1,4 +1,5 @@
 import { Link, Stack } from '@mui/material';
+import { useChainCtx } from 'contexts/web3';
 import React, { useEffect, useMemo, useState } from 'react';
 import { AbiItem } from 'types/abi';
 import { MethodInput } from './input';
@@ -27,6 +28,7 @@ export const TxParams: React.FC<iProps> = ({ abi }) => {
   const alwaysOpenFields = useMemo(() => {
     return abi.stateMutability === 'payable' ? [TxArg.Value] : []
   }, [abi]);
+  const chainCtx = useChainCtx();
   const [fields, setFields] = React.useState<TxArg[]>(alwaysOpenFields);
   const [open, setOpen] = useState(false);
 
@@ -42,12 +44,14 @@ export const TxParams: React.FC<iProps> = ({ abi }) => {
 
   const inputs = useMemo(() => {
     return fields.map((txArg) => {
+      const defaultValue = txArg === TxArg.From && chainCtx.wallet ? chainCtx.account : undefined;
       return (
         <MethodInput
           key={txArg}
           label={txArg}
           path={['tx', txArg]}
           type={TxArgType[txArg]}
+          defaultValue={defaultValue}
         />
       )
     });

@@ -31,6 +31,7 @@ interface IState {
   chainId: number | null;
   web3: Web3;
   status: Status;
+  account: string;
 }
 
 export const Web3Context = createContext<IState | null>(null);
@@ -97,7 +98,6 @@ export const Web3CtxProvider: React.FC<iProps> = (props) => {
     if (!ctx.connectorName.startsWith(WALLET_CONNECTOR_PREFIX)) {
       return null;
     }
-    console.log(wallets, ctx.connectorName);
     
     const wallet = wallets.find((w) => {
       return formConnectorName(w.name) === ctx.connectorName;
@@ -126,6 +126,7 @@ export const Web3CtxProvider: React.FC<iProps> = (props) => {
     chainId: ctx.networkId ?? null,
     web3: ctx.library as Web3,
     status,
+    account: ctx.account!,
   }
 
   return (

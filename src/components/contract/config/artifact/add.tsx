@@ -6,10 +6,12 @@ import { useContractCtx } from 'contexts/contract';
 import { SafeError } from 'types/common';
 import { useArtifactCtx } from 'contexts/artifact';
 
+// TODO: make always on top button save (and name input);
 interface iProps {
   open: boolean;
   close: () => void;
 }
+
 export const AddArtifactDialog: React.FC<iProps> = (props) => {
   const { close, open } = props;
   const [name, setName] = useState('');
@@ -89,19 +91,6 @@ export const AddArtifactDialog: React.FC<iProps> = (props) => {
           error={!!error}
         />
       </DialogContent>
-      <DialogActions>
-        <Button
-          autoFocus
-          onClick={() => {
-            window.scroll(0, 0)
-            document.body.scrollTo({ top: 0 });
-            console.log('scroll!!!');
-          }
-          }
-        >
-          Go to the top!
-        </Button>
-      </DialogActions>
     </Dialog>
   )
 }

@@ -41,7 +41,6 @@ export const useArtifactStore = () => {
   useEffect(() => {
     logger.log('Updating..')
     const existing = Storage.getAllKeys('item', '.*');
-    console.log("🚀 ~ file: use-artifact-store.ts ~ line 30 ~ useEffect ~ existing", existing)
     for (const item of existing) {
       const cur = list.find((i) => i.actualHash === item);
       if (!cur) {

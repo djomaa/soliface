@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
+import { Button, Menu, MenuItem } from '@mui/material';
+
 import { useChainCtx } from 'contexts/web3';
-import { AppBar as MuiAppBar, Button, CircularProgress, Toolbar, Box, AppBar, IconButton, Typography, Menu, MenuItem } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
 import { useWalletList, IWallet } from 'hooks/use-wallet-list';
 
 export const WalletSelector: React.FC = () => {

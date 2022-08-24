@@ -3,7 +3,6 @@ import { FormContainer } from 'react-hook-form-mui';
 import { ExpandMore } from '@mui/icons-material';
 import { Stack, Accordion, AccordionSummary, Typography, AccordionDetails, Tooltip, Divider, Box, Container, ButtonGroup } from '@mui/material';
 import { MethodInputs } from './inputs';
-import { MethodResult } from './result';
 import { MethodActions } from './actions';
 import { useMethodCtx } from './context';
 
@@ -12,7 +11,7 @@ interface iProps {
 export const ContractMethodBody: React.FC<iProps> = () => {
   const [open, setOpen] = useState(false);
   const ctx = useMethodCtx();
-
+  
   return (
     <Accordion
       expanded={open}
@@ -32,7 +31,7 @@ export const ContractMethodBody: React.FC<iProps> = () => {
           <Stack spacing={1.5}>
             <MethodInputs />
             <MethodActions />
-            <MethodResult />
+            {ctx.result}
           </Stack>
         </FormContainer>
       </AccordionDetails>

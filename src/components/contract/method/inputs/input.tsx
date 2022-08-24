@@ -5,17 +5,19 @@ export interface iInputProps {
   label: string;
   type: string;
   path: (string | number)[];
+  defaultValue?: string;
 }
-export const MethodInput: React.FC<iInputProps> = ({ label, type, path }) => {
+export const MethodInput: React.FC<iInputProps> = ({ label, type, path, defaultValue }) => {
   const name = path.join('.');
   return (
     <TextFieldElement
-        key={label}
-        name={name}
-        label={`${label} - ${type}`}
-        fullWidth
-        variant='standard'
-        margin='normal'
-      />
+      fullWidth
+      variant='standard'
+      margin='normal'
+      value={defaultValue}
+      key={label}
+      name={name}
+      label={`${label} - ${type}`}
+    />
   )
 }

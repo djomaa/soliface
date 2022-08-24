@@ -1,9 +1,8 @@
 import React from 'react';
-import { useChainCtx } from 'contexts/web3'
 import { Circle } from '@mui/icons-material';
-import { Status } from 'contexts/web3/web3.context';
-import { ComposedIcon } from 'components/composed-icon';
 import { SvgIcon } from '@mui/material';
+
+import { useChainCtx, Status } from 'contexts/web3'
 
 function getColorByStatus(status: Status) {
   switch (status) {
@@ -28,9 +27,6 @@ export const State: React.FC = () => {
       error: 'red',
       success: 'green',
     }
-    console.log('wqeqweqw');
-    console.log(realColor[color]);
-    // console.log(<ctx.wallet.icon />);
     return (
       <>
         <SvgIcon

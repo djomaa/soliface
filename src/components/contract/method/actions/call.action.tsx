@@ -7,15 +7,16 @@ import { useAsyncAction } from 'hooks/use-async-action';
 import React, { useMemo, useCallback, useEffect } from 'react';
 import { AbiItem } from 'types/abi';
 import { useMethodCtx } from '../context';
+import { CallResult } from '../result/call/call.result';
 import { IMethodActionConf } from '../types';
 
 export const CallAction: React.FC = () => {
-  const { abi, form, performAction, setAction } = useMethodCtx();
+  const { abi, form, setResult } = useMethodCtx();
   const contractCtx = useContractCtx();
   const web3 = useWeb3();
   const safeAbiCoder = useWeb3SafeAbiCoder();
 
-  const action = useAsyncAction(async (res: IMethodActionConf) => {
+  const [action, perform] = useAsyncAction(async (res: IMethodActionConf) => {
     const { params, tx } = res;
     const data = safeAbiCoder.encodeFunctionCall(abi, params);
     const result = await web3.eth.call({
@@ -28,7 +29,10 @@ export const CallAction: React.FC = () => {
   }, [web3, abi]);
   
   useEffect(() => {
-    setAction(action);
+    if (!action) {
+      return;
+    }
+    setResult(<CallResult action={action}/>);
   }, [action])
 
   const disabledReason = useMemo(() => {
@@ -43,9 +47,9 @@ export const CallAction: React.FC = () => {
   const callButton = (
     <LoadingButton
       type="submit"
-      onClick={form.handleSubmit(action.perform)}
+      onClick={form.handleSubmit(perform)}
       variant='outlined'
-      loading={action.loading}
+      loading={action?.loading}
       disabled={!!disabledReason}
     >
       Call

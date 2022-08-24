@@ -46,7 +46,6 @@ export function safeValue<
   ...args: Parameters<T>
 ): ReturnType<T> | undefined {
   const [value, error] = safe(fn, ...args);
-  console.log("🚀 ~ file: safe.tsx ~ line 34 ~ error", error)
   
   return value;
 }

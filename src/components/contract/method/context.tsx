@@ -3,16 +3,20 @@ import { IAction } from 'hooks/use-async-action';
 import { useForm, UseFormReturn } from 'react-hook-form';
 import { AbiItem } from 'types/abi'
 import { IMethodActionConf } from './types';
+import { useChainCtx } from 'contexts/web3';
+import { useLogger } from 'hooks/use-logger';
 
-interface IMethodCtxState<T = IMethodActionConf> {
+// type IActionResult<T> = (action: )
+
+interface IState<T = IMethodActionConf> {
   abi: AbiItem;
   form: UseFormReturn<T>;
-  action: IAction<string, [T]> | undefined;
-  performAction: (action: IAction<string, [T]>, params: [T]) => void;
-  setAction: (action: IAction<string, [T]>) => void;
-
+  // action: IAction<string, [T]> | undefined;
+  result?: JSX.Element;
+  // updateAction: <R>(action: IAction<R, [T]>, handler: React.FC<{ action: IAction<R, [T]> }>) => void;
+  setResult: (result: JSX.Element) => void;
 }
-export const MethodCtx = createContext<IMethodCtxState | null>(null);
+export const MethodCtx = createContext<IState | null>(null);
 
 export const useMethodCtx = () => {
   const ctx = useContext(MethodCtx);
@@ -28,19 +32,28 @@ interface iProps {
 }
 
 export const MethodCtxProvider: React.FC<iProps> = ({ abi, children }) => {
+  const [logger, { logState }] = useLogger(MethodCtxProvider);
+  const chainCtx = useChainCtx();
   const form = useForm<IMethodActionConf>({ defaultValues: { tx: {}, params: [] } });
-  const [action, setAction] = useState<IAction<string>>();
-  const performAction = (action: IAction<string>, params: any) => {
-    setAction(action);
-    action.perform(...params);
-  }
+  // const [action, setAction] = useState<IAction<any>>();
+  const [result, setResult] = useState<IState['result']>();
+  // const updateAction = <R>(action: IAction<R>, handler: IState['Result']) => {
 
-  const value: IMethodCtxState = {
+  logState('Result changed', result);
+
+  useEffect(() => {
+    if (!chainCtx.wallet) {
+      return;
+    }
+    const { from } = form.getValues().tx;
+    form.setValue('tx.from', chainCtx.account);
+  }, [chainCtx.wallet, chainCtx.account])
+
+  const value: IState = {
     abi,
     form,
-    action,
-    performAction,
-    setAction,
+    result,
+    setResult,
   }
   return (
     <MethodCtx.Provider value={value}>
