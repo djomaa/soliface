@@ -1,5 +1,5 @@
-import { Box, Breadcrumbs, BreadcrumbsTypeMap, Button, ButtonGroup, Divider, IconButton, Link, Stack, Typography, TypographyTypeMap } from '@mui/material';
-import React, { useMemo } from 'react';
+import { Box, Breadcrumbs, BreadcrumbsTypeMap, Button, ButtonGroup, Divider, IconButton, Link, Stack, Tooltip, Typography, TypographyTypeMap } from '@mui/material';
+import React, { useMemo, useState } from 'react';
 import { TextFieldElement } from 'react-hook-form-mui';
 import { useCounter } from 'react-use';
 import { parseInput } from './parse';
@@ -10,83 +10,48 @@ import styles from 'styles/common.module.scss'
 import { TypographyProps } from '@mui/system';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
-import { OverridableComponent, OverrideProps } from '@mui/material/OverridableComponent';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import { PathBreadcrump } from './path-breadcrump';
 
 export interface iInputProps {
   position: (string | number)[];
   path: string[];
   components: AbiInput[];
   defaultValue?: string;
+  size: number | undefined;
 }
 
-interface IBuildBreadcrumpOpts {
-  breadcrumb?: OverrideProps<BreadcrumbsTypeMap, any>;
-  typography?: TypographyTypeMap['props'];
-}
-function buildBreadcrump(items: any[], props?: IBuildBreadcrumpOpts) {
-  return (
-    <Breadcrumbs aria-label="breadcrumb" {...props?.breadcrumb}>
-      {items.map((item) => <Typography {...props?.typography}>{item}</Typography>)}
-    </Breadcrumbs>
-  )
-}
 
-function preparePath(path: (string | number)[]) {
-  return path.reduce((acc, item, i) => {
-    const isFirst = i === 0;
-    if (typeof item === 'string') {
-      if (!isFirst) {
-        acc += '.';
-      }
-      acc += item
-    } else {
-      acc += `[${item}]`
-    }
-    return acc;
-  }, '')
-}
-
-export const MethodArrayInput: React.FC<iInputProps> = ({ position, path, defaultValue, components }) => {
-  console.log("🚀 ~ file: array-input.tsx:33 ~ path", { position, path })
-
-  const [count, a] = useCounter(1, null, 1);
+export const MethodArrayInput: React.FC<iInputProps> = ({ position, path, defaultValue, size, components }) => {
+  const [count, a] = useCounter(size ?? 1, size ?? null, size ?? 1);
   const [logger] = useLogger(MethodArrayInput.name);
-  logger.debug('Count is', count)
 
-  const addRemove = (
-    <ButtonGroup variant="text" size='small'>
-      <IconButton onClick={() => a.inc()}>
+  const disabled = !!size;
+  let addRemove = (
+    <ButtonGroup variant="text" size='small' >
+      <IconButton onClick={() => a.inc()} disabled={disabled}>
         <AddIcon />
       </IconButton>
-      <IconButton onClick={() => a.dec()}>
+      <IconButton onClick={() => a.dec()} disabled={disabled}>
         <RemoveIcon />
       </IconButton>
-      {/* <Button onClick={() => a.inc()}>Add</Button>
-      <Button onClick={() => a.dec()}>Remove</Button> */}
     </ButtonGroup>
-    // <Stack direction="row">
-    //   <Link
-    //     variant='subtitle2'
-    //     onClick={() => a.inc()}
-    //   >
-    //     Add
-    //   </Link>
-
-    //   <Link
-    //     variant='subtitle2'
-    //     onClick={() => a.dec()}
-    //   >
-    //     Remove
-    //   </Link>
-    // </Stack>
   );
+
+  if (disabled) {
+    addRemove = (
+      <Tooltip title='Array has strict size'>
+        {addRemove}
+      </Tooltip>
+    )
+  }
 
   const elements = useMemo(() => {
     logger.debug('Creating methods', { count, components });
     const a1 = Array.from({ length: count }, (_, i) => {
       const inputs = components
         .map((component, j) => {
-          const fPosition = [...position, i, j];
+          const fPosition = [...position, i];
           const fPath = [...path, i];
           const inputs = parseInput(component, fPosition, fPath);
           return inputs;
@@ -94,7 +59,11 @@ export const MethodArrayInput: React.FC<iInputProps> = ({ position, path, defaul
         .flat()
       return (
         <Box className={styles.ArrayInputItem}>
-          {buildBreadcrump([...path, i], { breadcrumb: { className: styles.ArrayInputItemHeader }, typography: { variant: 'subtitle2', color: 'text.secondary' } })}
+          <PathBreadcrump
+            path={[...path, i]}
+            breadcrumb={{ className: styles.ArrayInputHeader }}
+            typography={{ variant: 'subtitle2', color: 'text.secondary' }}
+          />
           {inputs}
         </Box >
       )
@@ -107,7 +76,11 @@ export const MethodArrayInput: React.FC<iInputProps> = ({ position, path, defaul
   return (
     <>
       <Box className={styles.ArrayInputBox}>
-        {buildBreadcrump(path, { breadcrumb: { className: styles.ArrayInputHeader }, typography: { variant: 'subtitle2', color: 'text.primary' } })}
+        <PathBreadcrump
+          path={path}
+          breadcrumb={{ className: styles.ArrayInputHeader }}
+          typography={{ variant: 'subtitle2', color: 'text.primary' }}
+        />
         {addRemove}
         {elements}
       </Box>

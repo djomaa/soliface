@@ -13,7 +13,7 @@ export const MethodInputs: React.FC<iProps> = () => {
   const { abi } = useMethodCtx();
   const inputs = abi.inputs
     ?.map((item, i) => {
-      return parseInput(item, [i], []);
+      return parseInput(item, ['params', i], []);
     })
     .flat()
   // .map((item) => {

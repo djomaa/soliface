@@ -10,7 +10,7 @@ export interface iInputProps {
   /**
    * path to postion in final web3 array
    */
-  position: number[];
+  position: (string | number)[];
   path: (string | number)[];
   defaultValue?: string;
 }
@@ -22,16 +22,16 @@ export const MethodInput: React.FC<iInputProps> = ({ name, type, position, path,
     // {/* <Typography>{label}</Typography> */}
     <TextFieldElement
       fullWidth
-      variant='standard'
-      // variant='outlined'
-      // margin='none'
+      // variant='standard'
+      variant='outlined'
+      margin='dense'
       value={defaultValue}
       key={name}
       // name={fullPosition}
       name={fullPosition}
       // label={type}
-      // label={name}
-      label={fullPath}
+      label={name}
+      // label={fullPath}
       InputProps={{
         startAdornment: < InputAdornment position="start" >{position.join(',')}</InputAdornment>,
         endAdornment: < InputAdornment position="end">{type}</InputAdornment>

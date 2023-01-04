@@ -46,14 +46,15 @@ export const TxParams: React.FC<iProps> = ({ abi }) => {
     return fields.map((txArg) => {
       const defaultValue = txArg === TxArg.From && chainCtx.wallet ? chainCtx.account : undefined;
       return (
-        <>a</>
-        // <MethodInput
-        //   key={txArg}
-        //   name={txArg}
-        //   path={['tx', txArg]}
-        //   type={TxArgType[txArg]}
-        //   defaultValue={defaultValue}
-        // />
+        // <>a</>
+        <MethodInput
+          key={txArg}
+          name={txArg}
+          position={['tx', txArg]}
+          path={[txArg]}
+          type={TxArgType[txArg]}
+          defaultValue={defaultValue}
+        />
       )
     });
   }, [fields]);
