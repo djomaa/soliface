@@ -3,6 +3,10 @@ declare module 'styles/common.module.scss' {
     AlertSuccessContentFullWidth: string;
     ClickableText;
     'MuiAlert-message': string;
+    ArrayInputBox: string;
+    ArrayInputItem: string;
+    ArrayInputHeader: string;
+    ArrayInputItemHeader: string;
   };
   export default classes;
 }

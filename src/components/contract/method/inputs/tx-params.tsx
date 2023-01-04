@@ -46,13 +46,14 @@ export const TxParams: React.FC<iProps> = ({ abi }) => {
     return fields.map((txArg) => {
       const defaultValue = txArg === TxArg.From && chainCtx.wallet ? chainCtx.account : undefined;
       return (
-        <MethodInput
-          key={txArg}
-          label={txArg}
-          path={['tx', txArg]}
-          type={TxArgType[txArg]}
-          defaultValue={defaultValue}
-        />
+        <>a</>
+        // <MethodInput
+        //   key={txArg}
+        //   name={txArg}
+        //   path={['tx', txArg]}
+        //   type={TxArgType[txArg]}
+        //   defaultValue={defaultValue}
+        // />
       )
     });
   }, [fields]);
@@ -60,15 +61,15 @@ export const TxParams: React.FC<iProps> = ({ abi }) => {
   const toggleButtonText = open ? 'Hide transaction parameters' : 'Show all transaction parameters'
   return (
     <>
-      <Stack>
-        {inputs}
-      </Stack>
       <Link
         variant='subtitle2'
         onClick={toggleOpen}
       >
         {toggleButtonText}
       </Link>
+      <Stack>
+        {inputs}
+      </Stack>
     </>
   )
 }

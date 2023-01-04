@@ -19,6 +19,13 @@ export const CallAction: React.FC = () => {
   const [action, perform] = useAsyncAction(async (res: IMethodActionConf) => {
     const { params, tx } = res;
     const data = safeAbiCoder.encodeFunctionCall(abi, params);
+    const est = await web3.eth.estimateGas({
+      from: ZERO_ADDRESS,
+      to: contractCtx.address,
+      data,
+      ...tx,
+    });
+    console.log('Gas limit !!!', est)
     const result = await web3.eth.call({
       from: ZERO_ADDRESS,
       to: contractCtx.address,

@@ -1,23 +1,42 @@
+import { InputAdornment, Typography } from '@mui/material';
 import React from 'react';
 import { TextFieldElement } from 'react-hook-form-mui';
+import { AbiInput, AbiItem } from 'types/abi';
+import { MethodArrayInput } from './array-input';
 
 export interface iInputProps {
-  label: string;
+  name: string;
   type: string;
+  /**
+   * path to postion in final web3 array
+   */
+  position: number[];
   path: (string | number)[];
   defaultValue?: string;
 }
-export const MethodInput: React.FC<iInputProps> = ({ label, type, path, defaultValue }) => {
-  const name = path.join('.');
+export const MethodInput: React.FC<iInputProps> = ({ name, type, position, path, defaultValue }) => {
+  const fullPosition = position.join('.');
+  const fullPath = path.join('.');
   return (
+    // <div>
+    // {/* <Typography>{label}</Typography> */}
     <TextFieldElement
       fullWidth
       variant='standard'
-      margin='normal'
+      // variant='outlined'
+      // margin='none'
       value={defaultValue}
-      key={label}
-      name={name}
-      label={`${label} - ${type}`}
+      key={name}
+      // name={fullPosition}
+      name={fullPosition}
+      // label={type}
+      // label={name}
+      label={fullPath}
+      InputProps={{
+        startAdornment: < InputAdornment position="start" >{position.join(',')}</InputAdornment>,
+        endAdornment: < InputAdornment position="end">{type}</InputAdornment>
+      }}
     />
+    // </div>
   )
 }
