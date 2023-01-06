@@ -1,9 +1,9 @@
 import React from 'react';
-import { IAction } from 'hooks/use-async-action';
-import { useLogger } from 'hooks/use-logger';
+import { Alert, AlertTitle, CircularProgress } from '@mui/material';
+
 import { AbiCoderError } from 'contexts/web3';
-import { Alert, AlertTitle, CircularProgress, Stack, Switch, Typography } from '@mui/material';
-import { Mode } from '@mui/icons-material';
+import { useLogger } from 'hooks/use-logger';
+import { IAction } from 'hooks/use-async-action';
 
 export function parseActionError(error: unknown): { title: string, body: JSX.Element } {
   if (error instanceof AbiCoderError) {
@@ -67,7 +67,7 @@ export const ResultSuccess: React.FC<IAlterProps> = ({ title, body }) => {
 export const ResultLoading: React.FC<IAlterProps> = ({ title, body }) => {
   return (
     <Alert
-      icon={<CircularProgress size={20}/>}
+      icon={<CircularProgress size={20} />}
       severity='info'
       variant='outlined'>
       <AlertTitle>

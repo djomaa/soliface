@@ -1,11 +1,12 @@
+import { useCopyToClipboard } from 'react-use';
 import React, { useMemo, useState } from 'react';
-import { Dialog, DialogContent, Icon, IconButton, Link, List, ListItem, Modal, Paper, Stack, SvgIconTypeMap, Tooltip, Typography } from '@mui/material';
+import { Launch as OriginalLaunchIcon, ContentCopy as CopyIcon } from '@mui/icons-material'
+import { Dialog, DialogContent, IconButton, Link, List, ListItem, SvgIconTypeMap, Tooltip } from '@mui/material';
+
+import { Chain } from 'types/chain';
 import { useChainCtx } from 'contexts/web3';
 import { useChainList } from 'hooks/use-chain-list';
-import { Launch as OriginalLaunchIcon, ContentCopy as CopyIcon } from '@mui/icons-material'
-import { Chain } from 'types/chain';
-import { generateTxLink, generateTxLinkByChain } from 'helpers/explorer';
-import { useCopyToClipboard } from 'react-use';
+import { generateTxLinkByChain } from 'helpers/explorer';
 
 const LaunchIcon: React.FC<SvgIconTypeMap['props']> = (props) => <OriginalLaunchIcon {...props} fontSize='small' />
 

@@ -1,7 +1,7 @@
 import Web3 from 'web3';
 import React from 'react'
-import { Alert, AlertTitle, TextField } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
+
 import { AbiItem, AbiOutput } from 'types/abi';
 
 const DataGridColumns: GridColDef[] = [
@@ -44,7 +44,7 @@ function parseOutput(item: AbiOutput, path: number[]): iOut[] {
       return parseOutput(cItem, [...path, i]);
     }).flat();
   }
-  
+
   const out = {
     name: item.name,
     type: item.type,

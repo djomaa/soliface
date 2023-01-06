@@ -1,14 +1,14 @@
+import React, { useMemo, useEffect } from 'react';
 import { LoadingButton } from '@mui/lab';
 import { Tooltip } from '@mui/material';
-import { ZERO_ADDRESS } from 'constants/chain';
+
 import { useContractCtx } from 'contexts/contract';
-import { useChainCtx, useWeb3, useWeb3SafeAbiCoder } from 'contexts/web3';
 import { useAsyncAction } from 'hooks/use-async-action';
-import React, { useMemo, useCallback, useEffect } from 'react';
-import { AbiItem } from 'types/abi';
+import { useChainCtx, useWeb3, useWeb3SafeAbiCoder } from 'contexts/web3';
+
 import { useMethodCtx } from '../context';
-import { WriteResult } from '../result/write/write.result';
 import { IMethodActionConf } from '../types';
+import { WriteResult } from '../result/write/write.result';
 
 export const WriteAction: React.FC = () => {
   const { abi, form, setResult } = useMethodCtx();
@@ -46,11 +46,6 @@ export const WriteAction: React.FC = () => {
     }
     setResult(<WriteResult action={action} />);
   }, [action])
-
-  // const perform = (params: IMethodActionConf) => {
-  //   action.perform(params);
-  //   setResult(<WriteResult action={action} />);
-  // }
 
   const disabledReason = useMemo(() => {
     if (!chainCtx.wallet) {

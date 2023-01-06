@@ -1,8 +1,10 @@
-import { Link, Stack } from '@mui/material';
-import { useChainCtx } from 'contexts/web3';
 import React, { useEffect, useMemo, useState } from 'react';
+import { Link, Stack } from '@mui/material';
+
 import { AbiItem } from 'types/abi';
-import { MethodInput } from './input';
+import { useChainCtx } from 'contexts/web3';
+
+import { MethodInput } from './base/base.input';
 
 enum TxArg {
   From = 'from',
@@ -46,10 +48,12 @@ export const TxParams: React.FC<iProps> = ({ abi }) => {
     return fields.map((txArg) => {
       const defaultValue = txArg === TxArg.From && chainCtx.wallet ? chainCtx.account : undefined;
       return (
+        // <>a</>
         <MethodInput
           key={txArg}
-          label={txArg}
-          path={['tx', txArg]}
+          name={txArg}
+          position={['tx', txArg]}
+          path={[txArg]}
           type={TxArgType[txArg]}
           defaultValue={defaultValue}
         />
@@ -60,15 +64,15 @@ export const TxParams: React.FC<iProps> = ({ abi }) => {
   const toggleButtonText = open ? 'Hide transaction parameters' : 'Show all transaction parameters'
   return (
     <>
-      <Stack>
-        {inputs}
-      </Stack>
       <Link
         variant='subtitle2'
         onClick={toggleOpen}
       >
         {toggleButtonText}
       </Link>
+      <Stack>
+        {inputs}
+      </Stack>
     </>
   )
 }

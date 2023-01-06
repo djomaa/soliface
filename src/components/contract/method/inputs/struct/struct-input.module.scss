@@ -1,0 +1,16 @@
+@import  'styles/common.module.scss';
+
+.MethodStructInput {
+  @extend .MethodInputMargin;
+
+  &Header {
+    padding-right: 1vw;
+    background-color: #F0F0F0;
+  }
+  
+  &Body {
+    @extend .MethodInputLevel;
+    border-left: 1.5px solid #1a1a1a;
+  }
+
+}

@@ -1,16 +1,15 @@
-import { IAction } from 'hooks/use-async-action';
 import { PromiEvent, TransactionReceipt } from 'web3-core';
 import React, { useEffect, useMemo, useState } from 'react'
+import { Alert, AlertProps, AlertTitle, CircularProgress, List, ListItem, ListItemText, Tooltip } from '@mui/material';
+
 import { useLogger } from 'hooks/use-logger';
-import { Alert, AlertProps, AlertTitle, CircularProgress, IconButton, Link, List, ListItem, ListItemText, Tooltip, Typography } from '@mui/material';
-import { parseActionError, ResultLoading, ResultSuccess, ResultWarning } from '../base';
-import { useChainCtx } from 'contexts/web3';
-import { useChainList } from 'hooks/use-chain-list';
-import { IExplorer } from 'types/chain';
+import { IAction } from 'hooks/use-async-action';
+import { FalseReceiptStatusDescription } from 'constants/text.constants';
+
+import { parseActionError } from '../base';
+import styles from 'styles/common.module.scss'
 import { TxHashSection } from './tx-hash.section';
 import { ReceiptSection } from './receipt.section';
-import { FalseReceiptStatusDescription } from 'constants/text.constants';
-import styles from 'styles/common.module.scss'
 
 interface iProps {
   action: IAction<{ promiEvent: PromiEvent<any> }>;
@@ -150,7 +149,7 @@ export const WriteResult: React.FC<iProps> = ({ action }) => {
 
   const title = useMemo(() => {
     if (action?.error) {
-        return parseActionError(action.error).title;
+      return parseActionError(action.error).title;
     }
     if (receipt && !receipt.status) {
       return (
@@ -171,7 +170,7 @@ export const WriteResult: React.FC<iProps> = ({ action }) => {
       severity={severity}
       variant={variant}
       {...(isLoading ? { icon: <CircularProgress size={20} /> } : undefined)}
-      {...(severity === 'success' ? { className: styles.AlertSuccessContentFullWidth }: undefined)}
+      {...(severity === 'success' ? { className: styles.AlertSuccessContentFullWidth } : undefined)}
     >
       <AlertTitle>{title}</AlertTitle>
       {body}
