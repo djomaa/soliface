@@ -4,7 +4,7 @@ import { Link, Stack } from '@mui/material';
 import { AbiItem } from 'types/abi';
 import { useChainCtx } from 'contexts/web3';
 
-import { MethodInput } from './input';
+import { MethodInput } from './base/base.input';
 
 enum TxArg {
   From = 'from',

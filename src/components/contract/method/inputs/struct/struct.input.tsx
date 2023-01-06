@@ -2,19 +2,20 @@ import React from 'react';
 import { Box } from '@mui/material';
 
 import { AbiInput } from 'types/abi';
-import styles from 'styles/common.module.scss';
-import { PathBreadcrump } from './path-breadcrump';
 
-import { parseInput } from './parse';
+import { parseInput } from '../parse';
+import style from './struct-input.module.scss';
+import { MethodStructInputHeader } from './header';
 
 export interface iInputProps {
   position: (string | number)[];
   path: string[];
   components: AbiInput[];
   defaultValue?: string;
+  type: string;
 }
 
-export const MethodStructInput: React.FC<iInputProps> = ({ position, path, defaultValue, components }) => {
+export const MethodStructInput: React.FC<iInputProps> = ({ type, position, path, defaultValue, components }) => {
   const inputs = components
     .map((input, i) => {
       const fPosition = [...position, i];
@@ -25,15 +26,11 @@ export const MethodStructInput: React.FC<iInputProps> = ({ position, path, defau
     .flat()
 
   return (
-    <>
-      <Box className={styles.ArrayInputBox}>
-        <PathBreadcrump
-          path={path}
-          breadcrumb={{ className: styles.ArrayInputHeader }}
-          typography={{ variant: 'subtitle2', color: 'text.primary' }}
-        />
+    <Box className={style.MethodStructInput}>
+      <MethodStructInputHeader type={type} path={path} />
+      <Box className={style.MethodStructInputBody}>
         {inputs}
       </Box>
-    </>
+    </Box >
   )
 }

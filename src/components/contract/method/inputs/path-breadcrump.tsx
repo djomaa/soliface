@@ -38,11 +38,12 @@ export const PathBreadcrump: React.FC<IPathBreadcrumpProps> = ({ path, breadcrum
     <Stack
       direction='row'
       alignItems='center'
-      className={styles.ArrayInputHeader} >
-      {more}
+    // className={styles.ArrayInputHeader}
+    >
       <Breadcrumbs>
         {items}
       </Breadcrumbs >
+      {more}
     </Stack >
   );
 }

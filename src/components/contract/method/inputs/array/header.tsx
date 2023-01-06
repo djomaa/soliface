@@ -1,8 +1,8 @@
 import React from 'react';
 import { Stack, Typography } from '@mui/material';
 
-import styles from 'styles/common.module.scss'
 
+import style from './array-input.module.scss'
 import { PathBreadcrump } from '../path-breadcrump';
 
 export interface IProps {
@@ -17,7 +17,7 @@ export const ArrayInputHeader: React.FC<IProps> = ({ type, path, }) => {
       direction='row'
       justifyContent='space-between'
       alignItems='center'
-      className={styles.ArrayInputHeader}
+      className={style.MethodArrayInputHeader}
     >
       <PathBreadcrump
         path={path}

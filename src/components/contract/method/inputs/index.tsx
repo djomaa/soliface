@@ -10,8 +10,8 @@ interface iProps {
 export const MethodInputs: React.FC<iProps> = () => {
   const { abi } = useMethodCtx();
   const inputs = abi.inputs
-    ?.map((item, i) => {
-      return parseInput(item, ['params', i], []);
+    ?.map((input, i) => {
+      return parseInput(input, ['params', i], [input.name]);
     })
     .flat()
 

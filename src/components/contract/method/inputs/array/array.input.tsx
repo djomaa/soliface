@@ -6,11 +6,10 @@ import { Box, ButtonGroup, IconButton, Stack, Tooltip } from '@mui/material';
 
 import { AbiInput } from 'types/abi';
 import { useLogger } from 'hooks/use-logger';
-import styles from 'styles/common.module.scss'
 
 import { parseInput } from '../parse';
+import style from './array-input.module.scss'
 import { ArrayInputHeader } from './header';
-import { PathBreadcrump } from '../path-breadcrump';
 
 export interface iInputProps {
   type: string;
@@ -50,21 +49,15 @@ export const MethodArrayInput: React.FC<iInputProps> = ({ type, position, path, 
     logger.debug('Creating methods', { count, components });
     const a1 = Array.from({ length: count }, (_, i) => {
       const inputs = components
-        .map((component, j) => {
+        .map((component) => {
           const fPosition = [...position, i];
           const fPath = [...path, i];
           const inputs = parseInput(component, fPosition, fPath);
           return inputs;
         })
-        .flat()
-      console.log('!!!', type)
+      // .flat()
       return (
-        <Box className={styles.ArrayInputItem}>
-          <PathBreadcrump
-            path={[...path, i]}
-            breadcrumb={{ className: styles.ArrayInputHeader }}
-            typography={{ variant: 'subtitle2', color: 'text.secondary' }}
-          />
+        <Box>
           {inputs}
         </Box >
       )
@@ -75,12 +68,12 @@ export const MethodArrayInput: React.FC<iInputProps> = ({ type, position, path, 
 
 
   return (
-    <>
-      <Box className={styles.ArrayInputBox}>
-        <ArrayInputHeader type={type} path={path} />
+    <Box className={style.MethodArrayInput}>
+      <ArrayInputHeader type={type} path={path} />
+      <Box className={style.MethodArrayInputBody}>
         {addRemove}
         {elements}
       </Box>
-    </>
+    </Box>
   )
 }

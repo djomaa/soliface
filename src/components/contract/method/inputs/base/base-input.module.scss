@@ -1,0 +1,14 @@
+@import  'styles/common.module.scss';
+
+.MethodInput {
+  @extend .MethodInputMargin;
+
+  &Header {
+    color: white;
+  }
+  
+  Box {
+
+  }
+
+}

@@ -9,60 +9,10 @@
   color: #1976d2;
 }
 
-.ArrayInputBox {
-  border-left: 2px solid #1a1a1a;
-  border-top: 2px solid #1a1a1a;
-  padding-left: 1vw;
-  margin-top: 1vh;
+.MethodInputMargin {
+  padding-top: 1vh;
+}
 
-  & .ArrayInputHeader {
-    // border-left: 2px solid #2DCDDF;
-    padding-left: 1vw;
-    background-color: #F0F0F0;
-  //   background: repeating-linear-gradient(
-  //     45deg,
-  //     rgba(0, 255, 255, 0.4),
-  //     rgba(0, 255, 255, 0.4) 5px,
-  //     white 5px,
-  //     white 10px,
-  // );  
-  }
-
-  & x.ArrayInputItem:first-child {
-      border-top: 2px dashed red;
-  }
-
-  & .ArrayInputItem {
-    // border-left: 2px solid #2DCDDF;
-    border-bottom: 2px dashed #1a1a1a;
-    // padding-left: 1vw;
-    margin-top: 1vh;
-    padding-bottom: 1vh;
-
-    // & :first-child {
-    //   border-bottom: 2px dashed white;
-    // }
-    
-
-    & .ArrayInputItemHeader {
-      // border-left: 2px solid #2DCDDF;
-      // border-top: 2px dotted #2DCDDF;
-      // padding-left: 1vw;
-      // margin-top: 1vh;
-      // border: 2px  dashed aqua
-    //   background: repeating-linear-gradient(
-    //     90deg,
-    //     rgba(0, 255, 255, 0.6),
-    //     rgba(0, 255, 255, 0.6) 5px,
-    //     white 5px,
-    //     white 10px,
-    // ); 
-    }
-
-    // :next {
-    //   border-top: 2px dashed #1a1a1a;
-    // }
-
-  }
-
+.MethodInputLevel {
+  padding-left: 0.5vw;
 }
