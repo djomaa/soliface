@@ -1,19 +1,19 @@
-import { Box, Breadcrumbs, BreadcrumbsTypeMap, Button, ButtonGroup, Divider, IconButton, Link, Stack, Tooltip, Typography, TypographyTypeMap } from '@mui/material';
-import React, { useMemo, useState } from 'react';
-import { TextFieldElement } from 'react-hook-form-mui';
+import React, { useMemo } from 'react';
 import { useCounter } from 'react-use';
-import { parseInput } from './parse';
-import { AbiInput } from 'types/abi';
-import { MethodInput } from './input';
-import { useLogger } from 'hooks/use-logger';
-import styles from 'styles/common.module.scss'
-import { TypographyProps } from '@mui/system';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import { PathBreadcrump } from './path-breadcrump';
+import { Box, ButtonGroup, IconButton, Stack, Tooltip } from '@mui/material';
+
+import { AbiInput } from 'types/abi';
+import { useLogger } from 'hooks/use-logger';
+import styles from 'styles/common.module.scss'
+
+import { parseInput } from '../parse';
+import { ArrayInputHeader } from './header';
+import { PathBreadcrump } from '../path-breadcrump';
 
 export interface iInputProps {
+  type: string;
   position: (string | number)[];
   path: string[];
   components: AbiInput[];
@@ -22,7 +22,7 @@ export interface iInputProps {
 }
 
 
-export const MethodArrayInput: React.FC<iInputProps> = ({ position, path, defaultValue, size, components }) => {
+export const MethodArrayInput: React.FC<iInputProps> = ({ type, position, path, defaultValue, size, components }) => {
   const [count, a] = useCounter(size ?? 1, size ?? null, size ?? 1);
   const [logger] = useLogger(MethodArrayInput.name);
 
@@ -57,6 +57,7 @@ export const MethodArrayInput: React.FC<iInputProps> = ({ position, path, defaul
           return inputs;
         })
         .flat()
+      console.log('!!!', type)
       return (
         <Box className={styles.ArrayInputItem}>
           <PathBreadcrump
@@ -76,11 +77,7 @@ export const MethodArrayInput: React.FC<iInputProps> = ({ position, path, defaul
   return (
     <>
       <Box className={styles.ArrayInputBox}>
-        <PathBreadcrump
-          path={path}
-          breadcrumb={{ className: styles.ArrayInputHeader }}
-          typography={{ variant: 'subtitle2', color: 'text.primary' }}
-        />
+        <ArrayInputHeader type={type} path={path} />
         {addRemove}
         {elements}
       </Box>

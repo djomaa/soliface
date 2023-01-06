@@ -1,11 +1,13 @@
 import React, { useMemo, useState } from 'react'
 import { Stack, Switch, Typography } from '@mui/material';
+
 import { useWeb3 } from 'contexts/web3';
-import { MethodDecodedResult } from './decoded-result';
-import { useMethodCtx } from '../../context';
-import { IAction } from 'hooks/use-async-action';
 import { useLogger } from 'hooks/use-logger';
+import { IAction } from 'hooks/use-async-action';
+
 import { BaseResult } from '../base';
+import { useMethodCtx } from '../../context';
+import { MethodDecodedResult } from './decoded-result';
 
 enum Mode {
   Raw,

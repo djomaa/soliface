@@ -1,11 +1,9 @@
-import { Stack } from '@mui/material';
 import React from 'react';
-import { AbiInput, AbiItem } from 'types/abi';
-import { useMethodCtx } from '../context';
-import { MethodArrayInput } from './array-input';
-import { MethodInput, iInputProps } from './input';
+import { Stack } from '@mui/material';
+
 import { parseInput } from './parse';
 import { TxParams } from './tx-params';
+import { useMethodCtx } from '../context';
 
 interface iProps {
 }
@@ -16,9 +14,6 @@ export const MethodInputs: React.FC<iProps> = () => {
       return parseInput(item, ['params', i], []);
     })
     .flat()
-  // .map((item) => {
-  //   return <MethodInput key={item.label} {...item} />;
-  // })
 
   return (
     <>

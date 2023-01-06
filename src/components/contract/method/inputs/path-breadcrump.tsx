@@ -1,10 +1,10 @@
 import React, { useState, useMemo } from 'react';
-import styles from 'styles/common.module.scss'
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import { OverrideProps } from '@mui/material/OverridableComponent';
 import { Breadcrumbs, BreadcrumbsTypeMap, IconButton, Stack, Typography, TypographyTypeMap } from '@mui/material';
+
+import styles from 'styles/common.module.scss'
 
 interface IPathBreadcrumpProps {
   path: (string | number)[];
@@ -14,6 +14,7 @@ interface IPathBreadcrumpProps {
 
 export const PathBreadcrump: React.FC<IPathBreadcrumpProps> = ({ path, breadcrumb, typography }) => {
   const [open, setOpen] = useState(false);
+
   const more = useMemo(() => {
     if (path.length === 1) {
       return;
@@ -22,7 +23,7 @@ export const PathBreadcrump: React.FC<IPathBreadcrumpProps> = ({ path, breadcrum
       ? <IconButton size='small' onClick={() => setOpen((prev) => !prev)}><ArrowLeftIcon fontSize='small' /></IconButton>
       : <IconButton size='small' onClick={() => setOpen((prev) => !prev)}><ArrowRightIcon fontSize='small' /></IconButton>;
   }, [open]);
-  // const more = <IconButton size='small' onClick={() => setOpen((prev) => !prev)}><MoreHorizIcon fontSize='small' /></IconButton>
+
   const items = useMemo(() => {
     if (open) {
       return path.map((item, i) => {
@@ -32,6 +33,7 @@ export const PathBreadcrump: React.FC<IPathBreadcrumpProps> = ({ path, breadcrum
     const part = <Typography {...typography}>{path[path.length - 1]}</Typography>;
     return path.length === 1 ? [part] : [<div />, part]
   }, [open]);
+
   return (
     <Stack
       direction='row'

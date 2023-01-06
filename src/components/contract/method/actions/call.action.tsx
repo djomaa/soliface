@@ -1,14 +1,15 @@
-import { LoadingButton } from '@mui/lab';
+import React, { useMemo, useEffect } from 'react';
 import { Tooltip } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
+
 import { ZERO_ADDRESS } from 'constants/chain';
 import { useContractCtx } from 'contexts/contract';
-import { useWeb3, useWeb3SafeAbiCoder } from 'contexts/web3';
 import { useAsyncAction } from 'hooks/use-async-action';
-import React, { useMemo, useCallback, useEffect } from 'react';
-import { AbiItem } from 'types/abi';
+import { useWeb3, useWeb3SafeAbiCoder } from 'contexts/web3';
+
 import { useMethodCtx } from '../context';
-import { CallResult } from '../result/call/call.result';
 import { IMethodActionConf } from '../types';
+import { CallResult } from '../result/call/call.result';
 
 export const CallAction: React.FC = () => {
   const { abi, form, setResult } = useMethodCtx();
@@ -34,12 +35,12 @@ export const CallAction: React.FC = () => {
     });
     return result;
   }, [web3, abi]);
-  
+
   useEffect(() => {
     if (!action) {
       return;
     }
-    setResult(<CallResult action={action}/>);
+    setResult(<CallResult action={action} />);
   }, [action])
 
   const disabledReason = useMemo(() => {
