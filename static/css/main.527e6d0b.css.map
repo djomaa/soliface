@@ -1,1 +1,0 @@
-{"version":3,"file":"static/css/main.527e6d0b.css","mappings":"AACE,6EACE,WAIJ,6BAEE,cADA,cACA","sources":["styles/common.module.scss"],"sourcesContent":[".AlertSuccessContentFullWidth {\n  & .MuiAlert-message {\n    width: 100%;\n  }\n}\n\n.ClickableText {\n  cursor: pointer;\n  color: #1976d2;\n}\n"],"names":[],"sourceRoot":""}
