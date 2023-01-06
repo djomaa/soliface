@@ -4,8 +4,6 @@ import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import { OverrideProps } from '@mui/material/OverridableComponent';
 import { Breadcrumbs, BreadcrumbsTypeMap, IconButton, Stack, Typography, TypographyTypeMap } from '@mui/material';
 
-import styles from 'styles/common.module.scss'
-
 interface IPathBreadcrumpProps {
   path: (string | number)[];
   breadcrumb?: OverrideProps<BreadcrumbsTypeMap, any>;
@@ -38,7 +36,6 @@ export const PathBreadcrump: React.FC<IPathBreadcrumpProps> = ({ path, breadcrum
     <Stack
       direction='row'
       alignItems='center'
-    // className={styles.ArrayInputHeader}
     >
       <Breadcrumbs>
         {items}
