@@ -5,7 +5,6 @@
     "email": "demid.mosko@gmail.com"
   },
   "version": "0.1.0",
-  "homepage": "https://djomaa.github.io/soliface",
   "dependencies": {
     "@emotion/react": "latest",
     "@emotion/styled": "latest",
