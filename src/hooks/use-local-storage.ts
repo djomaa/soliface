@@ -20,8 +20,8 @@ export class LocalStorageWrap {
 
   constructor(...oKeys: string[]) {
     const keys = [LocalStorageWrap.PROJECT_NAME, ...oKeys];
-    this._baseKey = this._key(keys, false);
-    
+    this._baseKey = this.formatKey(keys, false);
+
   }
 
   serialize<T>(value: T): string {
@@ -31,7 +31,7 @@ export class LocalStorageWrap {
     return JSON.parse(value);
   }
   get<T>(...keys: Key[]) {
-    const key = this._key(keys)
+    const key = this.formatKey(keys)
     const raw = this._store.getItem(key);
     if (!raw) {
       return;
@@ -40,7 +40,7 @@ export class LocalStorageWrap {
     return value;
   }
   getAll(...keys: Key[]) {
-    const key = this._key(keys, false)
+    const key = this.formatKey(keys, false)
     const pattern = new RegExp(`^${key}`)
     const values = this.keys(pattern).map(key => this.get(key));
     return values;
@@ -48,20 +48,24 @@ export class LocalStorageWrap {
 
   getAllKeys(...parts: (RegExp | string)[]) {
     const keys = parts.map(i => i.toString());
-    const fullKey = this._key(keys, false);
+    const fullKey = this.formatKey(keys, false);
     const pattern = new RegExp(`^${fullKey}`)
 
-    return this.keys(pattern);
+    const result = this.keys(pattern);
+    return result.map((key) => {
+      const last = key.lastIndexOf(this._delemiter);
+      return key.substring(last + 1);
+    })
   }
 
   set<T>(value: T, ...keys: Key[]) {
-    const key = this._key(keys)
+    const key = this.formatKey(keys)
     const raw = this.serialize(value);
     this._store.setItem(key, raw);
   }
 
   remove(...keys: Key[]) {
-    const key = this._key(keys)
+    const key = this.formatKey(keys)
     this._store.removeItem(key);
   }
 
@@ -77,7 +81,7 @@ export class LocalStorageWrap {
         if (!key.startsWith(this._baseKey)) {
           continue;
         }
-        const normalizedKey = key.substring(this._baseKey.length + 1);
+        const normalizedKey = this.removeKey(key, this._baseKey);
         keys.push(normalizedKey);
       }
       this._keys = keys;
@@ -93,13 +97,22 @@ export class LocalStorageWrap {
   }
 
 
-  private _key(keys: Key[], useBaseKey: boolean = true) {
+  formatKey(keys: Key[], useBaseKey: boolean = true) {
     const part = keys.join(this._delemiter);
     return useBaseKey ? this._baseKey + this._delemiter + part : part;
+  }
+
+  removeKey(value: string, key: string) {
+    return value.substring(key.length + 1);
+  }
+
+  removeKeys(value: string, keys: string[]) {
+    const totalLength = keys.reduce((acc, key) => acc + key.length + 1, 0);
+    return value.substring(keys.length);
   }
 
   static PROJECT_NAME = 'soliface';
 }
 
 export const MyStorage = new LocalStorageWrap();
-export {}
+export { }

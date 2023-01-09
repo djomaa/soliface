@@ -5,6 +5,7 @@ import { AppBar } from 'components/app-bar';
 import { ContractCtxProvider } from 'contexts/contract';
 import { Contract } from 'components/contract';
 import { ArtifactCtxProvider } from 'contexts/artifact/artifact.context';
+import { AbiManager } from 'components/abi-manager';
 
 export const MainPage: React.FC = () => {
 
@@ -12,10 +13,11 @@ export const MainPage: React.FC = () => {
     <ChainCtxProvider>
       <ArtifactCtxProvider>
         <ContractCtxProvider>
-          <AppBar />
+          <AbiManager />
+          {/* <AppBar />
           <Container>
             <Contract />
-          </Container>
+          </Container> */}
         </ContractCtxProvider>
       </ArtifactCtxProvider>
     </ChainCtxProvider>

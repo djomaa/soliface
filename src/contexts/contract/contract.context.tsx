@@ -22,8 +22,8 @@ interface IState {
 export const ContractContext = createContext<IState>({
   artifact: undefined,
   address: undefined,
-  setAddress: () => {},
-  setArtifact: () => {},
+  setAddress: () => { },
+  setArtifact: () => { },
 });
 
 export const useContractCtx = () => {
@@ -68,13 +68,15 @@ export const ContractCtxProvider: React.FC<iProps> = ({ children }) => {
   }, [])
 
   const [address, setAddress] = useState<string>(initial.address ?? '');
-  const [artifact, setArtifact] = useState(initial.artifact);
+  const [artifact, setArtifact] = useState<Artifact | undefined>(initial.artifact);
 
   logState('artifact', artifact);
 
   useEffect(() => {
     search.set(SearchParam.Address, address);
-    search.set(SearchParam.ArtifactHash, artifact.hash);
+    if (artifact) {
+      search.set(SearchParam.ArtifactHash, artifact.hash);
+    }
     // search.set(SearchParam.Artifact, encodeB64(artifact.toString()));
     setSearch(search);
   }, [address, artifact])
