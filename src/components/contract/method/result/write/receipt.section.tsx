@@ -1,7 +1,10 @@
 import { useToggle } from 'react-use';
 import React, { useMemo } from 'react';
 import { TransactionReceipt } from 'web3-core';
-import { Dialog, DialogContent, TextField } from '@mui/material';
+
+import Dialog from '@mui/material/Dialog';
+import TextField from '@mui/material/TextField';
+import DialogContent from '@mui/material/DialogContent';
 
 import styles from 'styles/common.module.scss'
 

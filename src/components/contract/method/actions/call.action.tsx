@@ -1,6 +1,7 @@
 import React, { useMemo, useEffect } from 'react';
-import { Tooltip } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+
+import Tooltip from '@mui/material/Tooltip';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 import { ZERO_ADDRESS } from 'constants/chain';
 import { useContractCtx } from 'contexts/contract';

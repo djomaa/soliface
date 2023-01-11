@@ -1,7 +1,7 @@
-import React, { createContext, useCallback, useEffect, useState } from 'react';
-import { DefaultAbi } from 'constants/abi'
-import { AbiItem } from 'types/abi';
+import React, { createContext } from 'react';
+
 import { Artifact } from 'helpers/abi';
+import { DefaultAbi } from 'constants/abi';
 import { useLogger } from 'hooks/use-logger';
 import { useArtifactStore } from 'hooks/use-artifact-store';
 
@@ -10,6 +10,8 @@ const DefaultArtifacts = Object.keys(DefaultAbi).map((name) => new Artifact(name
 interface IState {
   artifacts: Artifact[];
   addArtifact: (artifact: Artifact) => void;
+  removeArtifact: (artifact: Artifact) => void;
+  saveArtifact: (artifact: Artifact) => void;
 }
 
 export const ArtifactContext = createContext<IState | null>(null);
@@ -22,7 +24,7 @@ export const ArtifactCtxProvider: React.FC<iProps> = (props) => {
 
   const [logger, { logState }] = useLogger(ArtifactCtxProvider);
 
-  const [artifacts, addArtifact] = useArtifactStore();
+  const [artifacts, addArtifact, removeArtifact, saveArtifact] = useArtifactStore();
 
   // const [artifacts, setArtifacts] = useState(DefaultArtifacts);
   // const addArtifact = useCallback((artifact: Artifact) => {
@@ -38,7 +40,7 @@ export const ArtifactCtxProvider: React.FC<iProps> = (props) => {
 
   logState('artifacts', artifacts);
 
-  const value = { artifacts, addArtifact };
+  const value = { artifacts, addArtifact, removeArtifact, saveArtifact };
   return (
     <ArtifactContext.Provider value={value}>
       {children}

@@ -1,10 +1,11 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { IAction } from 'hooks/use-async-action';
 import { useForm, UseFormReturn } from 'react-hook-form';
+import React, { createContext, useContext, useEffect, useState } from 'react';
+
 import { AbiItem } from 'types/abi'
-import { IMethodActionConf } from './types';
 import { useChainCtx } from 'contexts/web3';
 import { useLogger } from 'hooks/use-logger';
+
+import { IMethodActionConf } from './types';
 
 // type IActionResult<T> = (action: )
 

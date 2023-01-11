@@ -3,16 +3,19 @@ import { DefaultAbi } from 'constants/abi'
 import { AbiItem } from 'types/abi';
 import { Artifact } from 'helpers/abi';
 import { useLogger } from './use-logger';
-import { LocalStorageWrap } from './use-artifacts-storage';
+import { LocalStorageWrap } from './use-local-storage';
 
 type IShortList = Pick<Artifact, 'name' | 'hash'>[];
 
 const Storage = new LocalStorageWrap('artifacts');
 
+const DefaultArtifacts = Object.keys(DefaultAbi).map((name) => new Artifact(name, () => DefaultAbi[name]));
+
+
 function getOriginalList(): Artifact[] {
   const oList = Storage.get<IShortList>('list');
-  if (!oList) {
-    return [];
+  if (!oList || !oList.length) {
+    return DefaultArtifacts;
   }
   const result = oList.map(({ name, hash }) => {
     return new Artifact(name, () => Storage.get<AbiItem[]>('item', hash)!, hash);
@@ -20,7 +23,8 @@ function getOriginalList(): Artifact[] {
   return result;
 }
 
-const DefaultArtifacts = Object.keys(DefaultAbi).map((name) => new Artifact(name, () => DefaultAbi[name]));
+
+const ITEM = 'item';
 
 export const useArtifactStore = () => {
 
@@ -38,11 +42,33 @@ export const useArtifactStore = () => {
     setList([...list, artifact]);
   }, [list]);
 
+  const save = useCallback((artifact: Artifact) => {
+    logger.log('Save artifact', artifact.name, artifact.hash)
+    const isPresented = list.find((a) => a.hash === artifact.hash);
+    Storage.set(artifact.abi, artifact.hash);
+    if (isPresented) {
+      setList([...list]);
+    } else {
+      logger.warn('Artifact not presented');
+      setList([...list, artifact]);
+    }
+  }, [list]);
+
+  const remove = useCallback((artifact: Artifact) => {
+    logger.log('Remove artifact', artifact.name, artifact.hash);
+    const result = list.filter((a) => a.hash !== artifact.hash);
+    if (result.length === list.length) {
+      return;
+    }
+    setList(result);
+  }, [list]);
+
   useEffect(() => {
-    logger.log('Updating..')
-    const existing = Storage.getAllKeys('item', '.*');
+    logger.log('Updating..', list)
+    const existing = Storage.getAllKeys(ITEM, '.*');
+    logger.debug('Keys fetched', existing)
     for (const item of existing) {
-      const cur = list.find((i) => i.actualHash === item);
+      const cur = list.find((i) => i.hash === item);
       if (!cur) {
         logger.log('Removing', item)
         Storage.remove('item', item);
@@ -65,9 +91,17 @@ export const useArtifactStore = () => {
   }, [list]);
 
   const fullList = useMemo(() => {
-    return [...DefaultArtifacts, ...list];
+    // const defaults: Artifact[] = [];
+    // for (const defaultArtifact of DefaultArtifacts) {
+    //   const isProvided = list.find((a) => a.hash === defaultArtifact.hash);
+    //   if (!isProvided) {
+    //     defaults.push(defaultArtifact);
+    //   }
+    // }
+    // return [...defaults, ...list];
+    return [...list];
   }, [list]);
 
-  return [fullList, add] as const;
+  return [fullList, add, remove, save] as const;
 
 }

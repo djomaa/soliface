@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { useArtifactStore } from 'hooks/use-artifact-store';
-import { Artifact, safeDecodeAndValidateAbi } from 'helpers/abi';
-import { decodeB64, encodeB64 } from 'helpers/base64';
-import { safe, safeValue } from 'helpers/safe';
+
+import { safe } from 'helpers/safe';
+import { Artifact } from 'helpers/abi';
+import { decodeB64 } from 'helpers/base64';
 import { useLogger } from 'hooks/use-logger';
 import { useArtifactCtx } from 'contexts/artifact';
 
@@ -22,8 +22,8 @@ interface IState {
 export const ContractContext = createContext<IState>({
   artifact: undefined,
   address: undefined,
-  setAddress: () => {},
-  setArtifact: () => {},
+  setAddress: () => { },
+  setArtifact: () => { },
 });
 
 export const useContractCtx = () => {
@@ -42,7 +42,7 @@ export const ContractCtxProvider: React.FC<iProps> = ({ children }) => {
   const [search, setSearch] = useSearchParams();
   const initial = useMemo(() => {
     const address = search.get(SearchParam.Address);
-    let artifact: Artifact = artifacts[0]
+    let artifact: Artifact | undefined;
     if (search.has(SearchParam.ArtifactHash)) {
       const searchHash = search.get(SearchParam.ArtifactHash);
       const fArtifact = artifacts.find((i) => i.hash === searchHash);
@@ -68,13 +68,21 @@ export const ContractCtxProvider: React.FC<iProps> = ({ children }) => {
   }, [])
 
   const [address, setAddress] = useState<string>(initial.address ?? '');
-  const [artifact, setArtifact] = useState(initial.artifact);
+  const [artifact, setArtifact] = useState<Artifact | undefined>(initial.artifact);
 
   logState('artifact', artifact);
 
   useEffect(() => {
-    search.set(SearchParam.Address, address);
-    search.set(SearchParam.ArtifactHash, artifact.hash);
+    if (address) {
+      search.set(SearchParam.Address, address);
+    } else {
+      search.delete(SearchParam.Address);
+    }
+    if (artifact) {
+      search.set(SearchParam.ArtifactHash, artifact.hash);
+    } else {
+      search.delete(SearchParam.ArtifactHash);
+    }
     // search.set(SearchParam.Artifact, encodeB64(artifact.toString()));
     setSearch(search);
   }, [address, artifact])

@@ -25,7 +25,7 @@ function search(chains: Chain[], value: string) {
       return true
     }
     if (isHexSearch && chain.chainId === hexSearch) {
-        return true
+      return true
     }
     return false;
   });
@@ -63,7 +63,7 @@ export const ChainSelector: React.FC = () => {
         selected={chain.chainId === ctx.chainId}
         onClick={() => changeChain(chain.chainId)}
       >
-       {chain.name}
+        {chain.name}
       </MenuItem>
     )
   })
@@ -97,14 +97,14 @@ export const ChainSelector: React.FC = () => {
         onClose={() => setAnchorEl(null)}
         autoFocus={false}
       >
-        <MenuItem>
-          <TextField
+        {/* <MenuItem> */}
+        {/* <TextField
             value={searchValue}
             onChange={(e) => {
               return setSearchValue(e.target.value);
             }}
-          ></TextField>
-        </MenuItem>
+          ></TextField> */}
+        {/* </MenuItem> */}
         {options}
       </Menu>
     </div>

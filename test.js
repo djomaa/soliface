@@ -1,71 +1,36 @@
-const assert = require('assert')
-const coder = require('web3-eth-abi')
-console.log("🚀 ~ file: test.js:2 ~ coder", coder)
 
-const abi = {
-  "inputs": [
-    {
-      "components": [
-        {
-          "internalType": "uint256",
-          "name": "firstParentField",
-          "type": "uint256"
-        },
-        {
-          "components": [
-            {
-              "internalType": "uint256",
-              "name": "firstChildField",
-              "type": "uint256"
-            },
-            {
-              "internalType": "address[]",
-              "name": "secondChildField",
-              "type": "address[]"
-            },
-          ],
-          "internalType": "struct Contract.Child",
-          "name": "secondParentField",
-          "type": "tuple"
-        },
-      ],
-      "internalType": "struct Contract.Parent",
-      "name": "tokens",
-      "type": "tuple"
-    }
-  ],
-  "name": "updateDepositTokensWhitelist",
-  "stateMutability": "nonpayable",
-  "type": "function"
+const defaultStr = `import { Dialog } from '@mui/material';`;
+const str = process.argv[2] ?? defaultStr;
+
+const RE_LINE = /import { ([\w, ]+) } from '@mui\/material';?/;
+
+const match = str.match(RE_LINE);
+
+if (!match) {
+  return;
 }
 
-const data = [
-  [
-    "1",
-    ["2", ['0xbe807dddb074639cd9fa61b47676c064fc50d62c', '0x685b1ded8013785d6623cc18d214320b6bb64759']]
-  ]
-]
+const str1 = match[1];
+const RE_PART = /(\w+)/g;
+const match1 = str1.match(RE_PART);
+console.log('1', match1);
 
-const gen = [
-  [
-    "1",
-    [
-      "2",
-      [
-        [
-          "0x585b1ded8013785d6623cc18d214320b6bb64759"
-        ],
-        [
-          "0x685b1ded8013785d6623cc18d214320b6bb64759"
-        ]
-      ]
-    ]
-  ]
-]
+const res = match1
+  .map((m) => {
+    return `import ${m} from '@mui/material/${m}';`;
+  })
 
-assert.deepStrictEqual(data, gen);
 
-const res = coder.encodeFunctionCall(abi, data);
-console.log("🚀 ~ file: test.js:44 ~ res", res)
+const res1 = res
+  .sort((a, b) => {
+    // console.log('a, b', a.length, b.length, a > b)
+    return a.length - b.length;
+    if (a.length === b.length) {
+      return 0;
+    }
+    return a.length > b.length ? 1 : -1;
+  })
+
+console.log(res1.join('\n'));
 
 

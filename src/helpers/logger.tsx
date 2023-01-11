@@ -5,7 +5,7 @@ export class Logger {
   log(...args: any[]) {
     console.log(`[${this.prefix}]`, ...args);
   }
-  
+
   error(...args: any[]) {
     console.error(`[${this.prefix}]`, ...args);
   }
@@ -14,6 +14,9 @@ export class Logger {
     console.debug(`[${this.prefix}]`, ...args);
   }
 
+  warn(...args: any[]) {
+    console.warn(`[${this.prefix}]`, ...args);
+  }
 
   sub(prefix: string) {
     return new Logger(`${this.prefix}:${prefix}`);

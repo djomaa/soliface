@@ -1,6 +1,8 @@
 import React from 'react';
 import { TextFieldElement } from 'react-hook-form-mui';
-import { Box, InputAdornment } from '@mui/material';
+
+import Box from '@mui/material/Box';
+import InputAdornment from '@mui/material/InputAdornment';
 
 import style from './base-input.module.scss';
 import { PathBreadcrump } from '../path-breadcrump';

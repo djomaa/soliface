@@ -1,14 +1,32 @@
 import * as React from 'react';
-import { MainPage } from 'pages/main.page';
-import { AppBar } from 'components/app-bar';
-import { CssBaseline } from '@mui/material';
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
+
+import CssBaseline from '@mui/material/CssBaseline';
+
+import { AbiPage } from 'pages/abi';
+import { MainPage } from 'pages/main';
+import { Route } from 'constants/route';
+
+const router = createBrowserRouter([
+  {
+    path: Route.Home,
+    element: <MainPage />,
+  },
+  {
+    path: Route.Abi,
+    element: <AbiPage />,
+  },
+]);
 
 export const App: React.FC = () => {
   return (
     <>
       <CssBaseline />
       <main>
-      <MainPage />
+        <RouterProvider router={router} />
       </main>
     </>
   )

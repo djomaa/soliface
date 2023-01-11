@@ -1,12 +1,12 @@
 import Web3 from 'web3';
+import { useSearchParams } from 'react-router-dom';
 import Web3Provider, { useWeb3Context } from 'web3-react';
 import React, { createContext, useCallback, useEffect, useMemo } from 'react';
-import { Connector, InjectedConnector, NetworkOnlyConnector } from 'web3-react/dist/connectors';
-import { useChainList } from 'hooks/use-chain-list';
-import { useSearchParams } from 'react-router-dom';
-import { useChainCtx } from './web3.hooks';
-import { IWallet, useWalletList } from 'hooks/use-wallet-list';
+import { NetworkOnlyConnector } from 'web3-react/dist/connectors';
+
 import { Chain } from 'types/chain';
+import { useChainList } from 'hooks/use-chain-list';
+import { IWallet, useWalletList } from 'hooks/use-wallet-list';
 
 interface iProps {
   children: React.ReactNode | React.ReactNode[];
@@ -41,7 +41,7 @@ export const Initial: React.FC = () => {
   const ctx = useWeb3Context();
 
   const { chainList } = useChainList();
-  
+
   useEffect(() => {
     const chainId = search.get('chainId');
     if (!chainId) {
@@ -73,12 +73,11 @@ export const Initial: React.FC = () => {
 export const Web3CtxProvider: React.FC<iProps> = (props) => {
 
   const ctx = useWeb3Context();
-  const { chainList } = useChainList();
   const { wallets } = useWalletList();
 
   const connectWallet = useCallback((wallet: IWallet) => {
     const connectorName = formConnectorName(wallet.name)
-    ctx.setConnector(connectorName, { networkId: 1});
+    ctx.setConnector(connectorName, { networkId: 1 });
   }, []);
 
   const changeChain = useCallback((chain: Chain) => {
@@ -98,7 +97,7 @@ export const Web3CtxProvider: React.FC<iProps> = (props) => {
     if (!ctx.connectorName.startsWith(WALLET_CONNECTOR_PREFIX)) {
       return null;
     }
-    
+
     const wallet = wallets.find((w) => {
       return formConnectorName(w.name) === ctx.connectorName;
     });

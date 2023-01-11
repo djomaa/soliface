@@ -1,10 +1,12 @@
-import React, { useEffect, useMemo, useState } from 'react'
-import { Box, MenuItem, TextField } from '@mui/material'
+import React from 'react'
+import Box from '@mui/material/Box';
+import Skeleton from '@mui/material/Skeleton';
+
 import { useContractCtx } from 'contexts/contract';
+import { useBaseAbiCoder } from 'contexts/web3';
+
 import { ContractMethod } from './method';
-import { addressValidator } from 'helpers/validators';
 import { ContractConfig } from './config';
-import { useBaseAbiCoder, useWeb3 } from 'contexts/web3';
 
 export const Contract: React.FC = () => {
   const ctx = useContractCtx();
@@ -20,12 +22,22 @@ export const Contract: React.FC = () => {
       >
         <ContractConfig />
       </Box>
-      {methods && methods.map((item) => {
+      {methods ? methods.map((item) => {
         const fullName = abiCoder.encodeFunctionSignature(item);
         return (
           <ContractMethod key={fullName} abi={item} />
         )
-      })}
-      </>
-      )
+      }) : (
+        <Box>
+          <Skeleton variant="rectangular" height={100} />
+          <br />
+          <Skeleton variant="rectangular" height={100} />
+          <br />
+          <Skeleton variant="rectangular" height={100} />
+          <br />
+          <Skeleton variant="rectangular" height={100} />
+        </Box>
+      )}
+    </>
+  )
 }

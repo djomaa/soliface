@@ -1,6 +1,7 @@
 import React, { useMemo, useEffect } from 'react';
-import { LoadingButton } from '@mui/lab';
-import { Tooltip } from '@mui/material';
+
+import Tooltip from '@mui/material/Tooltip';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 import { useContractCtx } from 'contexts/contract';
 import { useAsyncAction } from 'hooks/use-async-action';

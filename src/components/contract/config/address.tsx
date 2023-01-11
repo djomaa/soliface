@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+
 import { TextField } from '@mui/material';
+
 import { useContractCtx } from 'contexts/contract';
 import { addressValidator } from 'helpers/validators';
 
@@ -20,7 +22,7 @@ export const AddressInput: React.FC = () => {
     }
   }
 
-  const errD = !focus && error 
+  const errD = !focus && error
   return (
     <TextField
       fullWidth

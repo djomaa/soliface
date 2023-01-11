@@ -1,7 +1,17 @@
 import { useCopyToClipboard } from 'react-use';
 import React, { useMemo, useState } from 'react';
-import { Launch as OriginalLaunchIcon, ContentCopy as CopyIcon } from '@mui/icons-material'
-import { Dialog, DialogContent, IconButton, Link, List, ListItem, SvgIconTypeMap, Tooltip } from '@mui/material';
+
+import CopyIcon from '@mui/icons-material/ContentCopy'
+import OriginalLaunchIcon from '@mui/icons-material/Launch'
+
+import Link from '@mui/material/Link';
+import List from '@mui/material/List';
+import Dialog from '@mui/material/Dialog';
+import Tooltip from '@mui/material/Tooltip';
+import ListItem from '@mui/material/ListItem';
+import IconButton from '@mui/material/IconButton';
+import { SvgIconTypeMap } from '@mui/material/SvgIcon';
+import DialogContent from '@mui/material/DialogContent';
 
 import { Chain } from 'types/chain';
 import { useChainCtx } from 'contexts/web3';

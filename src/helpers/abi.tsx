@@ -39,6 +39,15 @@ export class Artifact {
     return this.getAbi();
   }
 
+  setAbi(abi: AbiItem[], originalHash?: string) {
+    this.getAbi = () => abi;
+    if (this.originalHash) {
+      this.originalHash = originalHash;
+    } else {
+      this.actualHash = makeAbiHash(abi);
+    }
+  }
+
   get hash(): string {
     if (this.originalHash) {
       return this.originalHash;
@@ -47,6 +56,10 @@ export class Artifact {
       this.actualHash = makeAbiHash(this.abi);
     }
     return this.actualHash;
+  }
+
+  get uid() {
+    return `${this.hash}-${this.name}`;
   }
 
   toJSON() {
@@ -97,7 +110,7 @@ export function safeDecodeAndValidateAbi(value: string): [DecodeAndValidateAbiRe
   const [json, jsonError] = safe(() => JSON.parse(value));
   if (jsonError) {
     const error = { message: 'Invalid json', details: jsonError.message };
-   return [undefined, error];
+    return [undefined, error];
   }
   const hash = safeObj(() => makeAbiHash(json));
   if (hash.error) {

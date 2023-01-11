@@ -21,21 +21,21 @@ export const State: React.FC = () => {
   const ctx = useChainCtx();
   const color = getColorByStatus(ctx.status);
 
-  if (ctx.wallet) {
-    const realColor = {
-      disabled: 'gray',
-      error: 'red',
-      success: 'green',
-    }
-    return (
-      <>
-        <SvgIcon
-          inheritViewBox
-          component={ctx.wallet.icon}
-        />
-      </>
-    );
-  }
+  // if (ctx.wallet) {
+  //   const realColor = {
+  //     disabled: 'gray',
+  //     error: 'red',
+  //     success: 'green',
+  //   }
+  //   return (
+  //     <>
+  //       <SvgIcon
+  //         inheritViewBox
+  //         component={ctx.wallet.icon}
+  //       />
+  //     </>
+  //   );
+  // }
 
 
   return (
