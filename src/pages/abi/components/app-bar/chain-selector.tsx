@@ -1,9 +1,13 @@
 import React, { useState, useMemo } from 'react';
-import { Button, Menu, MenuItem, TextField, Tooltip } from '@mui/material';
 
+import Menu from '@mui/material/Menu';
+import Button from '@mui/material/Button';
+import Tooltip from '@mui/material/Tooltip';
+import MenuItem from '@mui/material/MenuItem';
+
+import { Chain } from 'types/chain';
 import { useChainCtx } from 'contexts/web3';
 import { useChainList } from 'hooks/use-chain-list';
-import { Chain } from 'types/chain';
 
 function search(chains: Chain[], value: string) {
   if (!value) {

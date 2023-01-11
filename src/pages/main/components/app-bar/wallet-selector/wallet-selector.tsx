@@ -7,13 +7,12 @@ import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
+import ChangeCircleOutlinedIcon from '@mui/icons-material/ChangeCircleOutlined';
 
 import { cutAddress } from 'utils/address';
-import SvgIcon from '@mui/material/SvgIcon';
 import { useChainCtx } from 'contexts/web3';
 import { useWalletList, IWallet } from 'hooks/use-wallet-list';
-import ChangeCircleOutlinedIcon from '@mui/icons-material/ChangeCircleOutlined';
-import { InputAdornment } from '@mui/material';
 
 export const WalletSelector: React.FC = () => {
   const [anchor, setAnchor] = useState<HTMLElement>();

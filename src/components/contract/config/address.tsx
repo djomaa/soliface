@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { TextField } from '@mui/material';
+import TextField from '@mui/material/TextField';
 
 import { useContractCtx } from 'contexts/contract';
 import { addressValidator } from 'helpers/validators';

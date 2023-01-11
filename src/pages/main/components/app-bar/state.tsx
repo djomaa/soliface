@@ -1,6 +1,5 @@
 import React from 'react';
 import { Circle } from '@mui/icons-material';
-import { SvgIcon } from '@mui/material';
 
 import { useChainCtx, Status } from 'contexts/web3'
 

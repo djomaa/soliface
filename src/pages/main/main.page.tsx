@@ -1,10 +1,11 @@
 import React from 'react'
-import { Container } from '@mui/material'
-import { ChainCtxProvider } from 'contexts/web3';
-import { ContractCtxProvider } from 'contexts/contract';
+import Container from '@mui/material/Container'
+
 import { Contract } from 'components/contract';
-import { ArtifactCtxProvider } from 'contexts/artifact/artifact.context';
+import { ChainCtxProvider } from 'contexts/web3';
 import { MainPageAppBar } from './components/app-bar';
+import { ContractCtxProvider } from 'contexts/contract';
+import { ArtifactCtxProvider } from 'contexts/artifact';
 
 export const MainPage: React.FC = () => {
 
