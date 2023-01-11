@@ -1,8 +1,12 @@
 import React, { useState, useMemo } from 'react';
+
+import Stack from '@mui/material/Stack';
+import IconButton from '@mui/material/IconButton';
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import { OverrideProps } from '@mui/material/OverridableComponent';
-import { Breadcrumbs, BreadcrumbsTypeMap, IconButton, Stack, Typography, TypographyTypeMap } from '@mui/material';
+import Typography, { TypographyTypeMap } from '@mui/material/Typography';
+import Breadcrumbs, { BreadcrumbsTypeMap } from '@mui/material/Breadcrumbs';
 
 interface IPathBreadcrumpProps {
   path: (string | number)[];

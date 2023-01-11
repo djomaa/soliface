@@ -1,7 +1,7 @@
-import React, { createContext, useCallback, useEffect, useState } from 'react';
-import { DefaultAbi } from 'constants/abi'
-import { AbiItem } from 'types/abi';
+import React, { createContext } from 'react';
+
 import { Artifact } from 'helpers/abi';
+import { DefaultAbi } from 'constants/abi';
 import { useLogger } from 'hooks/use-logger';
 import { useArtifactStore } from 'hooks/use-artifact-store';
 

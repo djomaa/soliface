@@ -1,15 +1,33 @@
-import { Box, Button, Divider, IconButton, Typography } from '@mui/material'
-import { Container } from '@mui/system'
-import { DataGrid, GridActionsCellItem, GridCellEditCommitParams, GridCellEditStopParams, GridColDef, GridColumns, GridRowId, GridSelectionModel } from '@mui/x-data-grid'
-import { useArtifactCtx } from 'contexts/artifact'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
+
+import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack'
+import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
+import Tooltip from '@mui/material/Tooltip';
 import AddIcon from '@mui/icons-material/Add';
-import { AddArtifactDialog } from './add'
-import { useLogger } from 'hooks/use-logger'
+import Container from '@mui/system/Container';
 import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import Typography from '@mui/material/Typography';
+import DeleteIcon from '@mui/icons-material/Delete';
+import ExportIcon from '@mui/icons-material/FileUpload';
+import ImportIcon from '@mui/icons-material/FileDownload';
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import {
+  DataGrid,
+  GridActionsCellItem,
+  GridColumns,
+  GridRowId,
+  GridSelectionModel
+} from '@mui/x-data-grid';
+
 import { Artifact } from 'helpers/abi'
+import { useLogger } from 'hooks/use-logger'
+import { useArtifactCtx } from 'contexts/artifact'
+
+import { AddArtifactDialog } from './add'
 import { EditArtifactDialog } from './edit'
+
 interface IRow {
   id: GridRowId;
   name: string;
@@ -44,13 +62,39 @@ const ToolBar: React.FC<ToolbarProps> = (props) => {
 
   return (
     <Box>
-      <Button onClick={() => props.add()}>
-        Add
-      </Button>
-      <Button onClick={() => toggleRemoving(true)}>
-        Remove
-      </Button>
-
+      <Stack
+        direction='row'
+        justifyContent='space-evenly'
+        divider={<Divider orientation="vertical" variant='middle' flexItem />}
+      >
+        <Button
+          startIcon={<AddIcon />}
+          onClick={() => props.add()}
+        >
+          Add
+        </Button>
+        <Button
+          startIcon={<DeleteIcon />}
+          onClick={() => toggleRemoving(true)}
+        >
+          Remove
+        </Button>
+        <Tooltip title='Not implemented yet'>
+          <Button
+            startIcon={<ImportIcon />}
+          >
+            Import
+          </Button>
+        </Tooltip>
+        <Tooltip title='Not implemented yet'>
+          <Button
+            // disabled
+            startIcon={<ExportIcon />}
+          >
+            Export
+          </Button>
+        </Tooltip>
+      </Stack>
       <Divider />
     </Box>
   )
@@ -58,11 +102,12 @@ const ToolBar: React.FC<ToolbarProps> = (props) => {
 
 export const AbiManager: React.FC = () => {
   const [logger, { logState }] = useLogger(AbiManager);
+
   const [cur, setCur] = useState<Artifact>();
   const [isAddOpen, setAddOpen] = useState(false);
   const [isEditOpen, setEditOpen] = useState(false);
   const [isSelection, setSelection] = useState(false);
-  const { artifacts, removeArtifact, saveArtifact } = useArtifactCtx();
+  const { artifacts, removeArtifact } = useArtifactCtx();
   const items = useMemo<IRow[]>(() => {
     return artifacts.map((artifact) => {
       return { id: artifact.hash, name: artifact.name, hash: artifact.hash };
@@ -130,7 +175,7 @@ export const AbiManager: React.FC = () => {
             color="inherit"
           />,
           <GridActionsCellItem
-            icon={<DeleteIcon />}
+            icon={<DeleteOutlinedIcon />}
             label="Delete"
             onClick={() => deleteArtifacts([id])}
           />,
@@ -140,12 +185,16 @@ export const AbiManager: React.FC = () => {
   ]
 
   return (
-    // <Box sx={{ height: '95vh' }}>
-    <Container sx={{ height: '95vh' }}>
-      <Typography variant='h5'>
+    <Container>
+      <Typography
+        component="h1"
+        variant="h2"
+        align="center"
+        color="text.primary"
+        gutterBottom
+      >
         ABI Manager
       </Typography>
-      <Divider />
       <AddArtifactDialog
         open={isAddOpen}
         artifact={cur}
@@ -157,7 +206,7 @@ export const AbiManager: React.FC = () => {
         close={() => setEditOpen(false)}
       />
       <DataGrid
-        autoHeight={false}
+        autoHeight={true}
         hideFooter
         rows={items}
         columns={Columns}
@@ -178,7 +227,6 @@ export const AbiManager: React.FC = () => {
         }}
       />
     </Container>
-    // </Box>
   )
 
 

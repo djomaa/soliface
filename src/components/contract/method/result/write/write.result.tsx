@@ -1,13 +1,20 @@
 import { PromiEvent, TransactionReceipt } from 'web3-core';
 import React, { useEffect, useMemo, useState } from 'react'
-import { Alert, AlertProps, AlertTitle, CircularProgress, List, ListItem, ListItemText, Tooltip } from '@mui/material';
+
+import List from '@mui/material/List';
+import Alert, { AlertProps } from '@mui/material/Alert';
+import Tooltip from '@mui/material/Tooltip';
+import ListItem from '@mui/material/ListItem';
+import AlertTitle from '@mui/material/AlertTitle';
+import ListItemText from '@mui/material/ListItemText';
+import CircularProgress from '@mui/material/CircularProgress';
 
 import { useLogger } from 'hooks/use-logger';
+import styles from 'styles/common.module.scss'
 import { IAction } from 'hooks/use-async-action';
 import { FalseReceiptStatusDescription } from 'constants/text.constants';
 
 import { parseActionError } from '../base';
-import styles from 'styles/common.module.scss'
 import { TxHashSection } from './tx-hash.section';
 import { ReceiptSection } from './receipt.section';
 

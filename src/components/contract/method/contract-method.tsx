@@ -1,7 +1,14 @@
 import React, { useState } from 'react';
 import { FormContainer } from 'react-hook-form-mui';
-import { ExpandMore } from '@mui/icons-material';
-import { Stack, Accordion, AccordionSummary, Typography, AccordionDetails, Tooltip, Divider, Box, Container, ButtonGroup } from '@mui/material';
+
+import Stack from '@mui/material/Stack';
+import Divider from '@mui/material/Divider';
+import Accordion from '@mui/material/Accordion';
+import Typography from '@mui/material/Typography';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+
 import { MethodInputs } from './inputs';
 import { MethodActions } from './actions';
 import { useMethodCtx } from './context';
@@ -11,11 +18,11 @@ interface iProps {
 export const ContractMethodBody: React.FC<iProps> = () => {
   const [open, setOpen] = useState(false);
   const ctx = useMethodCtx();
-  
+
   return (
     <Accordion
       expanded={open}
-      TransitionProps={{ unmountOnExit: true }} 
+      TransitionProps={{ unmountOnExit: true }}
       onChange={() => setOpen((prev) => !prev)}
     >
       <AccordionSummary

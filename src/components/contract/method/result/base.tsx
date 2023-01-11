@@ -1,5 +1,8 @@
 import React from 'react';
-import { Alert, AlertTitle, CircularProgress } from '@mui/material';
+
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+import CircularProgress from '@mui/material/CircularProgress';
 
 import { AbiCoderError } from 'contexts/web3';
 import { useLogger } from 'hooks/use-logger';

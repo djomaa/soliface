@@ -1,7 +1,5 @@
 import Web3 from 'web3';
 import { useCallback, useContext } from 'react';
-import { useWeb3Context } from 'web3-react';
-// import { Web3Context } from 'web3-react/dist/context';
 import { EncodeFailedAbiCoderError } from './abi-coder.errors';
 import { abiCoder } from 'helpers/abi';
 import { Web3Context } from './web3.context';

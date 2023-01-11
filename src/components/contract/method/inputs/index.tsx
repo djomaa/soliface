@@ -1,5 +1,6 @@
 import React from 'react';
-import { Stack } from '@mui/material';
+
+import Stack from '@mui/material/Stack';
 
 import { parseInput } from './parse';
 import { TxParams } from './tx-params';

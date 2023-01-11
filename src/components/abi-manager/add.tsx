@@ -1,14 +1,25 @@
-import React, { useMemo, useRef, useState } from 'react'
-import { Dialog, DialogTitle, DialogContentText, Button, DialogActions, DialogContent, TextField, BottomNavigation, BottomNavigationAction, Divider, Alert, AlertTitle, Link } from '@mui/material';
-import { GetArtifactError, Artifact, safeDecodeAndValidateAbi } from 'helpers/abi';
-import { useArtifactStore } from 'hooks/use-artifact-store';
-import { useContractCtx } from 'contexts/contract';
-import { SafeError } from 'types/common';
-import { useArtifactCtx } from 'contexts/artifact';
+import React, { useMemo, useRef, useState } from 'react';
 
+import Link from '@mui/material/Link';
+import Alert from '@mui/material/Alert';
+import Dialog from '@mui/material/Dialog';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import AlertTitle from '@mui/material/AlertTitle';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import BottomNavigation from '@mui/material/BottomNavigation';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import { positions } from '@mui/system';
+import DialogContentText from '@mui/material/DialogContentText';
+import BottomNavigationAction from '@mui/material/BottomNavigationAction';
+
+import { SafeError } from 'types/common';
+import { useContractCtx } from 'contexts/contract';
+import { useArtifactCtx } from 'contexts/artifact';
+import { Artifact, safeDecodeAndValidateAbi } from 'helpers/abi';
+
 // TODO: make always on top button save (and name input);
 interface iProps {
   open: boolean;

@@ -1,5 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Link, Stack } from '@mui/material';
+
+import Link from '@mui/material/Link';
+import Stack from '@mui/material/Stack';
 
 import { AbiItem } from 'types/abi';
 import { useChainCtx } from 'contexts/web3';
