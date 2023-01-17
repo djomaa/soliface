@@ -18,8 +18,9 @@ export class Logger {
     console.warn(`[${this.prefix}]`, ...args);
   }
 
-  sub(prefix: string) {
-    return new Logger(`${this.prefix}:${prefix}`);
+  sub(...parts: string[]) {
+    const prefix = [this.prefix, ...parts].join(':');
+    return new Logger(prefix);
   }
 
 }

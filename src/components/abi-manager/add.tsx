@@ -17,7 +17,7 @@ import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 
 import { SafeError } from 'types/common';
 import { useContractCtx } from 'contexts/contract';
-import { useArtifactCtx } from 'contexts/artifact';
+import { useArtifactStore } from 'hooks/use-artifact-store';
 import { Artifact, safeDecodeAndValidateAbi } from 'helpers/abi';
 
 // TODO: make always on top button save (and name input);
@@ -33,7 +33,7 @@ export const AddArtifactDialog: React.FC<iProps> = (props) => {
   const [name, setName] = useState(props.artifact?.name ?? '');
   const [abiStr, setAbiStr] = useState(props.artifact?.abi ? JSON.stringify(props.artifact?.abi, null, 2) : '');
   const [error, setError] = useState<SafeError>();
-  const { addArtifact, removeArtifact } = useArtifactCtx();
+  const artifacts = useArtifactStore();
   const { setArtifact } = useContractCtx();
   const nameInputRef = useRef<HTMLElement>(null);
   const abiInputRef = useRef<HTMLInputElement>(null);
@@ -71,10 +71,10 @@ export const AddArtifactDialog: React.FC<iProps> = (props) => {
     }
     setError(undefined);
     if (props.artifact) {
-      removeArtifact(props.artifact);
+      artifacts.remove(props.artifact);
     }
     const artifact = new Artifact(name, () => decodedAbi.abi, decodedAbi.hash);
-    addArtifact(artifact);
+    artifacts.add(artifact);
     setArtifact(artifact);
     close();
   }

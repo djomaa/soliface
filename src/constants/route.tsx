@@ -1,11 +1,15 @@
 export enum Route {
   Home = '/',
-  Abi = '/abi',
+  AbiManager = '/abi',
+  ChainManager = '/chains',
+  Chain = '/chains/:id'
 }
 
 export const RouteLabel: Record<Route, string> = {
   [Route.Home]: 'Home',
-  [Route.Abi]: 'Abi',
+  [Route.AbiManager]: 'Abi',
+  [Route.ChainManager]: 'Chains',
+  [Route.Chain]: 'Chain',
 }
 
 export const Routes = Object.entries(RouteLabel) as [route: string, label: string][];

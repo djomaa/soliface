@@ -5,7 +5,7 @@ import { safe } from 'helpers/safe';
 import { Artifact } from 'helpers/abi';
 import { decodeB64 } from 'helpers/base64';
 import { useLogger } from 'hooks/use-logger';
-import { useArtifactCtx } from 'contexts/artifact';
+import { useArtifactStore } from 'hooks/use-artifact-store';
 
 enum SearchParam {
   Address = 'address',
@@ -36,7 +36,7 @@ interface iProps {
 export const ContractCtxProvider: React.FC<iProps> = ({ children }) => {
 
   const [logger, { logState }] = useLogger(ContractCtxProvider);
-  const { artifacts, addArtifact } = useArtifactCtx();
+  const artifacts = useArtifactStore();
 
 
   const [search, setSearch] = useSearchParams();
@@ -45,11 +45,11 @@ export const ContractCtxProvider: React.FC<iProps> = ({ children }) => {
     let artifact: Artifact | undefined;
     if (search.has(SearchParam.ArtifactHash)) {
       const searchHash = search.get(SearchParam.ArtifactHash);
-      const fArtifact = artifacts.find((i) => i.hash === searchHash);
+      const fArtifact = artifacts.list.find((i) => i.hash === searchHash);
       if (fArtifact) {
         artifact = fArtifact;
       } else {
-        logger.log('Artifact not found by search hash', searchHash, artifacts)
+        logger.log('Artifact not found by search hash', searchHash, artifacts.list)
       }
     }
     if (search.has(SearchParam.Artifact)) {
@@ -58,7 +58,7 @@ export const ContractCtxProvider: React.FC<iProps> = ({ children }) => {
       const [decoded, error] = safe(() => Artifact.fromString(strArtifact));
       if (decoded) {
         artifact = decoded;
-        addArtifact(artifact);
+        artifacts.add(artifact);
       }
       if (error) {
         logger.log('failed to decode artifact from search', error);

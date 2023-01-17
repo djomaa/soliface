@@ -23,10 +23,10 @@ import {
 
 import { Artifact } from 'helpers/abi'
 import { useLogger } from 'hooks/use-logger'
-import { useArtifactCtx } from 'contexts/artifact'
 
 import { AddArtifactDialog } from './add'
 import { EditArtifactDialog } from './edit'
+import { useArtifactStore } from 'hooks/use-artifact-store';
 
 interface IRow {
   id: GridRowId;
@@ -107,12 +107,12 @@ export const AbiManager: React.FC = () => {
   const [isAddOpen, setAddOpen] = useState(false);
   const [isEditOpen, setEditOpen] = useState(false);
   const [isSelection, setSelection] = useState(false);
-  const { artifacts, removeArtifact } = useArtifactCtx();
+  const artifacts = useArtifactStore();
   const items = useMemo<IRow[]>(() => {
-    return artifacts.map((artifact) => {
+    return artifacts.list.map((artifact) => {
       return { id: artifact.hash, name: artifact.name, hash: artifact.hash };
     })
-  }, [artifacts]);
+  }, [artifacts.list]);
   const [selectionModel, setSelectionModel] = React.useState<GridSelectionModel>([]);
 
   logState('selectionModel changed', selectionModel);
@@ -121,7 +121,7 @@ export const AbiManager: React.FC = () => {
     if (typeof id == 'number') {
       throw new Error('')
     }
-    const artifact = artifacts.find((a) => a.hash === id);
+    const artifact = artifacts.list.find((a) => a.hash === id);
     if (!artifact) {
       // sLogger.warn('Artifact cannot be removed: artifact not found by row id');
       throw new Error(`${AbiManager.name}: findOrFail: artifact not found`);
@@ -134,10 +134,10 @@ export const AbiManager: React.FC = () => {
     sLogger.debug('Started');
     for (const id of ids) {
       const artifact = findOrFail(id);
-      removeArtifact(artifact);
+      artifacts.remove(artifact);
     }
     sLogger.debug('Done');
-  }, [removeArtifact, artifacts]);
+  }, [artifacts.list]);
 
   const editArtifact = useCallback((id: IRow['id']) => {
     const sLogger = logger.sub('editArtifact');

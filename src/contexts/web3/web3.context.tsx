@@ -1,21 +1,19 @@
 import Web3 from 'web3';
 import { useSearchParams } from 'react-router-dom';
-import Web3Provider, { useWeb3Context } from 'web3-react';
+import { Web3ReactProvider, useWeb3React } from '@web3-react/core'
+import { NetworkConnector } from '@web3-react/network-connector'
+import { AbstractConnector } from '@web3-react/abstract-connector';
 import React, { createContext, useCallback, useEffect, useMemo } from 'react';
-import { NetworkOnlyConnector } from 'web3-react/dist/connectors';
 
 import { Chain } from 'types/chain';
 import { useChainList } from 'hooks/use-chain-list';
-import { IWallet, useWalletList } from 'hooks/use-wallet-list';
-
-interface iProps {
-  children: React.ReactNode | React.ReactNode[];
-}
-
-const WALLET_CONNECTOR_PREFIX = 'wallet';
-const formConnectorName = (name: string) => {
-  return [WALLET_CONNECTOR_PREFIX, name].join(':');
-}
+import { IWallet, useWalletList } from 'hooks/use-wallet-list/use-wallet-list';
+import Web3Provider from 'web3-react';
+import { InjectedConnector } from '@web3-react/injected-connector'
+import { useLogger } from 'hooks/use-logger';
+import { IAddChainConnector, ISwitchChainConnector } from 'hooks/use-wallet-list';
+import { safe, safeAsync } from 'helpers/safe';
+import { LocalStorageWrap } from 'hooks/use-local-storage';
 
 export enum Status {
   NotConnected,
@@ -23,8 +21,26 @@ export enum Status {
   Connected,
 }
 
+function getLibrary(provider: any) {
+  const library = new Web3(provider)
+  return library
+}
+
+function canConnectorChainBeSwitched<T extends AbstractConnector>(connector: T): connector is T & ISwitchChainConnector {
+  const tConnector = connector as Partial<ISwitchChainConnector>;
+  return !!tConnector.setChain;
+}
+
+function canConnectorChainBeAdded<T extends AbstractConnector>(connector: T): connector is T & IAddChainConnector {
+  const tConnector = connector as Partial<IAddChainConnector>;
+  return !!tConnector.addChain;
+}
+
+const WalletStorage = new LocalStorageWrap('wallet');
+
 interface IState {
   changeChain(chain: Chain): void;
+  addChain(chain: Chain): Promise<void>;
   connectWallet(wallet: IWallet): void;
   disconnect(): void;
   wallet: IWallet | null;
@@ -32,80 +48,26 @@ interface IState {
   web3: Web3;
   status: Status;
   account: string;
+  canSwitchChain: boolean | null;
+  canAddChain: boolean | null;
 }
+export const Web3Ctx = createContext<IState | null>(null);
 
-export const Web3Context = createContext<IState | null>(null);
-
-export const Initial: React.FC = () => {
-  const [search, setSearch] = useSearchParams();
-  const ctx = useWeb3Context();
-
-  const { chainList } = useChainList();
-
-  useEffect(() => {
-    const chainId = search.get('chainId');
-    if (!chainId) {
-      return;
-    }
-    const numberValue = Number(chainId);
-    if (Number.isNaN(numberValue)) {
-      return;
-    }
-    const chain = chainList.find(item => item.chainId === numberValue);
-    if (!chain) {
-      throw new Error('Web3Context: Chain not found by query.chainId');
-    }
-    ctx.setConnector(chain.rpc[0]);
-  }, [])
-
-  useEffect(() => {
-    if (ctx.networkId) {
-      search.set('chainId', ctx.networkId.toString());
-    } else {
-      search.delete('chainId');
-    }
-    setSearch(search);
-  }, [ctx.networkId])
-
-  return <></>;
+interface IProps {
+  children: React.ReactNode | React.ReactNode[];
 }
-
-export const Web3CtxProvider: React.FC<iProps> = (props) => {
-
-  const ctx = useWeb3Context();
+export const Web3CtxProvider: React.FC<IProps> = (props) => {
+  const [Logger] = useLogger(Web3CtxProvider);
+  const ctx = useWeb3React();
   const { wallets } = useWalletList();
 
-  const connectWallet = useCallback((wallet: IWallet) => {
-    const connectorName = formConnectorName(wallet.name)
-    ctx.setConnector(connectorName, { networkId: 1 });
+  const connect = useCallback((wallet: IWallet) => {
+    ctx.activate(wallet.connector);
   }, []);
 
-  const changeChain = useCallback((chain: Chain) => {
-    // TODO: choose the best rpc
-    const connectorName = chain.rpc[0];
-    ctx.setConnector(connectorName);
-  }, [])
-
-  const disconnect = () => {
-    ctx.unsetConnector();
-  }
-
-  const wallet = useMemo(() => {
-    if (!ctx.connectorName) {
-      return null;
-    }
-    if (!ctx.connectorName.startsWith(WALLET_CONNECTOR_PREFIX)) {
-      return null;
-    }
-
-    const wallet = wallets.find((w) => {
-      return formConnectorName(w.name) === ctx.connectorName;
-    });
-    if (!wallet) {
-      throw new Error('Web3Context: Wallet not found by connectorName');
-    }
-    return wallet;
-  }, [ctx.connectorName]);
+  const disconnect = useCallback(() => {
+    ctx.deactivate();
+  }, []);
 
   const status = useMemo(() => {
     if (!ctx.active && !ctx.error) {
@@ -117,55 +79,142 @@ export const Web3CtxProvider: React.FC<iProps> = (props) => {
     return Status.Connected;
   }, [ctx.active, ctx.error]);
 
-  const provider: IState = {
-    changeChain,
-    connectWallet,
-    disconnect,
-    wallet,
-    chainId: ctx.networkId ?? null,
-    web3: ctx.library as Web3,
+  const wallet = useMemo(() => {
+    const logger = Logger.sub('useMemo', 'wallet');
+    logger.debug('Started', { connector: ctx.connector });
+    // TODO?: wallet can be deleted from wallet list
+    if (!ctx.connector) {
+      logger.debug('Empty connector, so null');
+      return null;
+    }
+
+    logger.debug('Checking list', { wallets });
+    const wallet = wallets.find((w) => {
+      return w.connector === ctx.connector;
+    });
+
+    if (!wallet) {
+      logger.debug('Wallet not found, so null');
+      return null;
+    }
+
+    WalletStorage.set(wallet.name);
+    logger.log('Wallet updated', wallet);
+    return wallet;
+  }, [ctx.connector, wallets]);
+
+  const canSwitchChain = useMemo(() => {
+    const logger = Logger.sub('useMemo:canSwitchChain');
+    logger.debug('Started', ctx.connector);
+    if (!ctx.connector) {
+      logger.debug('Empty connector, so null');
+      return null;
+    }
+    const result = canConnectorChainBeSwitched(ctx.connector);
+    logger.log('Updated', result);
+    return result;
+  }, [ctx.connector]);
+
+  const canAddChain = useMemo(() => {
+    const logger = Logger.sub('useMemo:canAddChain');
+    logger.debug('Started', ctx.connector);
+    if (!ctx.connector) {
+      logger.debug('Empty connector, so null');
+      return null;
+    }
+    const result = canConnectorChainBeAdded(ctx.connector);
+    logger.log('Updated', result);
+    return result;
+  }, [ctx.connector]);
+
+  const changeChain = (chain: Chain) => {
+    const logger = Logger.sub('changeChain');
+    logger.debug('Changing chain', { chain, wallet });
+    if (wallet) {
+      logger.debug('Wallet provided');
+      if (!ctx.connector) {
+        logger.error(new Error('connector is empty'));
+        return;
+      }
+      if (!canConnectorChainBeSwitched(ctx.connector)) {
+        logger.error(new Error('connector is not chainSwitchable'), { connector: ctx.connector });
+        return;
+      }
+      logger.debug('Calling connector.setChainId');
+      ctx.connector.setChain(chain)
+        .catch((error) => {
+          logger.error(error);
+          return;
+        })
+      return;
+    }
+
+    logger.debug('Create NetworkConnector');
+    const connector = new NetworkConnector({ urls: { [chain.chainId]: chain.rpc[0] } });
+    ctx.activate(connector);
+  }
+
+  const addChain = (chain: Chain) => {
+    const logger = Logger.sub('changeChain');
+    logger.debug('Adding chain', { chain, wallet });
+    if (!ctx.connector) {
+      throw new Error('connector is empty');
+    }
+    if (!wallet) {
+      throw new Error('wallet is not connected');
+    }
+    if (!canAddChain) {
+      throw new Error('canAddChain is false');
+    }
+    if (!canConnectorChainBeAdded(ctx.connector)) {
+      throw new Error('connector is not chainSwitchable');
+    }
+    return ctx.connector.addChain(chain);
+  }
+
+  useEffect(() => {
+    const logger = Logger.sub('useEffect:[]')
+    const walletName = WalletStorage.get();
+    logger.debug('Initial connector', { walletName });
+    if (walletName) {
+      const wallet = wallets.find((w) => w.name === walletName);
+      if (!wallet) {
+        logger.debug('Wallet not found');
+        return;
+      }
+      connect(wallet);
+    }
+  }, []);
+
+  const value: IState = {
     status,
-    account: ctx.account!,
+    connectWallet: connect,
+    disconnect,
+    web3: ctx.library as Web3,
+    wallet,
+    account: ctx.account ?? '',
+    chainId: ctx.chainId ?? null,
+    changeChain: changeChain,
+    addChain,
+    canSwitchChain,
+    canAddChain,
   }
 
   return (
-    <Web3Context.Provider value={provider}>
+    <Web3Ctx.Provider value={value}>
       {props.children}
-    </Web3Context.Provider>
+    </Web3Ctx.Provider>
   )
-
 }
 
-export const ChainCtxProvider: React.FC<iProps> = (props) => {
-  const { chainList } = useChainList();
-  const { wallets } = useWalletList();
-
-
-  const connectors = useMemo(() => {
-    // TODO: any to connector
-    const connectors = chainList.reduce<Record<string, any>>((map, network) => {
-      for (const rpc of network.rpc) {
-        const connector = new NetworkOnlyConnector({ providerURL: rpc });
-        map[rpc] = connector;
-      }
-      return map;
-    }, {});
-    for (const wallet of wallets) {
-      const connectorName = formConnectorName(wallet.name);
-      connectors[connectorName] = wallet.connector;
-    }
-    return connectors;
-  }, [chainList]);
+export const ChainCtxProvider: React.FC<any> = (props) => {
 
   return (
-    <Web3Provider
-      connectors={connectors}
-      libraryName={'web3.js'}
-      web3Api={Web3}
+    <Web3ReactProvider
+      getLibrary={getLibrary}
     >
-      <Initial />
       <Web3CtxProvider {...props} />
-    </Web3Provider>
+    </Web3ReactProvider>
   )
 
 }

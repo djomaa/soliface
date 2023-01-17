@@ -13,6 +13,10 @@ const DefaultKeysParams = {
   useBaseKey: true,
   asRegex: false,
 }
+
+export type Entry<T> = [key: string, value: T];
+
+// TODO: use iterators
 export class LocalStorageWrap {
   _baseKey: string;
   _store = localStorage;
@@ -39,11 +43,24 @@ export class LocalStorageWrap {
     const value = this.deserialize<T>(raw);
     return value;
   }
+
   getAll(...keys: Key[]) {
     const key = this.formatKey(keys, false)
     const pattern = new RegExp(`^${key}`)
     const values = this.keys(pattern).map(key => this.get(key));
     return values;
+  }
+
+  getAllEntries<T>(...keys: Key[]): Entry<T>[] {
+    const key = this.formatKey(keys, false)
+    const pattern = new RegExp(`^${key}`)
+    const entries = this.keys(pattern).map(key => {
+      return [
+        key,
+        this.get(key)
+      ] as Entry<T>;
+    });
+    return entries;
   }
 
   getAllKeys(...parts: (RegExp | string)[]) {

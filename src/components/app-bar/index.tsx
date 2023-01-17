@@ -27,12 +27,10 @@ export const AppBar: React.FC<IAppBarProps> = ({ left = [], center = [], right =
             <PageSelector />
             {left}
           </Stack>
-          {center && (
-            <Stack direction='row' alignItems='center'>
-              <SolifaceIcon />
-              {center}
-            </Stack>
-          )}
+          <Stack direction='row' alignItems='center'>
+            <SolifaceIcon />
+            {center}
+          </Stack>
           {right && (
             <Stack direction='row' alignItems='center'>
               {right}

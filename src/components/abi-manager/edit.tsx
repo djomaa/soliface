@@ -17,8 +17,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 
 import { SafeError } from 'types/common';
-import { useContractCtx } from 'contexts/contract';
-import { useArtifactCtx } from 'contexts/artifact';
+import { useArtifactStore } from 'hooks/use-artifact-store';
 import { Artifact, safeDecodeAndValidateAbi } from 'helpers/abi';
 
 // TODO: make always on top button save (and name input);
@@ -29,13 +28,11 @@ interface iProps {
 }
 
 export const EditArtifactDialog: React.FC<iProps> = (props) => {
-  console.log("🚀 ~ file: edit.tsx:20 ~ props", props.artifact, props.open)
   const { close, open } = props;
   const [name, setName] = useState('');
   const [abiStr, setAbiStr] = useState('');
   const [error, setError] = useState<SafeError>();
-  const { addArtifact, removeArtifact, saveArtifact } = useArtifactCtx();
-  const { setArtifact } = useContractCtx();
+  const artifacts = useArtifactStore();
   const nameInputRef = useRef<HTMLElement>(null);
   const abiInputRef = useRef<HTMLInputElement>(null);
 
@@ -85,7 +82,7 @@ export const EditArtifactDialog: React.FC<iProps> = (props) => {
     setError(undefined);
     props.artifact.name = name;
     props.artifact.setAbi(decodedAbi.abi, decodedAbi.hash);
-    saveArtifact(props.artifact);
+    artifacts.save(props.artifact);
     close();
   }
 

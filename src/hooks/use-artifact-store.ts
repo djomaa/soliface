@@ -23,6 +23,7 @@ function getOriginalList(): Artifact[] {
   return result;
 }
 
+const initialArtifacts = getOriginalList();
 
 const ITEM = 'item';
 
@@ -31,7 +32,7 @@ export const useArtifactStore = () => {
   const [logger, { logState }] = useLogger(useArtifactStore);
 
 
-  const [list, setList] = useState(getOriginalList());
+  const [list, setList] = useState(initialArtifacts);
   const add = useCallback((artifact: Artifact) => {
     logger.log('Add artifact', artifact.name, artifact.hash)
     for (const item of list) {
@@ -102,6 +103,11 @@ export const useArtifactStore = () => {
     return [...list];
   }, [list]);
 
-  return [fullList, add, remove, save] as const;
-
+  // return [fullList, add, remove, save] as const;
+  return {
+    list,
+    add,
+    remove,
+    save,
+  };
 }
