@@ -2,7 +2,7 @@ import Web3 from 'web3';
 import { useCallback, useContext } from 'react';
 import { EncodeFailedAbiCoderError } from './abi-coder.errors';
 import { abiCoder } from 'helpers/abi';
-import { Status, Web3Ctx } from './web3.context';
+import { Status, Web3Ctx } from './chain.context';
 // import { Web3Context } from './web3.context';
 
 type EncodeFunctionCall = Web3['eth']['abi']['encodeFunctionCall'];

@@ -14,7 +14,6 @@ axiosTime(axiosInstance);
 
 export async function fetchHttpRpcData(url: string) {
   const res = await axiosInstance.post<any, TimeAxiosResponse>(url, RPC_CALL_GET_BLOCK_NUMBER);
-  console.log("🚀 ~ file: http.rpc.tsx:16 ~ fetchHttpRpcData ~ res", res)
   return {
     latency: res.timings.elapsedTime,
     block: Number(res.data.result),

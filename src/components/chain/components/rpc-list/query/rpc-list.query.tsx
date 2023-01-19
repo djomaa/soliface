@@ -2,6 +2,7 @@ import { QueryOptions, useQueries } from 'react-query';
 import { IData } from './constants';
 import { fetchWsRpcData } from './ws.rpc';
 import { fetchHttpRpcData } from './http.rpc';
+import { useLogger } from 'hooks/use-logger';
 
 export const useRpcListQuery = (urls: string[]) => {
   const queries = urls.map((url) => useRpcQuery(url));
@@ -9,6 +10,8 @@ export const useRpcListQuery = (urls: string[]) => {
 }
 
 export const useRpcQuery = (url: string): QueryOptions<IData> => {
+  const [Logger] = useLogger(useRpcQuery);
+  Logger.debug('creating rpc query for url', url)
   const fn = getFetcher(url);
   return {
     queryKey: ['get-rpc-data', url],

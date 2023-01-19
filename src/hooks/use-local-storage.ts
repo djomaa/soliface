@@ -1,3 +1,4 @@
+import { createKey } from 'constants/storage';
 import { useLocalStorage } from 'react-use'
 
 // export const useStorage = <T>(key: string) => {
@@ -115,8 +116,8 @@ export class LocalStorageWrap {
 
 
   formatKey(keys: Key[], useBaseKey: boolean = true) {
-    const part = keys.join(this._delemiter);
-    return useBaseKey ? this._baseKey + this._delemiter + part : part;
+    const part = createKey(...keys);
+    return useBaseKey ? createKey(this._baseKey, part) : part;
   }
 
   removeKey(value: string, key: string) {

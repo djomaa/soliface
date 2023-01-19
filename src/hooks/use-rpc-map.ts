@@ -88,6 +88,7 @@ export const useRpcMap = () => {
   }, [store]);
 
   return {
+    store,
     get,
     set
   };

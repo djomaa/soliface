@@ -1,87 +1,59 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 
 import Menu from '@mui/material/Menu';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
+import TextField from '@mui/material/TextField';
 
 import { Chain } from 'types/chain';
 import { Status, useChainCtx } from 'contexts/web3';
-import { useChainList } from 'hooks/use-chain-list';
-import { Typography } from '@mui/material';
+import { searchChain, useChainList } from 'hooks/use-chain-list';
 
 import style from './chain-selector.module.scss';
+import Popover from '@mui/material/Popover';
+import List from '@mui/material/List';
+import { ListItem } from '@mui/material';
+import ListItemButton from '@mui/material/ListItemButton';
+import { useSearch } from 'hooks/use-search';
+import { useFocus } from 'hooks/use-focus';
+import { ModalCtxProvider, useModalCtx } from 'contexts/modal';
+import { ChangeChainModal } from './connect-chain.dialog';
+import Box from '@mui/system/Box';
 
-function search(chains: Chain[], value: string) {
-  if (!value) {
-    return chains;
-  }
-  const searchRegexp = new RegExp(value, 'i');
-  const numberSearch = Number(value);
-  const isNumberSearch = Number.isNaN(numberSearch) === false;
-  const isHexSearch = value.startsWith('0x')
-  const hexSearch = isHexSearch ? Number(value) : null;
-  return chains.filter((chain) => {
-    if (chain.name.search(searchRegexp) !== -1) {
-      return true;
-    }
-    if (chain.shortName.search(value) !== -1) {
-      return true
-    }
-    if (isNumberSearch && chain.chainId === numberSearch) {
-      return true
-    }
-    if (isHexSearch && chain.chainId === hexSearch) {
-      return true
-    }
-    return false;
-  });
-}
+export const ChainSelectorCore: React.FC = () => {
 
-export const ChainSelector: React.FC = () => {
-  const [searchValue, setSearchValue] = useState<string>('');
-
+  const chainCtx = useChainCtx();
+  const modalCtx = useModalCtx();
   const { chainList } = useChainList();
-  const ctx = useChainCtx();
-  const isWallet = !!ctx.wallet;
-
-  const network = chainList.find((n) => n.chainId === ctx.chainId);
-
+  const [search, setSearch, searchList] = useSearch(chainList, searchChain);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
+  const [searchRef, focusSearch] = useFocus();
+  const chain = chainList.find((n) => n.chainId === chainCtx.chainId);
 
-  const changeChain = (chainId: number) => {
-    setAnchorEl(null);
-    const chain = chainList.find((c) => c.chainId === chainId);
-    if (!chain) {
-      throw new Error('Unexpected error: cannot find chain by chainId');
-    }
-    ctx.changeChain(chain);
+  const changeChain = (chain: Chain) => {
+    return modalCtx.addModal(ChangeChainModal, { chain });
   };
 
-  const filtered = useMemo(() => {
-    return search(chainList, searchValue);
-  }, [searchValue])
+  const options = useMemo(() => {
+    return searchList.map((chain) => {
+      return (
+        <ListItemButton
+          key={chain.chainId}
+          onClick={() => changeChain(chain)}
+        >
+          {chain.name}
+        </ListItemButton>
+      )
+    });
+  }, [searchList]);
 
-  const options = filtered.map((chain) => {
-    return (
-      <MenuItem
-        key={chain.chainId}
-        selected={chain.chainId === ctx.chainId}
-        onClick={() => changeChain(chain.chainId)}
-      >
-        {chain.name}
-      </MenuItem>
-    )
-  })
-
-  console.log(ctx);
-  if (ctx.status === Status.Connected && !ctx.canSwitchChain) {
+  if (chainCtx.status === Status.Connected && !chainCtx.canSwitchChain) {
     return (
       <>
         <Tooltip title='Chain cannot be switched'>
           <Button>
-            {network?.name ?? 'Not connected'}
+            {chain?.name ?? 'Not connected'}
           </Button>
         </Tooltip>
       </>
@@ -89,31 +61,54 @@ export const ChainSelector: React.FC = () => {
   }
 
   return (
-    <div>
+    <Box>
       <Button
         onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
           setAnchorEl(event.currentTarget);
+          focusSearch(10);
         }}
       >
-        {network?.name ?? "Not connected"}
+        {chain?.name ?? "Not connected"}
       </Button>
-      <Menu
+      <Popover
+        open={!!anchorEl}
+        keepMounted
         anchorEl={anchorEl}
-        open={open}
         onClose={() => setAnchorEl(null)}
-        autoFocus={false}
+        sx={{ maxHeight: '95vh' }}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
       >
-        {/* <MenuItem> */}
-        {/* <TextField
-            value={searchValue}
-            onChange={(e) => {
-              return setSearchValue(e.target.value);
-            }}
-          ></TextField> */}
-        {/* </MenuItem> */}
-        {options}
-      </Menu>
-    </div>
+        <List>
+          <ListItem>
+            <TextField
+              inputRef={searchRef}
+              fullWidth
+              focused={true}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              size='small'
+            />
+          </ListItem>
+          {options}
+          {!options.length && (
+            <ListItem>
+              No chains found :c
+            </ListItem>
+          )}
+        </List>
+      </Popover>
+    </Box>
   );
 
+}
+
+export const ChainSelector: React.FC = () => {
+  return (
+    <ModalCtxProvider>
+      <ChainSelectorCore />
+    </ModalCtxProvider>
+  )
 }

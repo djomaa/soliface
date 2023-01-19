@@ -13,10 +13,14 @@ import { useDefaultRpc } from 'hooks/use-default-rpc';
 import { useWalletList } from 'hooks/use-wallet-list';
 import { useChainCtx } from 'contexts/web3';
 import { ModalCtxProvider } from 'contexts/modal/modal.context';
+import { useLogger } from 'hooks/use-logger';
 
 export const RpcListCore: React.FC<Chain> = (chain: Chain) => {
+  const [Logger, { logState }] = useLogger(RpcListCore);
 
-  const { defaultRpc } = useDefaultRpc(chain.chainId);
+  const [defaultRpc] = useDefaultRpc(chain.chainId);
+
+  logState('defaultRpc', defaultRpc);
 
   const columns = useRpcListColumns(chain);
 
@@ -32,6 +36,8 @@ export const RpcListCore: React.FC<Chain> = (chain: Chain) => {
       ...chain.rpc,
     ]
   }, [defaultRpc, chain]);
+
+  logState('rpcs', rpcs);
 
   const data = useRpcListQuery(rpcs);
 

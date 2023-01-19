@@ -14,6 +14,8 @@ import { useLogger } from 'hooks/use-logger';
 import { IAddChainConnector, ISwitchChainConnector } from 'hooks/use-wallet-list';
 import { safe, safeAsync } from 'helpers/safe';
 import { LocalStorageWrap } from 'hooks/use-local-storage';
+import { useLocalStorage } from 'react-use';
+import { useStore } from 'hooks/use-store';
 
 export enum Status {
   NotConnected,
@@ -36,6 +38,7 @@ function canConnectorChainBeAdded<T extends AbstractConnector>(connector: T): co
   return !!tConnector.addChain;
 }
 
+// const WalletStorage = new LocalStorageWrap('wallet');
 const WalletStorage = new LocalStorageWrap('wallet');
 
 interface IState {
@@ -60,9 +63,10 @@ export const Web3CtxProvider: React.FC<IProps> = (props) => {
   const [Logger] = useLogger(Web3CtxProvider);
   const ctx = useWeb3React();
   const { wallets } = useWalletList();
+  const WalletStorage = useStore.object(['wallet']);
 
   const connect = useCallback((wallet: IWallet) => {
-    ctx.activate(wallet.connector);
+    return ctx.activate(wallet.connector);
   }, []);
 
   const disconnect = useCallback(() => {
@@ -95,13 +99,21 @@ export const Web3CtxProvider: React.FC<IProps> = (props) => {
 
     if (!wallet) {
       logger.debug('Wallet not found, so null');
+      WalletStorage.remove();
       return null;
     }
 
-    WalletStorage.set(wallet.name);
     logger.log('Wallet updated', wallet);
     return wallet;
   }, [ctx.connector, wallets]);
+
+  useEffect(() => {
+    if (wallet) {
+      WalletStorage.set(wallet.name);
+    } else {
+      WalletStorage.remove();
+    }
+  })
 
   const canSwitchChain = useMemo(() => {
     const logger = Logger.sub('useMemo:canSwitchChain');
@@ -174,7 +186,7 @@ export const Web3CtxProvider: React.FC<IProps> = (props) => {
 
   useEffect(() => {
     const logger = Logger.sub('useEffect:[]')
-    const walletName = WalletStorage.get();
+    const walletName = WalletStorage.value;
     logger.debug('Initial connector', { walletName });
     if (walletName) {
       const wallet = wallets.find((w) => w.name === walletName);

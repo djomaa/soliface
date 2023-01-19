@@ -28,7 +28,7 @@ export const ChainCard: React.FC<Chain> = (chain: Chain) => {
         }
       />
       <CardContent>
-        <Stack direction='row' justifyContent='space-between'>
+        <Stack direction='row' justifyContent='space-evenly'>
           <Stack alignItems='center'>
             <Typography color="text.secondary">
               Chain ID:
@@ -50,28 +50,8 @@ export const ChainCard: React.FC<Chain> = (chain: Chain) => {
         </Stack>
       </CardContent >
       <CardActions sx={{ width: '100%' }}>
-        <Stack
-          direction='row'
-          justifyContent='space-between'
-          alignItems='center'
-          width='100%'
-        >
-          <Box>
-            <Button size='small'>RPC</Button>
-            <Button size='small'>JSON</Button>
-          </Box>
-          <IconButton
-            onClick={() => setExpanded(!expanded)}
-          >
-            {expanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-          </IconButton>
-        </Stack>
+        <Button size='small' fullWidth>More</Button>
       </CardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <CardContent>
-          asd
-        </CardContent>
-      </Collapse>
     </Card >
   )
 }

@@ -27,7 +27,7 @@ export const useRpcListColumns = (chain: Chain) => {
 
   const chainCtx = useChainCtx();
   const modalCtx = useModalCtx();
-  const { defaultRpc, setDefaultRpc } = useDefaultRpc(chain.chainId);
+  const [defaultRpc, setDefaultRpc] = useDefaultRpc(chain.chainId);
 
   const addChain = useCallback((chain: Chain, rpc: string) => {
     console.log('!!! add')
