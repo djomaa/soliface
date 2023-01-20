@@ -99,7 +99,6 @@ export const Web3CtxProvider: React.FC<IProps> = (props) => {
 
     if (!wallet) {
       logger.debug('Wallet not found, so null');
-      WalletStorage.remove();
       return null;
     }
 
@@ -113,7 +112,7 @@ export const Web3CtxProvider: React.FC<IProps> = (props) => {
     } else {
       WalletStorage.remove();
     }
-  })
+  }, [wallet]);
 
   const canSwitchChain = useMemo(() => {
     const logger = Logger.sub('useMemo:canSwitchChain');
@@ -139,32 +138,30 @@ export const Web3CtxProvider: React.FC<IProps> = (props) => {
     return result;
   }, [ctx.connector]);
 
-  const changeChain = (chain: Chain) => {
+  const changeChain = useCallback((chain: Chain) => {
     const logger = Logger.sub('changeChain');
     logger.debug('Changing chain', { chain, wallet });
     if (wallet) {
       logger.debug('Wallet provided');
       if (!ctx.connector) {
-        logger.error(new Error('connector is empty'));
+        throw new Error('connector is empty');
         return;
       }
       if (!canConnectorChainBeSwitched(ctx.connector)) {
-        logger.error(new Error('connector is not chainSwitchable'), { connector: ctx.connector });
+        throw new Error('Connector is not switchable');
         return;
       }
       logger.debug('Calling connector.setChainId');
-      ctx.connector.setChain(chain)
-        .catch((error) => {
-          logger.error(error);
-          return;
-        })
-      return;
+      return ctx.connector.setChain(chain);
+      // .catch((error) => {
+      //   logger.error(error);
+      //   return;
+      // })
     }
-
     logger.debug('Create NetworkConnector');
     const connector = new NetworkConnector({ urls: { [chain.chainId]: chain.rpc[0] } });
-    ctx.activate(connector);
-  }
+    return ctx.activate(connector);
+  }, [wallet]);
 
   const addChain = (chain: Chain) => {
     const logger = Logger.sub('changeChain');

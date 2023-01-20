@@ -1,13 +1,16 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 
 class EventEmitter {
   private store = new Map<string, Function[]>();
 
-  emit(key: string) {
+  emit(key: string, toIgnore: Function) {
     if (!this.store.has(key)) {
       return;
     }
     for (const fn of this.store.get(key)!) {
+      if (fn === toIgnore) {
+        continue;
+      }
       fn();
     }
   }
@@ -43,5 +46,8 @@ export const useEventEmitter = (key: string, fn: Function) => {
     }
   });
 
-  return () => ee.emit(key);
+  const emit = useCallback(() => {
+    ee.emit(key, fn);
+  }, [fn])
+  return emit;
 }

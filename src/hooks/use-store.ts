@@ -12,17 +12,18 @@ function getOriginal(key: string) {
   return decoded;
 }
 
+let id = 0;
 export const useStore = (keys: (string | number)[]) => {
   const key = useMemo(() => {
     return createKey(APP_NAME, ...keys);
   }, [keys]);
 
-  const [Logger, { logState }] = useLogger(useStore.name, key);
+  const [Logger, { logState }] = useLogger(useStore.name, id++, key);
 
-  const [value, setValue] = useState<string | undefined>();
+  const [value, setValue] = useState<string | undefined>(getOriginal(key));
 
   const emit = useEventEmitter(key, () => {
-    Logger.debug('Updated by event');
+    Logger.debug('Updated by event', key);
     setValue(getOriginal(key));
   })
 

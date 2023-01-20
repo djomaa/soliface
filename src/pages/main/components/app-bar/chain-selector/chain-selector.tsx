@@ -32,6 +32,7 @@ export const ChainSelectorCore: React.FC = () => {
   const chain = chainList.find((n) => n.chainId === chainCtx.chainId);
 
   const changeChain = (chain: Chain) => {
+    setAnchorEl(null);
     return modalCtx.addModal(ChangeChainModal, { chain });
   };
 

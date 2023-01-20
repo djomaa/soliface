@@ -1,4 +1,4 @@
-import React, { createContext, ReactElement, useContext, useEffect, useMemo, useState } from 'react';
+import React, { createContext, ReactElement, useContext, useEffect, useId, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import { safe } from 'helpers/safe';
@@ -34,11 +34,13 @@ export const useModalCtx = () => {
 interface IProps {
   children: React.ReactNode | React.ReactNode[];
 }
+let ind = 0;
 export const ModalCtxProvider: React.FC<IProps> = ({ children }) => {
-  const [logger, { logState }] = useLogger(ModalCtxProvider);
+  const [logger, { logState }] = useLogger(ModalCtxProvider, ind++);
   const [modals, setModals] = useState<ReactElement<IModalBaseProps>[]>([]);
 
   const closeModal = (id: number) => {
+    logger.debug('Close', id);
     setModals((modals) => {
       return modals.filter((modal) => {
         modal.props.id !== id;
@@ -48,8 +50,8 @@ export const ModalCtxProvider: React.FC<IProps> = ({ children }) => {
 
   let id = 1;
   const addModal: IAddModal = (Component, props) => {
-    logger.debug('Add');
     const cId = id++;
+    logger.debug('Add', cId);
     const element = (
       <Box key={cId}>
         <Component
