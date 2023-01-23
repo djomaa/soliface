@@ -1,10 +1,10 @@
-import React from 'react';
+import React from 'react'
 
-import ButtonGroup from '@mui/material/ButtonGroup';
+import ButtonGroup from '@mui/material/ButtonGroup'
 
-import { CallAction } from './call.action';
-import { WriteAction } from './write.action';
-import { EncodeAction } from './encode.action';
+import { CallAction } from './call.action'
+import { WriteAction } from './write.action'
+import { EncodeAction } from './encode.action'
 
 export const MethodActions = () => {
   return (
@@ -13,5 +13,5 @@ export const MethodActions = () => {
       <WriteAction />
       <EncodeAction />
     </ButtonGroup>
-  );
+  )
 }

@@ -1,11 +1,20 @@
+import { Chain } from 'types/chain'
+
 export enum Route {
   Home = '/',
-  Abi = '/abi',
+  AbiManager = '/abi',
+  ChainManager = '/chains',
+  Chain = '/chains/:id'
 }
 
-export const RouteLabel: Record<Route, string> = {
+export const createRoute = {
+  [Route.Chain]: (id: Chain['chainId']) => Route.Chain.replace(':id', id.toString()),
+}
+
+export const RouteLabel: Partial<Record<Route, string>> = {
   [Route.Home]: 'Home',
-  [Route.Abi]: 'Abi',
+  [Route.AbiManager]: 'Abi',
+  [Route.ChainManager]: 'Chains',
 }
 
-export const Routes = Object.entries(RouteLabel) as [route: string, label: string][];
+export const Routes = Object.entries(RouteLabel) as Array<[route: string, label: string]>

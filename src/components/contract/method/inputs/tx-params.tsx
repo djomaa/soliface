@@ -1,12 +1,12 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react'
 
-import Link from '@mui/material/Link';
-import Stack from '@mui/material/Stack';
+import Link from '@mui/material/Link'
+import Stack from '@mui/material/Stack'
 
-import { AbiItem } from 'types/abi';
-import { useChainCtx } from 'contexts/web3';
+import { AbiItem } from 'types/abi'
+import { useChainCtx } from 'contexts/web3'
 
-import { MethodInput } from './base/base.input';
+import { MethodInput } from './base/base.input'
 
 enum TxArg {
   From = 'from',
@@ -21,34 +21,34 @@ const TxArgType = {
   [TxArg.Value]: 'uint256',
   [TxArg.Gas]: 'uint256',
   [TxArg.GasPrice]: 'uint256',
-  [TxArg.Nonce]: 'uint256',
+  [TxArg.Nonce]: 'uint256'
 }
 
 interface iProps {
-  abi: AbiItem;
+  abi: AbiItem
 }
 
 export const TxParams: React.FC<iProps> = ({ abi }) => {
   const alwaysOpenFields = useMemo(() => {
     return abi.stateMutability === 'payable' ? [TxArg.Value] : []
-  }, [abi]);
-  const chainCtx = useChainCtx();
-  const [fields, setFields] = React.useState<TxArg[]>(alwaysOpenFields);
-  const [open, setOpen] = useState(false);
+  }, [abi])
+  const chainCtx = useChainCtx()
+  const [fields, setFields] = React.useState<TxArg[]>(alwaysOpenFields)
+  const [open, setOpen] = useState(false)
 
-  const toggleOpen = () => setOpen((prev) => !prev);
+  const toggleOpen = () => { setOpen((prev) => !prev) }
 
   useEffect(() => {
     if (open) {
-      setFields([TxArg.From, TxArg.Value, TxArg.Gas, TxArg.GasPrice, TxArg.Nonce]);
+      setFields([TxArg.From, TxArg.Value, TxArg.Gas, TxArg.GasPrice, TxArg.Nonce])
     } else {
-      setFields(alwaysOpenFields);
+      setFields(alwaysOpenFields)
     }
   }, [open])
 
   const inputs = useMemo(() => {
     return fields.map((txArg) => {
-      const defaultValue = txArg === TxArg.From && chainCtx.wallet ? chainCtx.account : undefined;
+      const defaultValue = txArg === TxArg.From && (chainCtx.wallet != null) ? chainCtx.account : undefined
       return (
         // <>a</>
         <MethodInput
@@ -60,8 +60,8 @@ export const TxParams: React.FC<iProps> = ({ abi }) => {
           defaultValue={defaultValue}
         />
       )
-    });
-  }, [fields]);
+    })
+  }, [fields])
 
   const toggleButtonText = open ? 'Hide transaction parameters' : 'Show all transaction parameters'
   return (

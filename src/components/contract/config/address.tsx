@@ -1,24 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 
-import TextField from '@mui/material/TextField';
+import TextField from '@mui/material/TextField'
 
-import { useContractCtx } from 'contexts/contract';
-import { addressValidator } from 'helpers/validators';
+import { useContractCtx } from 'contexts/contract'
+import { addressValidator } from 'helpers/validators'
 
 export const AddressInput: React.FC = () => {
-  const ctx = useContractCtx();
+  const ctx = useContractCtx()
 
-  const [address, setAddress] = useState(ctx.address ?? '');
-  const [error, setError] = useState<string>();
-  const [touched, setTouched] = useState(false);
+  const [address, setAddress] = useState(ctx.address ?? '')
+  const [error, setError] = useState<string>()
+  const [touched, setTouched] = useState(false)
 
   const handleAddressChange = (value: string) => {
-    setAddress(value);
+    setAddress(value)
     if (addressValidator(value)) {
-      setError(undefined);
-      ctx.setAddress(value);
+      setError(undefined)
+      ctx.setAddress(value)
     } else {
-      setError('Invalid address');
+      setError('Invalid address')
     }
   }
 
@@ -29,10 +29,10 @@ export const AddressInput: React.FC = () => {
       label='Contract'
       margin='dense'
       value={address}
-      onChange={(e) => handleAddressChange(e.target.value)}
-      onBlur={() => setTouched(true)}
+      onChange={(e) => { handleAddressChange(e.target.value) }}
+      onBlur={() => { setTouched(true) }}
       error={touched ? !!error : false}
       helperText={touched ? error : undefined}
     />
-  );
+  )
 }

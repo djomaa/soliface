@@ -1,29 +1,29 @@
-import React from 'react';
+import React from 'react'
 
-import Stack from '@mui/material/Stack';
+import Stack from '@mui/material/Stack'
 
-import { parseInput } from './parse';
-import { TxParams } from './tx-params';
-import { useMethodCtx } from '../context';
+import { parseInput } from './parse'
+import { TxParams } from './tx-params'
+import { useMethodCtx } from '../method.context'
 
 interface iProps {
 }
 export const MethodInputs: React.FC<iProps> = () => {
-  const { abi } = useMethodCtx();
+  const { abi } = useMethodCtx()
   const inputs = abi.inputs
     ?.map((input, i) => {
-      return parseInput(input, ['params', i], [input.name]);
+      return parseInput(input, ['params', i], [input.name])
     })
     .flat()
 
   return (
     <>
-      {inputs && (
+      {(inputs != null) && (
         <Stack>
           {inputs}
         </Stack>
       )}
       <TxParams abi={abi} />
     </>
-  );
+  )
 }

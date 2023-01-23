@@ -1,1 +1,1 @@
-export * from './abi-manager';
+export * from './abi-manager'

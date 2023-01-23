@@ -1,12 +1,12 @@
-import React from 'react';
+import React from 'react'
 
-import Alert from '@mui/material/Alert';
-import AlertTitle from '@mui/material/AlertTitle';
-import CircularProgress from '@mui/material/CircularProgress';
+import Alert from '@mui/material/Alert'
+import AlertTitle from '@mui/material/AlertTitle'
+import CircularProgress from '@mui/material/CircularProgress'
 
-import { AbiCoderError } from 'contexts/web3';
-import { useLogger } from 'hooks/use-logger';
-import { IAction } from 'hooks/use-async-action';
+import { useLogger } from 'hooks/use-logger'
+import { AbiCoderError } from 'contexts/web3'
+import { IAction } from 'hooks/use-async-action'
 
 export function parseActionError(error: unknown): { title: string, body: JSX.Element } {
   if (error instanceof AbiCoderError) {
@@ -18,7 +18,7 @@ export function parseActionError(error: unknown): { title: string, body: JSX.Ele
   if (error instanceof Error) {
     return {
       title: 'Unexpected error',
-      body: <>{error.toString()}</>,
+      body: <>{error.toString()}</>
     }
   } else {
     return {
@@ -29,8 +29,8 @@ export function parseActionError(error: unknown): { title: string, body: JSX.Ele
 }
 
 interface IAlterProps {
-  title: JSX.Element | string;
-  body: JSX.Element | string;
+  title: JSX.Element | string
+  body: JSX.Element | string
 }
 export const ResultError: React.FC<IAlterProps> = ({ title, body }) => {
   return (
@@ -55,7 +55,7 @@ export const ResultSuccess: React.FC<IAlterProps> = ({ title, body }) => {
     <Alert severity='success' variant='outlined'
       sx={{
         '& .MuiAlert-message': {
-          width: '100%',
+          width: '100%'
         }
       }}
     >
@@ -83,30 +83,30 @@ export const ResultLoading: React.FC<IAlterProps> = ({ title, body }) => {
 }
 
 interface iProps {
-  action?: IAction<any>;
-  title?: JSX.Element;
-  body?: JSX.Element;
-  onSuccess?: JSX.Element;
+  action?: IAction<any>
+  title?: JSX.Element
+  body?: JSX.Element
+  onSuccess?: JSX.Element
 }
 
 export const BaseResult: React.FC<iProps> = (props) => {
-  const { action, title, body } = props;
+  const { action, title, body } = props
 
-  const [logger] = useLogger(BaseResult);
+  const [logger] = useLogger(BaseResult)
 
-  if (!action) {
-    logger.log('Empty action');
-    return <></>;
+  if (action == null) {
+    logger.log('Empty action')
+    return <></>
   }
 
   if (action.loading) {
-    logger.log('Loading..');
+    logger.log('Loading..')
     return <></>
   }
 
   if (action.error) {
-    logger.log('Failure');
-    const { title, body } = parseActionError(action.error);
+    logger.log('Failure')
+    const { title, body } = parseActionError(action.error)
     return (
       <Alert severity='error'>
         <AlertTitle>{title}</AlertTitle>
@@ -116,7 +116,7 @@ export const BaseResult: React.FC<iProps> = (props) => {
   }
 
   if (!action.result) {
-    throw new Error('BaseResult: No result');
+    throw new Error('BaseResult: No result')
   }
 
   return (
@@ -124,7 +124,7 @@ export const BaseResult: React.FC<iProps> = (props) => {
       <Alert severity='success' variant='outlined'
         sx={{
           '& .MuiAlert-message': {
-            width: '100%',
+            width: '100%'
           }
         }}
       >
@@ -134,5 +134,5 @@ export const BaseResult: React.FC<iProps> = (props) => {
         {body}
       </Alert>
     </>
-  );
+  )
 }

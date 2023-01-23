@@ -1,7 +1,7 @@
-export function encodeB64(str: string): string {
-  return Buffer.from(str).toString('base64');
+export function encodeB64 (str: string): string {
+  return Buffer.from(str).toString('base64')
 }
 
-export function decodeB64(str: string): string {
-  return Buffer.from(str, 'base64').toString('utf8');
+export function decodeB64 (str: string): string {
+  return Buffer.from(str, 'base64').toString('utf8')
 }

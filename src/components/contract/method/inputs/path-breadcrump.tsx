@@ -1,40 +1,40 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo } from 'react'
 
-import Stack from '@mui/material/Stack';
-import IconButton from '@mui/material/IconButton';
-import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
-import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import { OverrideProps } from '@mui/material/OverridableComponent';
-import Typography, { TypographyTypeMap } from '@mui/material/Typography';
-import Breadcrumbs, { BreadcrumbsTypeMap } from '@mui/material/Breadcrumbs';
+import Stack from '@mui/material/Stack'
+import IconButton from '@mui/material/IconButton'
+import ArrowLeftIcon from '@mui/icons-material/ArrowLeft'
+import ArrowRightIcon from '@mui/icons-material/ArrowRight'
+import { OverrideProps } from '@mui/material/OverridableComponent'
+import Typography, { TypographyTypeMap } from '@mui/material/Typography'
+import Breadcrumbs, { BreadcrumbsTypeMap } from '@mui/material/Breadcrumbs'
 
 interface IPathBreadcrumpProps {
-  path: (string | number)[];
-  breadcrumb?: OverrideProps<BreadcrumbsTypeMap, any>;
-  typography?: TypographyTypeMap['props'];
+  path: Array<string | number>
+  breadcrumb?: OverrideProps<BreadcrumbsTypeMap, any>
+  typography?: TypographyTypeMap['props']
 }
 
 export const PathBreadcrump: React.FC<IPathBreadcrumpProps> = ({ path, breadcrumb, typography }) => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
 
   const more = useMemo(() => {
     if (path.length === 1) {
-      return;
+      return
     }
     return open
-      ? <IconButton size='small' onClick={() => setOpen((prev) => !prev)}><ArrowLeftIcon fontSize='small' /></IconButton>
-      : <IconButton size='small' onClick={() => setOpen((prev) => !prev)}><ArrowRightIcon fontSize='small' /></IconButton>;
-  }, [open]);
+      ? <IconButton size='small' onClick={() => { setOpen((prev) => !prev) }}><ArrowLeftIcon fontSize='small' /></IconButton>
+      : <IconButton size='small' onClick={() => { setOpen((prev) => !prev) }}><ArrowRightIcon fontSize='small' /></IconButton>
+  }, [open])
 
   const items = useMemo(() => {
     if (open) {
       return path.map((item, i) => {
-        return <Typography {...typography}>{item}</Typography>;
+        return <Typography {...typography}>{item}</Typography>
       })
     }
-    const part = <Typography {...typography}>{path[path.length - 1]}</Typography>;
+    const part = <Typography {...typography}>{path[path.length - 1]}</Typography>
     return path.length === 1 ? [part] : [<div />, part]
-  }, [open]);
+  }, [open])
 
   return (
     <Stack
@@ -46,20 +46,20 @@ export const PathBreadcrump: React.FC<IPathBreadcrumpProps> = ({ path, breadcrum
       </Breadcrumbs >
       {more}
     </Stack >
-  );
+  )
 }
 
-function preparePath(path: (string | number)[]) {
+function preparePath (path: Array<string | number>) {
   return path.reduce((acc, item, i) => {
-    const isFirst = i === 0;
+    const isFirst = i === 0
     if (typeof item === 'string') {
       if (!isFirst) {
-        acc += '.';
+        acc += '.'
       }
       acc += item
     } else {
       acc += `[${item}]`
     }
-    return acc;
+    return acc
   }, '')
 }

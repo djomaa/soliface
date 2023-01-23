@@ -1,1 +1,1 @@
-export * from './address.utils';
+export * from './address.utils'

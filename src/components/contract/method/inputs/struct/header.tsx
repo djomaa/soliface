@@ -1,18 +1,17 @@
-import React from 'react';
+import React from 'react'
 
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
+import Stack from '@mui/material/Stack'
+import Typography from '@mui/material/Typography'
 
-import style from './struct-input.module.scss';
-import { PathBreadcrump } from '../path-breadcrump';
+import style from './struct-input.module.scss'
+import { PathBreadcrump } from '../path-breadcrump'
 
 export interface IProps {
-  type: string;
-  path: string[];
+  type: string
+  path: string[]
 }
 
-
-export const MethodStructInputHeader: React.FC<IProps> = ({ type, path, }) => {
+export const MethodStructInputHeader: React.FC<IProps> = ({ type, path }) => {
   return (
     <Stack
       direction='row'

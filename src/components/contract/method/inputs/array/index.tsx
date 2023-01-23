@@ -1,1 +1,1 @@
-export * from './array.input';
+export * from './array.input'

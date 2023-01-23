@@ -1,11 +1,11 @@
-import React from 'react';
-import SvgIcon, { SvgIconTypeMap } from '@mui/material/SvgIcon';
-import { BaseProps, OverridableTypeMap } from '@mui/material/OverridableComponent';
+import React from 'react'
 
+import SvgIcon, { SvgIconTypeMap } from '@mui/material/SvgIcon'
+import { BaseProps } from '@mui/material/OverridableComponent'
 
-type SvgComponent = React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+type SvgComponent = React.FunctionComponent<React.SVGProps<SVGSVGElement>>
 type IconProps = BaseProps<SvgIconTypeMap>
-// export const SvgIconFactor = <T extends OverridableTypeMap>(base: SvgComponent) => {
+
 export const SvgIconFactory = (base: SvgComponent) => {
   const fc: React.FC<IconProps> = (props) => {
     return (
@@ -14,8 +14,7 @@ export const SvgIconFactory = (base: SvgComponent) => {
         inheritViewBox
         component={base}
       />
-    );
+    )
   }
-  return fc;
+  return fc
 }
-

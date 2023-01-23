@@ -1,18 +1,18 @@
 export class AbiCoderError extends Error {
-  details: string;
+  details: string
 
-  constructor(
+  constructor (
     message: string,
-    oError: Error,
+    oError: Error
   ) {
-    super(message);
-    this.details = oError.message;
+    super(message)
+    this.details = oError.message
   }
 }
 export class EncodeFailedAbiCoderError extends AbiCoderError {
-  constructor(
-    oError: Error,
+  constructor (
+    oError: Error
   ) {
-    super('Failed to encode parameters', oError);
+    super('Failed to encode parameters', oError)
   }
 }

@@ -1,34 +1,34 @@
-import React, { useMemo, useEffect } from 'react';
+import React, { useMemo, useEffect } from 'react'
 
-import Tooltip from '@mui/material/Tooltip';
-import LoadingButton from '@mui/lab/LoadingButton';
+import Tooltip from '@mui/material/Tooltip'
+import LoadingButton from '@mui/lab/LoadingButton'
 
-import { useContractCtx } from 'contexts/contract';
-import { useAsyncAction } from 'hooks/use-async-action';
-import { useChainCtx, useWeb3, useWeb3SafeAbiCoder } from 'contexts/web3';
+import { useContractCtx } from 'contexts/contract'
+import { useAsyncAction } from 'hooks/use-async-action'
+import { useChainCtx, useWeb3, useWeb3SafeAbiCoder } from 'contexts/web3'
 
-import { useMethodCtx } from '../context';
-import { IMethodActionConf } from '../types';
-import { WriteResult } from '../result/write/write.result';
+import { useMethodCtx } from '../method.context'
+import { IMethodActionConf } from '../types'
+import { WriteResult } from '../result/write/write.result'
 
 export const WriteAction: React.FC = () => {
-  const { abi, form, setResult } = useMethodCtx();
-  const contractCtx = useContractCtx();
-  const chainCtx = useChainCtx();
-  const web3 = useWeb3();
-  const safeAbiCoder = useWeb3SafeAbiCoder();
+  const { abi, form, setResult } = useMethodCtx()
+  const contractCtx = useContractCtx()
+  const chainCtx = useChainCtx()
+  const web3 = useWeb3()
+  const safeAbiCoder = useWeb3SafeAbiCoder()
 
   const [action, perform] = useAsyncAction(async (res: IMethodActionConf) => {
-    const data = safeAbiCoder.encodeFunctionCall(abi, res.params);
+    const data = safeAbiCoder.encodeFunctionCall(abi, res.params)
     const txConf = {
       from: chainCtx.account,
       to: contractCtx.address,
-      data,
+      data
     }
     const [gas, gasPrice, nonce] = await Promise.all([
       res.tx.gas ?? web3.eth.estimateGas(txConf),
       res.tx.gasPrice ?? web3.eth.getGasPrice(),
-      res.tx.nonce ? Number(res.tx.nonce) : web3.eth.getTransactionCount(txConf.from),
+      res.tx.nonce ? Number(res.tx.nonce) : web3.eth.getTransactionCount(txConf.from)
     ])
     const promiEvent = web3.eth.sendTransaction({
       from: chainCtx.account,
@@ -37,28 +37,28 @@ export const WriteAction: React.FC = () => {
       gas,
       gasPrice,
       nonce
-    });
-    return { promiEvent };
-  }, [web3, abi]);
+    })
+    return { promiEvent }
+  }, [web3, abi])
 
   useEffect(() => {
-    if (!action) {
-      return;
+    if (action == null) {
+      return
     }
-    setResult(<WriteResult action={action} />);
+    setResult(<WriteResult action={action} />)
   }, [action])
 
   const disabledReason = useMemo(() => {
-    if (!chainCtx.wallet) {
-      return 'Wallet not connected';
+    if (chainCtx.wallet == null) {
+      return 'Wallet not connected'
     }
     if (!contractCtx.address) {
-      return 'Address not set';
+      return 'Address not set'
     }
     if (!web3) {
-      return 'Web3 not connected';
+      return 'Web3 not connected'
     }
-  }, [contractCtx.address, web3]);
+  }, [contractCtx.address, web3])
 
   const callButton = (
     <LoadingButton
@@ -70,10 +70,10 @@ export const WriteAction: React.FC = () => {
     >
       Write
     </LoadingButton>
-  );
+  )
 
   if (!disabledReason) {
-    return callButton;
+    return callButton
   }
 
   return (
@@ -83,5 +83,4 @@ export const WriteAction: React.FC = () => {
       </span>
     </Tooltip>
   )
-
 }

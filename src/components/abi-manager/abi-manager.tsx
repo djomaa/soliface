@@ -1,50 +1,50 @@
 import React, { useCallback, useMemo, useState } from 'react'
 
-import Box from '@mui/material/Box';
+import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
-import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
-import Tooltip from '@mui/material/Tooltip';
-import AddIcon from '@mui/icons-material/Add';
-import Container from '@mui/system/Container';
-import EditIcon from '@mui/icons-material/Edit';
-import Typography from '@mui/material/Typography';
-import DeleteIcon from '@mui/icons-material/Delete';
-import ExportIcon from '@mui/icons-material/FileUpload';
-import ImportIcon from '@mui/icons-material/FileDownload';
-import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import Button from '@mui/material/Button'
+import Divider from '@mui/material/Divider'
+import Tooltip from '@mui/material/Tooltip'
+import AddIcon from '@mui/icons-material/Add'
+import Container from '@mui/system/Container'
+import EditIcon from '@mui/icons-material/Edit'
+import Typography from '@mui/material/Typography'
+import DeleteIcon from '@mui/icons-material/Delete'
+import ExportIcon from '@mui/icons-material/FileUpload'
+import ImportIcon from '@mui/icons-material/FileDownload'
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
 import {
   DataGrid,
   GridActionsCellItem,
   GridColumns,
   GridRowId,
   GridSelectionModel
-} from '@mui/x-data-grid';
+} from '@mui/x-data-grid'
 
 import { Artifact } from 'helpers/abi'
 import { useLogger } from 'hooks/use-logger'
-import { useArtifactCtx } from 'contexts/artifact'
+import { useArtifactStore } from 'hooks/use-artifact-store'
 
 import { AddArtifactDialog } from './add'
 import { EditArtifactDialog } from './edit'
 
 interface IRow {
-  id: GridRowId;
-  name: string;
-  hash: string;
+  id: GridRowId
+  name: string
+  hash: string
 }
 
 interface ToolbarProps {
-  add: Function;
-  remove: Function;
-  toggleRemoving: (v: boolean) => void;
+  add: Function
+  remove: Function
+  toggleRemoving: (v: boolean) => void
 }
 const ToolBar: React.FC<ToolbarProps> = (props) => {
-  const [isRemoving, setRemoving] = useState(false);
+  const [isRemoving, setRemoving] = useState(false)
 
   const toggleRemoving = (isActive: boolean) => {
-    setRemoving(isActive);
-    props.toggleRemoving(isActive);
+    setRemoving(isActive)
+    props.toggleRemoving(isActive)
   }
 
   if (isRemoving) {
@@ -53,11 +53,11 @@ const ToolBar: React.FC<ToolbarProps> = (props) => {
         <Button onClick={() => props.remove(true)}>
           Delete
         </Button>
-        <Button onClick={() => toggleRemoving(false)}>
+        <Button onClick={() => { toggleRemoving(false) }}>
           Cancel
         </Button>
       </Box>
-    );
+    )
   }
 
   return (
@@ -75,7 +75,7 @@ const ToolBar: React.FC<ToolbarProps> = (props) => {
         </Button>
         <Button
           startIcon={<DeleteIcon />}
-          onClick={() => toggleRemoving(true)}
+          onClick={() => { toggleRemoving(true) }}
         >
           Remove
         </Button>
@@ -101,63 +101,62 @@ const ToolBar: React.FC<ToolbarProps> = (props) => {
 }
 
 export const AbiManager: React.FC = () => {
-  const [logger, { logState }] = useLogger(AbiManager);
+  const [logger, { logState }] = useLogger(AbiManager)
 
-  const [cur, setCur] = useState<Artifact>();
-  const [isAddOpen, setAddOpen] = useState(false);
-  const [isEditOpen, setEditOpen] = useState(false);
-  const [isSelection, setSelection] = useState(false);
-  const { artifacts, removeArtifact } = useArtifactCtx();
+  const [cur, setCur] = useState<Artifact>()
+  const [isAddOpen, setAddOpen] = useState(false)
+  const [isEditOpen, setEditOpen] = useState(false)
+  const [isSelection, setSelection] = useState(false)
+  const artifacts = useArtifactStore()
   const items = useMemo<IRow[]>(() => {
-    return artifacts.map((artifact) => {
-      return { id: artifact.hash, name: artifact.name, hash: artifact.hash };
+    return artifacts.list.map((artifact) => {
+      return { id: artifact.hash, name: artifact.name, hash: artifact.hash }
     })
-  }, [artifacts]);
-  const [selectionModel, setSelectionModel] = React.useState<GridSelectionModel>([]);
+  }, [artifacts.list])
+  const [selectionModel, setSelectionModel] = React.useState<GridSelectionModel>([])
 
-  logState('selectionModel changed', selectionModel);
+  logState('selectionModel changed', selectionModel)
 
   const findOrFail = (id: GridRowId) => {
-    if (typeof id == 'number') {
+    if (typeof id === 'number') {
       throw new Error('')
     }
-    const artifact = artifacts.find((a) => a.hash === id);
-    if (!artifact) {
+    const artifact = artifacts.list.find((a) => a.hash === id)
+    if (artifact == null) {
       // sLogger.warn('Artifact cannot be removed: artifact not found by row id');
-      throw new Error(`${AbiManager.name}: findOrFail: artifact not found`);
+      throw new Error(`${AbiManager.name}: findOrFail: artifact not found`)
     }
-    return artifact;
+    return artifact
   }
 
   const deleteArtifacts = useCallback((ids: GridSelectionModel) => {
-    const sLogger = logger.sub('deleteArtifacts');
-    sLogger.debug('Started');
+    const sLogger = logger.sub('deleteArtifacts')
+    sLogger.debug('Started')
     for (const id of ids) {
-      const artifact = findOrFail(id);
-      removeArtifact(artifact);
+      const artifact = findOrFail(id)
+      artifacts.remove(artifact)
     }
-    sLogger.debug('Done');
-  }, [removeArtifact, artifacts]);
+    sLogger.debug('Done')
+  }, [artifacts.list])
 
   const editArtifact = useCallback((id: IRow['id']) => {
-    const sLogger = logger.sub('editArtifact');
-    sLogger.debug('Edit', id);
-    const artifact = findOrFail(id);
-    setCur(artifact);
-    setEditOpen(true);
+    const sLogger = logger.sub('editArtifact')
+    sLogger.debug('Edit', id)
+    const artifact = findOrFail(id)
+    setCur(artifact)
+    setEditOpen(true)
   }, [])
-
 
   const Columns: GridColumns = [
     {
       field: 'hash',
-      headerName: 'Hash',
+      headerName: 'Hash'
     },
     {
       field: 'name',
       headerName: 'Name',
       editable: true,
-      flex: 1,
+      flex: 1
     },
     {
       field: 'actions',
@@ -171,16 +170,16 @@ export const AbiManager: React.FC = () => {
             icon={<EditIcon />}
             label="Edit"
             className="textPrimary"
-            onClick={() => editArtifact(id)}
+            onClick={() => { editArtifact(id) }}
             color="inherit"
           />,
           <GridActionsCellItem
             icon={<DeleteOutlinedIcon />}
             label="Delete"
-            onClick={() => deleteArtifacts([id])}
-          />,
-        ];
-      },
+            onClick={() => { deleteArtifacts([id]) }}
+          />
+        ]
+      }
     }
   ]
 
@@ -198,12 +197,12 @@ export const AbiManager: React.FC = () => {
       <AddArtifactDialog
         open={isAddOpen}
         artifact={cur}
-        close={() => setAddOpen(false)}
+        close={() => { setAddOpen(false) }}
       />
       <EditArtifactDialog
         open={isEditOpen}
         artifact={cur}
-        close={() => setEditOpen(false)}
+        close={() => { setEditOpen(false) }}
       />
       <DataGrid
         autoHeight={true}
@@ -212,22 +211,20 @@ export const AbiManager: React.FC = () => {
         columns={Columns}
         checkboxSelection={isSelection}
         components={{
-          Toolbar: ToolBar,
+          Toolbar: ToolBar
         }}
         componentsProps={{
           toolbar: {
-            add: () => setAddOpen(true),
-            toggleRemoving: (v: boolean) => setSelection(v),
-            remove: () => deleteArtifacts(selectionModel),
+            add: () => { setAddOpen(true) },
+            toggleRemoving: (v: boolean) => { setSelection(v) },
+            remove: () => { deleteArtifacts(selectionModel) }
           } as ToolbarProps
         }}
         experimentalFeatures={{ newEditingApi: true }}
         onSelectionModelChange={(newSelectionModel) => {
-          setSelectionModel(newSelectionModel);
+          setSelectionModel(newSelectionModel)
         }}
       />
     </Container>
   )
-
-
 }

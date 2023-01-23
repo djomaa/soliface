@@ -1,34 +1,34 @@
-import { useCopyToClipboard } from 'react-use';
-import React, { useMemo, useState } from 'react';
+import { useCopyToClipboard } from 'react-use'
+import React, { useMemo, useState } from 'react'
 
 import CopyIcon from '@mui/icons-material/ContentCopy'
 import OriginalLaunchIcon from '@mui/icons-material/Launch'
 
-import Link from '@mui/material/Link';
-import List from '@mui/material/List';
-import Dialog from '@mui/material/Dialog';
-import Tooltip from '@mui/material/Tooltip';
-import ListItem from '@mui/material/ListItem';
-import IconButton from '@mui/material/IconButton';
-import { SvgIconTypeMap } from '@mui/material/SvgIcon';
-import DialogContent from '@mui/material/DialogContent';
+import Link from '@mui/material/Link'
+import List from '@mui/material/List'
+import Dialog from '@mui/material/Dialog'
+import Tooltip from '@mui/material/Tooltip'
+import ListItem from '@mui/material/ListItem'
+import IconButton from '@mui/material/IconButton'
+import { SvgIconTypeMap } from '@mui/material/SvgIcon'
+import DialogContent from '@mui/material/DialogContent'
 
-import { Chain } from 'types/chain';
-import { useChainCtx } from 'contexts/web3';
-import { useChainList } from 'hooks/use-chain-list';
-import { generateTxLinkByChain } from 'helpers/explorer';
+import { Chain } from 'types/chain'
+import { useChainCtx } from 'contexts/web3'
+import { useChainList } from 'hooks/use-chain-list'
+import { generateTxLinkByChain } from 'helpers/explorer'
 
 const LaunchIcon: React.FC<SvgIconTypeMap['props']> = (props) => <OriginalLaunchIcon {...props} fontSize='small' />
 
 interface iProps {
-  txHash: string;
+  txHash: string
 }
 const NoLinkLaunch: React.FC<{ chain: Chain }> = ({ chain }) => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
 
   const explorers = useMemo(() => {
-    if (!chain.explorers) {
-      return [];
+    if (chain.explorers == null) {
+      return []
     }
     return chain.explorers.map(({ url }) => (
       <ListItem>
@@ -40,10 +40,10 @@ const NoLinkLaunch: React.FC<{ chain: Chain }> = ({ chain }) => {
           {url}
         </Link>
       </ListItem>
-    ));
-  }, [chain]);
+    ))
+  }, [chain])
 
-  if (!explorers.length) {
+  if (explorers.length === 0) {
     return (
       <Tooltip title='We are not able to generate link for this chain'>
         <LaunchIcon color='disabled' />
@@ -54,13 +54,13 @@ const NoLinkLaunch: React.FC<{ chain: Chain }> = ({ chain }) => {
   return (
     <>
       <Tooltip title='We are not able to generate link for this chain. Please click the icon to check available explorers.'>
-        <IconButton onClick={() => setOpen((p) => !p)}>
+        <IconButton onClick={() => { setOpen((p) => !p) }}>
           <LaunchIcon />
         </IconButton>
       </Tooltip>
       <Dialog
         open={open}
-        onClose={() => setOpen(false)}
+        onClose={() => { setOpen(false) }}
       >
         <DialogContent>
           <List>
@@ -73,22 +73,22 @@ const NoLinkLaunch: React.FC<{ chain: Chain }> = ({ chain }) => {
 }
 
 export const TxHashSection: React.FC<iProps> = ({ txHash }) => {
-  const { chainId } = useChainCtx();
-  const { chainList } = useChainList();
-  const chain = chainList.find((c) => c.chainId === chainId);
-  const [, copyToClipboard] = useCopyToClipboard();
+  const { chainId } = useChainCtx()
+  const { chainList } = useChainList()
+  const chain = chainList.find((c) => c.chainId === chainId)
+  const [, copyToClipboard] = useCopyToClipboard()
 
   const launchIcon = useMemo(() => {
-    if (!chain) {
+    if (chain == null) {
       return (
         <Tooltip title='We have no info about the chain'>
           <LaunchIcon />
         </Tooltip>
       )
     }
-    const link = generateTxLinkByChain(chain, txHash);
+    const link = generateTxLinkByChain(chain, txHash)
     if (!link) {
-      return <NoLinkLaunch chain={chain} />;
+      return <NoLinkLaunch chain={chain} />
     }
 
     return (
@@ -98,16 +98,15 @@ export const TxHashSection: React.FC<iProps> = ({ txHash }) => {
         </IconButton>
       </Link>
     )
-
-  }, [txHash, chainId]);
+  }, [txHash, chainId])
 
   const copyIcon = useMemo(() => {
     return (
-      <IconButton onClick={() => copyToClipboard(txHash)}>
+      <IconButton onClick={() => { copyToClipboard(txHash) }}>
         <CopyIcon fontSize='small' />
       </IconButton>
     )
-  }, [txHash]);
+  }, [txHash])
 
   return (
     // <Typography variant='body2'>
@@ -117,5 +116,4 @@ export const TxHashSection: React.FC<iProps> = ({ txHash }) => {
       {txHash} {copyIcon} {launchIcon}
     </>
   )
-
 }

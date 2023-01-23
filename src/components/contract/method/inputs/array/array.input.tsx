@@ -1,45 +1,44 @@
-import React, { useMemo } from 'react';
-import { useCounter } from 'react-use';
+import React, { useMemo } from 'react'
+import { useCounter } from 'react-use'
 
-import Box from '@mui/material/Box';
-import Tooltip from '@mui/material/Tooltip';
-import AddIcon from '@mui/icons-material/Add';
-import IconButton from '@mui/material/IconButton';
-import RemoveIcon from '@mui/icons-material/Remove';
-import ButtonGroup from '@mui/material/ButtonGroup';
+import Box from '@mui/material/Box'
+import Tooltip from '@mui/material/Tooltip'
+import AddIcon from '@mui/icons-material/Add'
+import IconButton from '@mui/material/IconButton'
+import RemoveIcon from '@mui/icons-material/Remove'
+import ButtonGroup from '@mui/material/ButtonGroup'
 
-import { AbiInput } from 'types/abi';
-import { useLogger } from 'hooks/use-logger';
+import { AbiInput } from 'types/abi'
+import { useLogger } from 'hooks/use-logger'
 
-import { parseInput } from '../parse';
+import { parseInput } from '../parse'
 import style from './array-input.module.scss'
-import { ArrayInputHeader } from './header';
+import { ArrayInputHeader } from './header'
 
 export interface iInputProps {
-  type: string;
-  position: (string | number)[];
-  path: string[];
-  components: AbiInput[];
-  defaultValue?: string;
-  size: number | undefined;
+  type: string
+  position: Array<string | number>
+  path: string[]
+  components: AbiInput[]
+  defaultValue?: string
+  size: number | undefined
 }
 
-
 export const MethodArrayInput: React.FC<iInputProps> = ({ type, position, path, defaultValue, size, components }) => {
-  const [count, a] = useCounter(size ?? 1, size ?? null, size ?? 1);
-  const [logger] = useLogger(MethodArrayInput.name);
+  const [count, a] = useCounter(size ?? 1, size ?? null, size ?? 1)
+  const [logger] = useLogger(MethodArrayInput.name)
 
-  const disabled = !!size;
+  const disabled = !!size
   let addRemove = (
     <ButtonGroup variant="text" size='small' >
-      <IconButton onClick={() => a.inc()} disabled={disabled}>
+      <IconButton onClick={() => { a.inc() }} disabled={disabled}>
         <AddIcon />
       </IconButton>
-      <IconButton onClick={() => a.dec()} disabled={disabled}>
+      <IconButton onClick={() => { a.dec() }} disabled={disabled}>
         <RemoveIcon />
       </IconButton>
     </ButtonGroup>
-  );
+  )
 
   if (disabled) {
     addRemove = (
@@ -50,14 +49,14 @@ export const MethodArrayInput: React.FC<iInputProps> = ({ type, position, path, 
   }
 
   const elements = useMemo(() => {
-    logger.debug('Creating methods', { count, components });
+    logger.debug('Creating methods', { count, components })
     const a1 = Array.from({ length: count }, (_, i) => {
       const inputs = components
         .map((component) => {
-          const fPosition = [...position, i];
-          const fPath = [...path, i];
-          const inputs = parseInput(component, fPosition, fPath);
-          return inputs;
+          const fPosition = [...position, i]
+          const fPath = [...path, i]
+          const inputs = parseInput(component, fPosition, fPath)
+          return inputs
         })
       // .flat()
       return (
@@ -66,10 +65,8 @@ export const MethodArrayInput: React.FC<iInputProps> = ({ type, position, path, 
         </Box >
       )
     })
-    return a1.flat();
-
-  }, [count]);
-
+    return a1.flat()
+  }, [count])
 
   return (
     <Box className={style.MethodArrayInput}>
