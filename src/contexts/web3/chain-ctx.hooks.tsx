@@ -1,41 +1,40 @@
-import Web3 from 'web3';
-import { useCallback, useContext } from 'react';
-import { EncodeFailedAbiCoderError } from './abi-coder.errors';
-import { abiCoder } from 'helpers/abi';
-import { Status, Web3Ctx } from './chain.context';
-// import { Web3Context } from './web3.context';
+import Web3 from 'web3'
+import { useCallback, useContext } from 'react'
 
-type EncodeFunctionCall = Web3['eth']['abi']['encodeFunctionCall'];
+import { abiCoder } from 'helpers/abi'
 
+import { EncodeFailedAbiCoderError } from './abi-coder.errors'
+import { Web3Ctx } from './chain.context'
+
+type EncodeFunctionCall = Web3['eth']['abi']['encodeFunctionCall']
 
 export const useChainCtx = () => {
-  const ctx = useContext(Web3Ctx);
-  if (!ctx) {
-    throw new Error('useChainCtx: Web3Context is null');
+  const ctx = useContext(Web3Ctx)
+  if (ctx == null) {
+    throw new Error('useChainCtx: Web3Context is null')
   }
-  return ctx;
+  return ctx
 }
 
 export const useWeb3 = () => {
-  const ctx = useChainCtx();
-  return ctx.web3;
+  const ctx = useChainCtx()
+  return ctx.web3
 }
 
 export const useBaseAbiCoder = () => {
-  return abiCoder;
+  return abiCoder
 }
 
-
 export const useWeb3SafeAbiCoder = () => {
-  const web3 = useWeb3();
+  const web3 = useWeb3()
   const encodeFunctionCall = useCallback((...params: Parameters<EncodeFunctionCall>): ReturnType<EncodeFunctionCall> => {
     try {
-      const result = web3.eth.abi.encodeFunctionCall(...params);
-      return result;
+      const result = web3.eth.abi.encodeFunctionCall(...params)
+      return result
     } catch (error) {
-      throw new EncodeFailedAbiCoderError(error as Error);
+      throw new EncodeFailedAbiCoderError(error as Error)
     }
-  }, [web3]);
+  }, [web3])
 
-  return { encodeFunctionCall };
+  return { encodeFunctionCall }
 }

@@ -1,14 +1,15 @@
 import React from 'react'
-import Typography from '@mui/material/Typography'
-import Container from '@mui/material/Container'
-import Stack from '@mui/material/Stack'
-import { AppBar } from 'components/app-bar'
-import Box from '@mui/material/Box'
-import Alert from '@mui/material/Alert'
 
+import Box from '@mui/material/Box'
+import Stack from '@mui/material/Stack'
+import Alert from '@mui/material/Alert'
+import Container from '@mui/material/Container'
+import Typography from '@mui/material/Typography'
+
+import { AppBar } from 'components/app-bar'
 
 interface IProps {
-  reason?: string;
+  reason?: string
 }
 export const Page404: React.FC<IProps> = ({ reason }) => {
   return (
@@ -38,4 +39,3 @@ export const Page404: React.FC<IProps> = ({ reason }) => {
     </>
   )
 }
-

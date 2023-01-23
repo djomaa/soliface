@@ -1,11 +1,10 @@
-import React from 'react';
+import React from 'react'
 
-import { AppBar } from 'components/app-bar';
+import { AppBar } from 'components/app-bar'
 
-import { WalletSelector } from 'components/app-bar/wallet-selector';
+import { WalletSelector } from 'components/app-bar/wallet-selector'
 
 export const ChainPageAppBar: React.FC = () => {
-
   return (
     <AppBar
       right={

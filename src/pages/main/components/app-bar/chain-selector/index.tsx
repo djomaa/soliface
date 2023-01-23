@@ -1,1 +1,1 @@
-export * from './chain-selector';
+export * from './chain-selector'

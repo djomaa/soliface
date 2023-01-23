@@ -1,13 +1,8 @@
-import React from 'react';
-import { useAsync } from 'react-use'
+import React from 'react'
 
-import { AsyncDialogProps } from "react-dialog-async";
-import { useState } from 'react';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog'
+import Button from '@mui/material/Button'
+import DialogTitle from '@mui/material/DialogTitle'
 
 export const InputDialog: React.FC = () => {
   return (
@@ -18,6 +13,5 @@ export const InputDialog: React.FC = () => {
         Close
       </Button>
     </Dialog >
-  );
+  )
 }
-

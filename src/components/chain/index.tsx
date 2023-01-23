@@ -1,1 +1,1 @@
-export * from './components/chain';
+export * from './components/chain'

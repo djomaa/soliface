@@ -1,1 +1,1 @@
-export * from './abi-manager.page';
+export * from './abi-manager.page'

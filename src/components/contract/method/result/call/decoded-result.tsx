@@ -1,86 +1,86 @@
-import Web3 from 'web3';
+import Web3 from 'web3'
 import React from 'react'
 
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridColDef } from '@mui/x-data-grid'
 
-import { AbiItem, AbiOutput } from 'types/abi';
+import { AbiItem, AbiOutput } from 'types/abi'
 
 const DataGridColumns: GridColDef[] = [
   {
     field: 'path',
-    headerName: 'Index',
+    headerName: 'Index'
   },
   {
     field: 'type',
-    headerName: 'Type',
+    headerName: 'Type'
   },
   {
     field: 'name',
-    headerName: 'Name',
+    headerName: 'Name'
   },
   {
     field: 'value',
     headerName: 'Value',
-    flex: 1,
+    flex: 1
     // valueGetter: (p) => {
     //   p.value = <TextField disabled>{p.value}</TextField>
     // }
-  },
+  }
 ]
 
 interface iOut {
-  name: string;
-  type: string;
-  path: number[];
+  name: string
+  type: string
+  path: number[]
 }
 
 interface iOutWithValue extends iOut {
-  id: number;
-  value: string;
+  id: number
+  value: string
 }
 
-function parseOutput(item: AbiOutput, path: number[]): iOut[] {
-  if (item.components) {
+function parseOutput (item: AbiOutput, path: number[]): iOut[] {
+  if (item.components != null) {
     return item.components.map((cItem, i) => {
-      return parseOutput(cItem, [...path, i]);
-    }).flat();
+      return parseOutput(cItem, [...path, i])
+    }).flat()
   }
 
   const out = {
     name: item.name,
     type: item.type,
-    path: path,
+    path
   }
-  return [out];
+  return [out]
 }
 
 interface iProps {
-  raw: string;
-  abi: AbiItem;
-  web3: Web3;
+  raw: string
+  abi: AbiItem
+  web3: Web3
 }
 
 export const MethodDecodedResult: React.FC<iProps> = ({ raw, abi, web3 }) => {
-  if (!abi.outputs || !abi.outputs.length) {
+  if ((abi.outputs == null) || (abi.outputs.length === 0)) {
     return <></>
   };
   // TODO: handle decode failure
-  const decoded = web3.eth.abi.decodeParameters(abi.outputs, raw);
+  const decoded = web3.eth.abi.decodeParameters(abi.outputs, raw)
   const items = abi.outputs
     .map((output, i) => parseOutput(output, [i]))
     .flat()
     .map<iOutWithValue>((out, id) => {
-      const value = out.path.reduce((obj, key) => {
-        return obj[key];
-      }, decoded);
-      return {
-        ...out,
-        // TODO: type cast?
-        name: out.name ?? '-',
-        id,
-        value: value as unknown as string,
-      }
-    });
+    const value = out.path.reduce((obj, key) => {
+      return obj[key]
+    }, decoded)
+    return {
+      ...out,
+      // TODO: type cast?
+      name: out.name ?? '-',
+      id,
+      value: value as unknown as string
+    }
+  })
 
   return (
     <DataGrid

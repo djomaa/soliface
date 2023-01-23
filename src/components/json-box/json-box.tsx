@@ -1,5 +1,6 @@
-import React from 'react';
-import TextField from '@mui/material/TextField';;
+import React from 'react'
+
+import TextField from '@mui/material/TextField'
 
 export const JsonBox: React.FC<{ value: any }> = ({ value }) => {
   return (
@@ -10,5 +11,5 @@ export const JsonBox: React.FC<{ value: any }> = ({ value }) => {
       variant='outlined'
       value={JSON.stringify(value, null, 2)}
     />
-  );
+  )
 }

@@ -1,45 +1,45 @@
-import React, { useMemo, useEffect } from 'react';
+import React, { useMemo, useEffect } from 'react'
 
-import Tooltip from '@mui/material/Tooltip';
-import LoadingButton from '@mui/lab/LoadingButton';
+import Tooltip from '@mui/material/Tooltip'
+import LoadingButton from '@mui/lab/LoadingButton'
 
-import { useContractCtx } from 'contexts/contract';
-import { useAsyncAction } from 'hooks/use-async-action';
-import { useWeb3, useWeb3SafeAbiCoder } from 'contexts/web3';
+import { useContractCtx } from 'contexts/contract'
+import { useAsyncAction } from 'hooks/use-async-action'
+import { useWeb3, useWeb3SafeAbiCoder } from 'contexts/web3'
 
-import { useMethodCtx } from '../context';
-import { IMethodActionConf } from '../types';
-import { EncodeResult } from '../result/encode';
+import { useMethodCtx } from '../method.context'
+import { IMethodActionConf } from '../types'
+import { EncodeResult } from '../result/encode'
 
 export const EncodeAction: React.FC = () => {
-  const { abi, form, setResult } = useMethodCtx();
-  const contractCtx = useContractCtx();
-  const web3 = useWeb3();
-  const safeAbiCoder = useWeb3SafeAbiCoder();
+  const { abi, form, setResult } = useMethodCtx()
+  const contractCtx = useContractCtx()
+  const web3 = useWeb3()
+  const safeAbiCoder = useWeb3SafeAbiCoder()
 
   const [action, perform] = useAsyncAction(async (res: IMethodActionConf) => {
-    const { params, tx } = res;
-    console.log('params', params);
-    const data = safeAbiCoder.encodeFunctionCall(abi, params);
-    return data;
-  }, [web3, abi]);
+    const { params, tx } = res
+    console.log('params', params)
+    const data = safeAbiCoder.encodeFunctionCall(abi, params)
+    return data
+  }, [web3, abi])
 
   useEffect(() => {
-    if (!action) {
-      return;
+    if (action == null) {
+      return
     }
-    setResult(<EncodeResult action={action} />);
+    setResult(<EncodeResult action={action} />)
   }, [action])
 
   const disabledReason = useMemo(() => {
-    return;
+    return
     if (!contractCtx.address) {
-      return 'Address not set';
+      return 'Address not set'
     }
     if (!web3) {
-      return 'Web3 not connected';
+      return 'Web3 not connected'
     }
-  }, [contractCtx.address, web3]);
+  }, [contractCtx.address, web3])
 
   const callButton = (
     <LoadingButton
@@ -51,10 +51,10 @@ export const EncodeAction: React.FC = () => {
     >
       Encode
     </LoadingButton>
-  );
+  )
 
   if (!disabledReason) {
-    return callButton;
+    return callButton
   }
 
   return (
@@ -64,5 +64,4 @@ export const EncodeAction: React.FC = () => {
       </span>
     </Tooltip>
   )
-
 }

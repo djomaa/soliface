@@ -1,21 +1,18 @@
-import * as React from 'react';
+import * as React from 'react'
 import {
   createBrowserRouter,
   Outlet,
-  RouterProvider,
-  Routes,
-  Route,
-  BrowserRouter,
-} from "react-router-dom";
+  RouterProvider
+} from 'react-router-dom'
 
-import CssBaseline from '@mui/material/CssBaseline';
+import CssBaseline from '@mui/material/CssBaseline'
 
-import { AbiManagerPage } from 'pages/abi-manager';
-import { MainPage } from 'pages/main';
-import { Route as Rr } from 'constants/route';
-import { ChainManagerPage } from 'pages/chain-manager';
-import { ChainPage } from 'pages/chain';
-import { Page404 } from 'pages/page-404';
+import { MainPage } from 'pages/main'
+import { ChainPage } from 'pages/chain'
+import { Page404 } from 'pages/page-404'
+import { Route as Rr } from 'constants/route'
+import { AbiManagerPage } from 'pages/abi-manager'
+import { ChainManagerPage } from 'pages/chain-manager'
 
 const Layout: React.FC = () => {
   return (
@@ -25,7 +22,7 @@ const Layout: React.FC = () => {
         <Outlet />
       </main>
     </>
-  );
+  )
 }
 
 const router = createBrowserRouter([
@@ -35,15 +32,15 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <MainPage />,
+        element: <MainPage />
       },
       {
         path: Rr.AbiManager,
-        element: <AbiManagerPage />,
+        element: <AbiManagerPage />
       },
       {
         path: Rr.ChainManager,
-        element: <ChainManagerPage />,
+        element: <ChainManagerPage />
       },
       {
         path: Rr.Chain,
@@ -52,13 +49,10 @@ const router = createBrowserRouter([
       {
         path: '*',
         element: <Page404 />
-      },
-    ],
-  },
-  // TODO: 404
-]);
-
-
+      }
+    ]
+  }
+])
 
 export const App: React.FC = () => {
   return (

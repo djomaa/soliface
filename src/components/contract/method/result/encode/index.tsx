@@ -1,1 +1,1 @@
-export * from './encode.result';
+export * from './encode.result'

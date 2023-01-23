@@ -1,9 +1,9 @@
-export const APP_NAME = 'soliface';
+export const APP_NAME = 'soliface'
 
-const DELEMITER = '/';
+const DELEMITER = '/'
 
-export function createKey(...keys: (string | number)[]) {
-  return keys.join(DELEMITER);
+export function createKey (...keys: Array<string | number>) {
+  return keys.join(DELEMITER)
 }
 
-createKey.DELEMITER = DELEMITER;
+createKey.DELEMITER = DELEMITER

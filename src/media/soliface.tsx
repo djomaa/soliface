@@ -1,4 +1,4 @@
-import { SvgIconFactory } from './factory';
-import { ReactComponent as IconComponent } from './soliface.svg';
+import { SvgIconFactory } from './factory'
+import { ReactComponent as IconComponent } from './soliface.svg'
 
-export const SolifaceIcon = SvgIconFactory(IconComponent);
+export const SolifaceIcon = SvgIconFactory(IconComponent)

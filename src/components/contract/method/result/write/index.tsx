@@ -1,1 +1,1 @@
-export * from './write.result';
+export * from './write.result'

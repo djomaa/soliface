@@ -1,19 +1,18 @@
-import React from 'react';
-import Stack from '@mui/material/Stack';
+import React from 'react'
 
-import { AppBar } from 'components/app-bar';
+import { AppBar } from 'components/app-bar'
 
-import { State } from './state';
-import { ChainSelector } from './chain-selector/chain-selector';
-import { WalletSelector } from 'components/app-bar/wallet-selector';
+import { WalletSelector } from 'components/app-bar/wallet-selector'
+
+import { State } from './state'
+import { ChainSelector } from './chain-selector/chain-selector'
 
 export const MainPageAppBar: React.FC = () => {
-
   return (
     <AppBar
       left={[
         <State key='state' />,
-        <ChainSelector key='chainSelector' />,
+        <ChainSelector key='chainSelector' />
       ]}
       center={
         [

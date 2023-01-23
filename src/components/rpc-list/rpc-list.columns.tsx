@@ -1,38 +1,34 @@
-import React, { useCallback, useMemo } from 'react';
-import { UseQueryResult } from 'react-query';
-import Skeleton from '@mui/material/Skeleton';
-import WalletIcon from '@mui/icons-material/AccountBalanceWallet';
-import { GridActionsCellItem, GridColumns } from '@mui/x-data-grid';
-import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
+import { UseQueryResult } from 'react-query'
+import React, { useCallback, useMemo } from 'react'
 
-import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
-import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
+import Skeleton from '@mui/material/Skeleton'
+import WalletIcon from '@mui/icons-material/AccountBalanceWallet'
+import { GridActionsCellItem, GridColumns } from '@mui/x-data-grid'
+import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked'
+import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
 
-import { IData } from './query';
-import { getStatusIcon, getStatusWeight } from './rpc-list.utils';
-import { IWallet } from 'hooks/use-wallet-list';
-import { useChainCtx } from 'contexts/web3';
-import { Chain } from 'types/chain';
-import { useDefaultRpc } from 'hooks/use-default-rpc';
-import { useModalCtx } from 'contexts/modal/modal.context';
-import { AddChainModal } from './add-chain/add-chain-dialog';
+import { Chain } from 'types/chain'
+import { useChainCtx } from 'contexts/web3'
+import { useModalCtx } from 'contexts/modal'
+import { useDefaultRpc } from 'hooks/use-default-rpc'
+import { AddChainModal } from 'modals/add-chain.modal'
+
+import { IData } from './query'
+import { getStatusIcon, getStatusWeight } from './rpc-list.utils'
 
 interface IRow {
-  id: string;
-  query: UseQueryResult<IData>;
+  id: string
+  query: UseQueryResult<IData>
 }
 
-
 export const useRpcListColumns = (chain: Chain) => {
-
-  const chainCtx = useChainCtx();
-  const modalCtx = useModalCtx();
-  const [defaultRpc, setDefaultRpc] = useDefaultRpc(chain.chainId);
+  const chainCtx = useChainCtx()
+  const modalCtx = useModalCtx()
+  const [defaultRpc, setDefaultRpc] = useDefaultRpc(chain.chainId)
 
   const addChain = useCallback((chain: Chain, rpc: string) => {
-    console.log('!!! add')
-    modalCtx.addModal(AddChainModal, { chain: { ...chain, rpc: [rpc] } });
-  }, [chainCtx.addChain, modalCtx.addModal]);
+    modalCtx.addModal(AddChainModal, { chain: { ...chain, rpc: [rpc] } })
+  }, [chainCtx.addChain, modalCtx.addModal])
 
   const columns = useMemo(() => {
     const ColumnsCore: GridColumns<IRow> = [
@@ -42,10 +38,10 @@ export const useRpcListColumns = (chain: Chain) => {
         align: 'center',
         headerAlign: 'center',
         valueGetter: (params) => {
-          return getStatusWeight(params.row.query);
+          return getStatusWeight(params.row.query)
         },
         renderCell: (params) => {
-          return getStatusIcon(params.row.query);
+          return getStatusIcon(params.row.query)
         }
       },
       {
@@ -54,8 +50,8 @@ export const useRpcListColumns = (chain: Chain) => {
         headerAlign: 'center',
         flex: 1,
         valueGetter: (params) => {
-          return params.row.id;
-        },
+          return params.row.id
+        }
       },
       {
         field: 'block',
@@ -63,20 +59,20 @@ export const useRpcListColumns = (chain: Chain) => {
         headerAlign: 'center',
         align: 'center',
         valueGetter: (params) => {
-          return params.row.query.data?.block;
+          return params.row.query.data?.block
         },
         renderCell: (params) => {
           if (params.row.query.isLoading) {
             return <Skeleton variant="rectangular" width='80%' height='40%' />
           }
           if (params.row.query.isSuccess) {
-            const value = params.colDef.valueGetter!(params);
+            const value = params.colDef.valueGetter!(params)
             if (value) {
-              return value;
+              return value
             }
           }
-          return '-';
-        },
+          return '-'
+        }
       },
       {
         field: 'latency',
@@ -84,24 +80,24 @@ export const useRpcListColumns = (chain: Chain) => {
         headerAlign: 'center',
         align: 'center',
         valueGetter: (params) => {
-          return params.row.query.data?.latency;
+          return params.row.query.data?.latency
         },
         renderCell: (params) => {
           if (params.row.query.isLoading) {
             return <Skeleton variant="rectangular" width='80%' height='40%' />
           }
           if (params.row.query.isSuccess) {
-            const oValue = params.colDef.valueGetter!(params) as number | undefined;
+            const oValue = params.colDef.valueGetter!(params) as number | undefined
             if (oValue) {
-              const inSeconds = oValue / 1e3;
+              const inSeconds = oValue / 1e3
               const formatedValue = inSeconds.toLocaleString(undefined, {
-                maximumFractionDigits: 3,
-              });
-              return `${formatedValue}s`;
+                maximumFractionDigits: 3
+              })
+              return `${formatedValue}s`
             }
           }
-          return '-';
-        },
+          return '-'
+        }
       },
       {
         field: 'actions',
@@ -110,8 +106,8 @@ export const useRpcListColumns = (chain: Chain) => {
         width: 100,
         cellClassName: 'actions',
         getActions: (params) => {
-          const { isSuccess } = params.row.query;
-          const isDefaultRpc = params.row.id === defaultRpc;
+          const { isSuccess } = params.row.query
+          const isDefaultRpc = params.row.id === defaultRpc
 
           return [
             <GridActionsCellItem
@@ -122,7 +118,7 @@ export const useRpcListColumns = (chain: Chain) => {
               label="Set as defaul"
               className="textPrimary"
               onClick={() => {
-                setDefaultRpc(params.row.id);
+                setDefaultRpc(params.row.id)
               }}
               color="inherit"
             />,
@@ -132,23 +128,22 @@ export const useRpcListColumns = (chain: Chain) => {
               icon={<WalletIcon />}
               label="Add to wallet"
               className="textPrimary"
-              onClick={() => addChain(chain, params.row.id)}
+              onClick={() => { addChain(chain, params.row.id) }}
               color="inherit"
-            />,
-          ];
-        },
+            />
+          ]
+        }
       }
-    ];
+    ]
 
     return ColumnsCore.map((column) => {
       return {
         ...column,
         disableColumnMenu: true,
-        disableReorder: true,
-      };
-    });
-  }, [chain, defaultRpc, chainCtx.canAddChain]);
+        disableReorder: true
+      }
+    })
+  }, [chain, defaultRpc, chainCtx.canAddChain])
 
-  return columns;
-
+  return columns
 }

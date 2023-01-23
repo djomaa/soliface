@@ -1,1 +1,1 @@
-export * from './struct.input';
+export * from './struct.input'

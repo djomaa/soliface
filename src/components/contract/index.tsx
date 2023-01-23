@@ -1,19 +1,19 @@
 import React from 'react'
-import Box from '@mui/material/Box';
-import Skeleton from '@mui/material/Skeleton';
+import Box from '@mui/material/Box'
+import Skeleton from '@mui/material/Skeleton'
 
-import { useContractCtx } from 'contexts/contract';
-import { useBaseAbiCoder } from 'contexts/web3';
+import { useContractCtx } from 'contexts/contract'
+import { useBaseAbiCoder } from 'contexts/web3'
 
-import { ContractMethod } from './method';
-import { ContractConfig } from './config';
+import { ContractMethod } from './method'
+import { ContractConfig } from './config'
 
 export const Contract: React.FC = () => {
-  const ctx = useContractCtx();
-  const abiCoder = useBaseAbiCoder();
+  const ctx = useContractCtx()
+  const abiCoder = useBaseAbiCoder()
 
-  const { artifact } = ctx;
-  const methods = artifact?.abi.filter((item) => item.type !== 'event');
+  const { artifact } = ctx
+  const methods = artifact?.abi.filter((item) => item.type !== 'event')
 
   return (
     <>
@@ -22,12 +22,14 @@ export const Contract: React.FC = () => {
       >
         <ContractConfig />
       </Box>
-      {methods ? methods.map((item) => {
-        const fullName = abiCoder.encodeFunctionSignature(item);
-        return (
+      {(methods != null)
+        ? methods.map((item) => {
+          const fullName = abiCoder.encodeFunctionSignature(item)
+          return (
           <ContractMethod key={fullName} abi={item} />
-        )
-      }) : (
+          )
+        })
+        : (
         <Box>
           <Skeleton variant="rectangular" height={100} />
           <br />
@@ -37,7 +39,7 @@ export const Contract: React.FC = () => {
           <br />
           <Skeleton variant="rectangular" height={100} />
         </Box>
-      )}
+          )}
     </>
   )
 }

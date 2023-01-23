@@ -1,29 +1,29 @@
-import React, { useState } from 'react';
-import { FormContainer } from 'react-hook-form-mui';
+import React, { useState } from 'react'
+import { FormContainer } from 'react-hook-form-mui'
 
-import Stack from '@mui/material/Stack';
-import Divider from '@mui/material/Divider';
-import Accordion from '@mui/material/Accordion';
-import Typography from '@mui/material/Typography';
-import ExpandMore from '@mui/icons-material/ExpandMore';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
+import Stack from '@mui/material/Stack'
+import Divider from '@mui/material/Divider'
+import Accordion from '@mui/material/Accordion'
+import Typography from '@mui/material/Typography'
+import ExpandMore from '@mui/icons-material/ExpandMore'
+import AccordionSummary from '@mui/material/AccordionSummary'
+import AccordionDetails from '@mui/material/AccordionDetails'
 
-import { MethodInputs } from './inputs';
-import { MethodActions } from './actions';
-import { useMethodCtx } from './context';
+import { MethodInputs } from './inputs'
+import { MethodActions } from './actions'
+import { useMethodCtx } from './method.context'
 
 interface iProps {
 }
 export const ContractMethodBody: React.FC<iProps> = () => {
-  const [open, setOpen] = useState(false);
-  const ctx = useMethodCtx();
+  const [open, setOpen] = useState(false)
+  const ctx = useMethodCtx()
 
   return (
     <Accordion
       expanded={open}
       TransitionProps={{ unmountOnExit: true }}
-      onChange={() => setOpen((prev) => !prev)}
+      onChange={() => { setOpen((prev) => !prev) }}
     >
       <AccordionSummary
         expandIcon={<ExpandMore />}

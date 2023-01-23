@@ -1,1 +1,1 @@
-export * from './chain-manager.page';
+export * from './chain-manager.page'

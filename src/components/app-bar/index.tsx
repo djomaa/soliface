@@ -1,20 +1,19 @@
-import React from 'react';
+import React from 'react'
 
-import Stack from '@mui/material/Stack';
-import Toolbar from '@mui/material/Toolbar';
-import MuiAppBar from '@mui/material/AppBar';
+import Stack from '@mui/material/Stack'
+import Toolbar from '@mui/material/Toolbar'
+import MuiAppBar from '@mui/material/AppBar'
 
-import { SolifaceIcon } from 'media/soliface';
+import { SolifaceIcon } from 'media/soliface'
 
-import { PageSelector } from './page-selector';
+import { PageSelector } from './page-selector'
 
 interface IAppBarProps {
-  left?: JSX.Element[];
-  center?: JSX.Element[];
-  right?: JSX.Element[];
+  left?: JSX.Element[]
+  center?: JSX.Element[]
+  right?: JSX.Element[]
 }
 export const AppBar: React.FC<IAppBarProps> = ({ left = [], center = [], right = [] }) => {
-
   return (
     <MuiAppBar
       position="sticky"

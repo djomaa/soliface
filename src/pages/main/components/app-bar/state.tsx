@@ -1,24 +1,25 @@
-import React from 'react';
-import CircleIcon from '@mui/icons-material/Circle';
+import React from 'react'
+
+import CircleIcon from '@mui/icons-material/Circle'
 
 import { useChainCtx, Status } from 'contexts/web3'
 
 function getColorByStatus(status: Status) {
   switch (status) {
     case Status.NotConnected:
-      return 'disabled';
+      return 'disabled'
     case Status.Failed:
-      return 'error';
+      return 'error'
     case Status.Connected:
-      return 'success';
+      return 'success'
     default:
-      throw new Error(`${getColorByStatus.name}: Unknown status "${status}"`);
+      throw new Error(`${getColorByStatus.name}: Unknown status "${status}"`)
   }
 }
 
 export const State: React.FC = () => {
-  const ctx = useChainCtx();
-  const color = getColorByStatus(ctx.status);
+  const ctx = useChainCtx()
+  const color = getColorByStatus(ctx.status)
 
   // if (ctx.wallet) {
   //   const realColor = {
@@ -35,7 +36,6 @@ export const State: React.FC = () => {
   //     </>
   //   );
   // }
-
 
   return (
     <CircleIcon

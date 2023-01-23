@@ -1,40 +1,37 @@
-import React, { useState, useMemo, useRef } from 'react';
+import React, { useMemo } from 'react'
 
-import Menu from '@mui/material/Menu';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
-import TextField from '@mui/material/TextField';
+import Box from '@mui/system/Box'
+import List from '@mui/material/List'
+import { ListItem } from '@mui/material'
+import Button from '@mui/material/Button'
+import Tooltip from '@mui/material/Tooltip'
+import Popover from '@mui/material/Popover'
+import TextField from '@mui/material/TextField'
+import ListItemButton from '@mui/material/ListItemButton'
 
-import { Chain } from 'types/chain';
-import { Status, useChainCtx } from 'contexts/web3';
-import { searchChain, useChainList } from 'hooks/use-chain-list';
-
-import style from './chain-selector.module.scss';
-import Popover from '@mui/material/Popover';
-import List from '@mui/material/List';
-import { ListItem } from '@mui/material';
-import ListItemButton from '@mui/material/ListItemButton';
-import { useSearch } from 'hooks/use-search';
-import { useFocus } from 'hooks/use-focus';
-import { ModalCtxProvider, useModalCtx } from 'contexts/modal';
-import { ChangeChainModal } from './connect-chain.dialog';
-import Box from '@mui/system/Box';
+import { Chain } from 'types/chain'
+import { useFocus } from 'hooks/use-focus'
+import { useSearch } from 'hooks/use-search'
+import { Status, useChainCtx } from 'contexts/web3'
+import { ChangeChainModal } from 'modals/connect-chain.modal'
+import { ModalCtxProvider, useModalCtx } from 'contexts/modal'
+import { searchChain, useChainList } from 'hooks/use-chain-list'
 
 export const ChainSelectorCore: React.FC = () => {
-
-  const chainCtx = useChainCtx();
-  const modalCtx = useModalCtx();
-  const { chainList } = useChainList();
-  const [search, setSearch, searchList] = useSearch(chainList, searchChain);
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [searchRef, focusSearch] = useFocus();
-  const chain = chainList.find((n) => n.chainId === chainCtx.chainId);
+  const chainCtx = useChainCtx()
+  const modalCtx = useModalCtx()
+  const { chainList } = useChainList()
+  const [search, setSearch, searchList] = useSearch(chainList, searchChain)
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+  const [searchRef, focusSearch] = useFocus()
+  const chain = useMemo(() => {
+    return chainList.find((n) => n.chainId === chainCtx.chainId);
+  }, [chainCtx.chainId]);
 
   const changeChain = (chain: Chain) => {
-    setAnchorEl(null);
-    return modalCtx.addModal(ChangeChainModal, { chain });
-  };
+    setAnchorEl(null)
+    return modalCtx.addModal(ChangeChainModal, { chain })
+  }
 
   const options = useMemo(() => {
     return searchList.map((chain) => {
@@ -46,8 +43,8 @@ export const ChainSelectorCore: React.FC = () => {
           {chain.name}
         </ListItemButton>
       )
-    });
-  }, [searchList]);
+    })
+  }, [searchList])
 
   if (chainCtx.status === Status.Connected && !chainCtx.canSwitchChain) {
     return (
@@ -58,28 +55,28 @@ export const ChainSelectorCore: React.FC = () => {
           </Button>
         </Tooltip>
       </>
-    );
+    )
   }
 
   return (
     <Box>
       <Button
         onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
-          setAnchorEl(event.currentTarget);
-          focusSearch(10);
+          setAnchorEl(event.currentTarget)
+          focusSearch(10)
         }}
       >
-        {chain?.name ?? "Not connected"}
+        {chain?.name ?? 'Not connected'}
       </Button>
       <Popover
-        open={!!anchorEl}
+        open={!(anchorEl == null)}
         keepMounted
         anchorEl={anchorEl}
-        onClose={() => setAnchorEl(null)}
+        onClose={() => { setAnchorEl(null) }}
         sx={{ maxHeight: '95vh' }}
         anchorOrigin={{
           vertical: 'bottom',
-          horizontal: 'left',
+          horizontal: 'left'
         }}
       >
         <List>
@@ -89,12 +86,12 @@ export const ChainSelectorCore: React.FC = () => {
               fullWidth
               focused={true}
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => { setSearch(e.target.value) }}
               size='small'
             />
           </ListItem>
           {options}
-          {!options.length && (
+          {(options.length === 0) && (
             <ListItem>
               No chains found :c
             </ListItem>
@@ -102,8 +99,7 @@ export const ChainSelectorCore: React.FC = () => {
         </List>
       </Popover>
     </Box>
-  );
-
+  )
 }
 
 export const ChainSelector: React.FC = () => {

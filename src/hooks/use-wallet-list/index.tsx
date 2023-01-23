@@ -1,2 +1,2 @@
-export * from './use-wallet-list';
-export * from './interafaces';
+export * from './use-wallet-list'
+export * from './interafaces'
