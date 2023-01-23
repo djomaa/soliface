@@ -2,7 +2,7 @@ import { useForm, UseFormReturn } from 'react-hook-form'
 import React, { createContext, useContext, useEffect, useState } from 'react'
 
 import { AbiItem } from 'types/abi'
-import { useChainCtx } from 'contexts/web3'
+import { useChainCtx } from 'contexts/chain'
 import { useLogger } from 'hooks/use-logger'
 
 import { IMethodActionConf } from './types'

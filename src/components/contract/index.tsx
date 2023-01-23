@@ -3,7 +3,7 @@ import Box from '@mui/material/Box'
 import Skeleton from '@mui/material/Skeleton'
 
 import { useContractCtx } from 'contexts/contract'
-import { useBaseAbiCoder } from 'contexts/web3'
+import { useBaseAbiCoder } from 'contexts/chain'
 
 import { ContractMethod } from './method'
 import { ContractConfig } from './config'
@@ -26,20 +26,20 @@ export const Contract: React.FC = () => {
         ? methods.map((item) => {
           const fullName = abiCoder.encodeFunctionSignature(item)
           return (
-          <ContractMethod key={fullName} abi={item} />
+            <ContractMethod key={fullName} abi={item} />
           )
         })
         : (
-        <Box>
-          <Skeleton variant="rectangular" height={100} />
-          <br />
-          <Skeleton variant="rectangular" height={100} />
-          <br />
-          <Skeleton variant="rectangular" height={100} />
-          <br />
-          <Skeleton variant="rectangular" height={100} />
-        </Box>
-          )}
+          <Box>
+            <Skeleton variant="rectangular" height={100} />
+            <br />
+            <Skeleton variant="rectangular" height={100} />
+            <br />
+            <Skeleton variant="rectangular" height={100} />
+            <br />
+            <Skeleton variant="rectangular" height={100} />
+          </Box>
+        )}
     </>
   )
 }

@@ -22,7 +22,6 @@ export const AddressInput: React.FC = () => {
     }
   }
 
-  const errD = !focus && error
   return (
     <TextField
       fullWidth

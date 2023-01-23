@@ -8,7 +8,7 @@ import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked'
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
 
 import { Chain } from 'types/chain'
-import { useChainCtx } from 'contexts/web3'
+import { useChainCtx } from 'contexts/chain'
 import { useModalCtx } from 'contexts/modal'
 import { useDefaultRpc } from 'hooks/use-default-rpc'
 import { AddChainModal } from 'modals/add-chain.modal'

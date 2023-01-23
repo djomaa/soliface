@@ -9,7 +9,7 @@ import Snackbar, { SnackbarProps } from '@mui/material/Snackbar'
 
 import { Chain } from 'types/chain'
 import { AsyncModal } from 'contexts/modal'
-import { useChainCtx } from 'contexts/web3'
+import { useChainCtx } from 'contexts/chain'
 import { useLogger } from 'hooks/use-logger'
 import { useDefaultRpc } from 'hooks/use-default-rpc'
 
@@ -18,9 +18,6 @@ interface IProps {
   chain: Chain
 }
 
-enum TabValue {
-  Rpc = 'Rpc',
-}
 
 interface ContentProps extends AlertProps, Pick<SnackbarProps, 'autoHideDuration'> {
   text: string
@@ -35,10 +32,12 @@ export const ConnectChainToast: AsyncModal<IProps> = ({ chain, ...props }) => {
   logState('defaultRpc', defaultRpc)
 
   const state = useAsync(async () => {
-    chainCtx.changeChain(chain)
+    await chainCtx.changeChain(chain)
   }, [chainCtx.changeChain, chain])
 
   const { text, autoHideDuration, ...alertProps } = useMemo<ContentProps>(() => {
+    console.log('state', state);
+
     if (state.loading) {
       return {
         severity: 'info',
@@ -62,7 +61,8 @@ export const ConnectChainToast: AsyncModal<IProps> = ({ chain, ...props }) => {
     return {
       severity: 'success',
       text: 'Connected',
-      autoHideDuration: 2e3
+      action: closeAction,
+      autoHideDuration: 5e3
     }
   }, [state.error, state.loading])
 

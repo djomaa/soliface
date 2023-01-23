@@ -11,7 +11,7 @@ import InputAdornment from '@mui/material/InputAdornment'
 import ChangeCircleOutlinedIcon from '@mui/icons-material/ChangeCircleOutlined'
 
 import { cutAddress } from 'utils/address'
-import { useChainCtx } from 'contexts/web3'
+import { useChainCtx } from 'contexts/chain'
 import { useWalletList, IWallet } from 'hooks/use-wallet-list'
 
 export const WalletSelector: React.FC = () => {

@@ -26,7 +26,7 @@ export const useAsyncAction = <
       }
     })
   }
-  const action = (memo != null) ? useCallback(oAction, memo) : oAction
+  const action = useCallback(oAction, memo != null ? memo : []);
   const perform = useCallback((...params: TArgs) => {
     logger.log('Performing')
     update({ id, loading: true, error: undefined, result: undefined })

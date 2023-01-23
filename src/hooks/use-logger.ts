@@ -13,6 +13,7 @@ export const useLogger = (keyOrFn: string | Function, ...subs: Stringifiable[]) 
 
     const logState = (text: string, state: any) => {
       const subLogger = logger.sub(text)
+      // eslint-disable-next-line react-hooks/rules-of-hooks
       useEffect(() => {
         subLogger.debug(state)
       }, [state])

@@ -12,7 +12,7 @@ import DialogTitle from '@mui/material/DialogTitle'
 import DialogContent from '@mui/material/DialogContent'
 
 import { Chain } from 'types/chain'
-import { useChainCtx } from 'contexts/web3'
+import { useChainCtx } from 'contexts/chain'
 import style from 'styles/dialog.module.scss'
 import { useDefaultRpc } from 'hooks/use-default-rpc'
 import { AsyncModal, useModalCtx } from 'contexts/modal'

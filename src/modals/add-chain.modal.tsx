@@ -17,7 +17,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 
 import { Chain } from 'types/chain'
 import { AsyncModal } from 'contexts/modal'
-import { useChainCtx } from 'contexts/web3'
+import { useChainCtx } from 'contexts/chain'
 import { JsonBox } from 'components/json-box'
 import style from 'styles/dialog.module.scss'
 

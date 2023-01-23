@@ -1,19 +1,18 @@
 import { QueryOptions, useQueries } from 'react-query'
 
-import { useLogger } from 'hooks/use-logger'
 
 import { IData } from './constants'
 import { fetchWsRpcData } from './ws.rpc'
 import { fetchHttpRpcData } from './http.rpc'
 
 export const useRpcListQuery = (urls: string[]) => {
-  const queries = urls.map((url) => useRpcQuery(url))
+  const queries = urls.map((url) => createRpcQuery(url))
   return useQueries(queries)
 }
 
-export const useRpcQuery = (url: string): QueryOptions<IData> => {
-  const [Logger] = useLogger(useRpcQuery)
-  Logger.debug('creating rpc query for url', url)
+export const createRpcQuery = (url: string): QueryOptions<IData> => {
+  // const [Logger] = useLogger(createRpcQuery)
+  // Logger.debug('creating rpc query for url', url)
   const fn = getFetcher(url)
   return {
     queryKey: ['get-rpc-data', url],
@@ -22,7 +21,7 @@ export const useRpcQuery = (url: string): QueryOptions<IData> => {
   }
 }
 
-export function getFetcher (oUrl: string) {
+export function getFetcher(oUrl: string) {
   const url = new URL(oUrl)
   switch (url.protocol) {
     case 'wss:':

@@ -9,6 +9,7 @@ import { useStore } from 'hooks/use-store'
 import { useLogger } from 'hooks/use-logger'
 import { IWallet, useWalletList } from 'hooks/use-wallet-list/use-wallet-list'
 import { IAddChainConnector, ISwitchChainConnector } from 'hooks/use-wallet-list'
+import { ChainCtxAnalytics } from 'contexts/analytics'
 
 export enum Status {
   NotConnected,
@@ -32,7 +33,7 @@ function canConnectorChainBeAdded<T extends AbstractConnector>(connector: T): co
 }
 
 interface IState {
-  changeChain: (chain: Chain) => void
+  changeChain: (chain: Chain) => Promise<void>
   addChain: (chain: Chain) => Promise<void>
   connectWallet: (wallet: IWallet) => void
   disconnect: () => void
@@ -44,13 +45,13 @@ interface IState {
   canSwitchChain: boolean | null
   canAddChain: boolean | null
 }
-export const Web3Ctx = createContext<IState | null>(null)
+export const ChainCtx = createContext<IState | null>(null)
 
 interface IProps {
   children: React.ReactNode | React.ReactNode[]
 }
-export const Web3CtxProvider: React.FC<IProps> = (props) => {
-  const [Logger] = useLogger(Web3CtxProvider)
+export const ChainCtxProviderCore: React.FC<IProps> = (props) => {
+  const [Logger] = useLogger(ChainCtxProviderCore)
   const ctx = useWeb3React()
   const { wallets } = useWalletList()
   const WalletStorage = useStore.object(['wallet'])
@@ -95,14 +96,6 @@ export const Web3CtxProvider: React.FC<IProps> = (props) => {
     logger.log('Wallet updated', wallet)
     return wallet
   }, [ctx.connector, wallets])
-
-  useEffect(() => {
-    if (wallet != null) {
-      WalletStorage.set(wallet.name)
-    } else {
-      WalletStorage.remove()
-    }
-  }, [wallet])
 
   const canSwitchChain = useMemo(() => {
     const logger = Logger.sub('useMemo:canSwitchChain')
@@ -181,7 +174,7 @@ export const Web3CtxProvider: React.FC<IProps> = (props) => {
       }
       connect(wallet)
     }
-  }, [])
+  }, [WalletStorage.value])
 
   const value: IState = {
     status,
@@ -198,9 +191,10 @@ export const Web3CtxProvider: React.FC<IProps> = (props) => {
   }
 
   return (
-    <Web3Ctx.Provider value={value}>
+    <ChainCtx.Provider value={value}>
+      <ChainCtxAnalytics />
       {props.children}
-    </Web3Ctx.Provider>
+    </ChainCtx.Provider>
   )
 }
 
@@ -209,7 +203,7 @@ export const ChainCtxProvider: React.FC<any> = (props) => {
     <Web3ReactProvider
       getLibrary={getLibrary}
     >
-      <Web3CtxProvider {...props} />
+      <ChainCtxProviderCore {...props} />
     </Web3ReactProvider>
   )
 }

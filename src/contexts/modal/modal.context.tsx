@@ -1,8 +1,9 @@
-import React, { createContext, ReactElement, useContext, useState } from 'react'
+import React, { createContext, useContext, useEffect } from 'react'
 
 import Box from '@mui/material/Box'
 
 import { useLogger } from 'hooks/use-logger'
+import { useList } from 'react-use'
 
 export interface IModalBaseProps {
   id: number
@@ -31,36 +32,46 @@ interface IProps {
   children: React.ReactNode | React.ReactNode[]
 }
 let ind = 0
+let id = 1
 export const ModalCtxProvider: React.FC<IProps> = ({ children }) => {
   const [logger, { logState }] = useLogger(ModalCtxProvider, ind++)
-  const [modals, setModals] = useState<Array<ReactElement<IModalBaseProps>>>([])
+  // const [modals, setModals] = useState<Array<ReactElement<IModalBaseProps>>>([])
+  const [modals, { filter, push }] = useList<React.ReactElement<IModalBaseProps>>([]);
 
   const closeModal = (id: number) => {
     logger.debug('Close', id)
-    setModals((modals) => {
-      return modals.filter((modal) => {
-        return modal.props.id !== id;
-      })
-    })
+    return filter((modal) => modal.props.id !== id);
+    // setModals((modals) => {
+    //   console.log('33333#', 'rm', id);
+    //   return modals.filter((modal) => {
+    //     console.log("🚀 ~ file: modal.context.tsx:43 ", modal, id)
+    //     return modal.props.id !== id;
+    //   })
+    // })
   }
 
-  let id = 1
   const addModal: IAddModal = (Component, props) => {
     const cId = id++
     logger.debug('Add', cId)
     const element = (
-      <Box key={cId}>
-        <Component
-          key={cId}
-          id={cId}
-          handleClose={() => { closeModal(cId) }}
-          {...props} />
-      </Box>
+      <Component
+        key={cId}
+        id={cId}
+        handleClose={() => {
+          console.log('handle close');
+          closeModal(cId)
+        }}
+        {...props} />
     )
-    setModals((modals) => [...modals, element])
+    // setModals((modals) => [...modals, element])
+    push(element);
     logger.debug('Done')
     return cId
   }
+
+  useEffect(() => {
+    console.log("🚀 ~ file: modal.context.tsx:69 ~ useEffect ~ modals", modals)
+  }, [modals])
 
   logState('modals', modals)
   const value = {

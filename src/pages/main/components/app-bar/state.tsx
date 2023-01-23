@@ -2,7 +2,7 @@ import React from 'react'
 
 import CircleIcon from '@mui/icons-material/Circle'
 
-import { useChainCtx, Status } from 'contexts/web3'
+import { useChainCtx, Status } from 'contexts/chain'
 
 function getColorByStatus(status: Status) {
   switch (status) {

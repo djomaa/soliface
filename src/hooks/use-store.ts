@@ -44,6 +44,7 @@ export const useStore = <T>(keys: Array<string | number>) => {
 }
 
 useStore.object = (...params: Parameters<(typeof useStore)>) => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [value, set, remove] = useStore(...params)
   return { value, set, remove }
 }

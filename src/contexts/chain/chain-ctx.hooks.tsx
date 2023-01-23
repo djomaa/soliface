@@ -4,12 +4,12 @@ import { useCallback, useContext } from 'react'
 import { abiCoder } from 'helpers/abi'
 
 import { EncodeFailedAbiCoderError } from './abi-coder.errors'
-import { Web3Ctx } from './chain.context'
+import { ChainCtx } from './chain.context'
 
 type EncodeFunctionCall = Web3['eth']['abi']['encodeFunctionCall']
 
 export const useChainCtx = () => {
-  const ctx = useContext(Web3Ctx)
+  const ctx = useContext(ChainCtx)
   if (ctx == null) {
     throw new Error('useChainCtx: Web3Context is null')
   }
