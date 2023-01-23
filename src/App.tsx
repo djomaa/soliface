@@ -17,6 +17,7 @@ import { ChainManagerPage } from 'pages/chain-manager'
 import { useEffect } from 'react'
 import { AnalyticsCtxProvider, useAnalytics } from 'contexts/analytics'
 import { ModalCtxProvider } from 'contexts/modal'
+import { ContractCtxProvider } from 'contexts/contract'
 
 const Layout: React.FC = () => {
   const analytics = useAnalytics();
@@ -27,10 +28,12 @@ const Layout: React.FC = () => {
 
   return (
     <ModalCtxProvider>
-      <CssBaseline />
-      <main>
-        <Outlet />
-      </main>
+      <ContractCtxProvider>
+        <CssBaseline />
+        <main>
+          <Outlet />
+        </main>
+      </ContractCtxProvider>
     </ModalCtxProvider>
   )
 }
