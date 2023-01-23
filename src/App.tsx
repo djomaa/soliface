@@ -16,6 +16,7 @@ import { AbiManagerPage } from 'pages/abi-manager'
 import { ChainManagerPage } from 'pages/chain-manager'
 import { useEffect } from 'react'
 import { AnalyticsCtxProvider, useAnalytics } from 'contexts/analytics'
+import { ModalCtxProvider } from 'contexts/modal'
 
 const Layout: React.FC = () => {
   const analytics = useAnalytics();
@@ -25,12 +26,12 @@ const Layout: React.FC = () => {
   }, [analytics]);
 
   return (
-    <>
+    <ModalCtxProvider>
       <CssBaseline />
       <main>
         <Outlet />
       </main>
-    </>
+    </ModalCtxProvider>
   )
 }
 

@@ -5,6 +5,16 @@ import { APP_NAME, createKey } from 'constants/storage'
 import { useLogger } from './use-logger'
 import { useEventEmitter } from './use-event-emitter'
 
+function obtain(key: string) {
+  const raw = localStorage.getItem(key)
+  if (raw === null) {
+    return
+  }
+  const decoded = JSON.parse(raw)
+  return decoded;
+}
+
+
 export const useStore = <T>(keys: Array<string | number>) => {
   const key = useMemo(() => {
     return createKey(APP_NAME, ...keys)
@@ -12,16 +22,12 @@ export const useStore = <T>(keys: Array<string | number>) => {
 
   const [Logger, { logState }] = useLogger(useStore.name, key)
 
-  const [value, setValue] = useState<T | null>(null)
+  const [value, setValue] = useState<T | null>(() => obtain(key));
 
   const emit = useEventEmitter(key, () => {
     Logger.debug('Updated by event', key)
-    const raw = localStorage.getItem(key)
-    if (raw === null) {
-      return
-    }
-    const decoded = JSON.parse(raw)
-    setValue(decoded)
+    const newValue = obtain(key);
+    setValue(newValue)
   })
 
   logState('value', value)

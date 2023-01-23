@@ -1,19 +1,19 @@
-import React, { createContext, useContext, useEffect } from 'react'
+import React, { createContext, useContext } from 'react'
 
 import Box from '@mui/material/Box'
 
 import { useLogger } from 'hooks/use-logger'
 import { useList } from 'react-use'
 
-export interface IModalBaseProps {
+export interface IAsyncModalBaseProps {
   id: number
   handleClose: () => void
   // className: string;
 }
 
-type IAddModal = <T>(component: React.FC<IModalBaseProps & T>, props: T) => number
+type IAddModal = <T>(component: React.FC<IAsyncModalBaseProps & T>, props: T) => number
 
-export type AsyncModal<T = {}> = React.FC<IModalBaseProps & T>
+export type AsyncModal<T = {}> = React.FC<IAsyncModalBaseProps & T>
 
 interface IState {
   addModal: IAddModal
@@ -36,7 +36,7 @@ let id = 1
 export const ModalCtxProvider: React.FC<IProps> = ({ children }) => {
   const [logger, { logState }] = useLogger(ModalCtxProvider, ind++)
   // const [modals, setModals] = useState<Array<ReactElement<IModalBaseProps>>>([])
-  const [modals, { filter, push }] = useList<React.ReactElement<IModalBaseProps>>([]);
+  const [modals, { filter, push }] = useList<React.ReactElement<IAsyncModalBaseProps>>([]);
 
   const closeModal = (id: number) => {
     logger.debug('Close', id)
@@ -68,10 +68,6 @@ export const ModalCtxProvider: React.FC<IProps> = ({ children }) => {
     logger.debug('Done')
     return cId
   }
-
-  useEffect(() => {
-    console.log("🚀 ~ file: modal.context.tsx:69 ~ useEffect ~ modals", modals)
-  }, [modals])
 
   logState('modals', modals)
   const value = {

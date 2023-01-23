@@ -1,6 +1,7 @@
-import { AppName } from './common'
+// import { AppName } from './common'
 
-export const APP_NAME = AppName;
+// export const APP_NAME = AppName;
+export const APP_NAME = 'soliface';
 
 const DELEMITER = '/'
 
