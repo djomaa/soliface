@@ -1,17 +1,7 @@
-import { useSearchParams } from 'react-router-dom'
-import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import React, { createContext, useContext, useState } from 'react'
 
-import { safe } from 'helpers/safe'
 import { Artifact } from 'helpers/abi'
-import { decodeB64 } from 'helpers/base64'
 import { useLogger } from 'hooks/use-logger'
-import { useArtifactStore } from 'hooks/use-artifact-store'
-
-enum SearchParam {
-  Address = 'address',
-  Artifact = 'artifact',
-  ArtifactHash = 'artifactHash',
-}
 
 interface IState {
   artifact?: Artifact

@@ -39,7 +39,7 @@ export const ModalCtxProvider: React.FC<IProps> = ({ children }) => {
     logger.debug('Close', id)
     setModals((modals) => {
       return modals.filter((modal) => {
-        modal.props.id !== id
+        return modal.props.id !== id;
       })
     })
   }

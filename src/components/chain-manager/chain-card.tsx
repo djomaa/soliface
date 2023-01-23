@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import Card from '@mui/material/Card'
 import Stack from '@mui/material/Stack'
@@ -11,6 +11,8 @@ import CardContent from '@mui/material/CardContent'
 import CardActions from '@mui/material/CardActions'
 
 import { Chain } from 'types/chain'
+import { Link } from 'react-router-dom'
+import { createRoute, Route } from 'constants/route'
 
 export const ChainCard: React.FC<Chain> = (chain: Chain) => {
   const url = chain.icon ? `https://icons.llamao.fi/icons/chains/rsz_${chain.icon}.jpg` : '/unknown-logo.png'
@@ -46,7 +48,14 @@ export const ChainCard: React.FC<Chain> = (chain: Chain) => {
         </Stack>
       </CardContent >
       <CardActions sx={{ width: '100%' }}>
-        <Button size='small' fullWidth>More</Button>
+        <Button
+          fullWidth
+          size='small'
+          component={Link}
+          to={createRoute[Route.Chain](chain.chainId)}
+        >
+          More
+        </Button>
       </CardActions>
     </Card >
   )

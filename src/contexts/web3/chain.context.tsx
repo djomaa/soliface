@@ -7,7 +7,6 @@ import React, { createContext, useCallback, useEffect, useMemo } from 'react'
 import { Chain } from 'types/chain'
 import { useStore } from 'hooks/use-store'
 import { useLogger } from 'hooks/use-logger'
-import { LocalStorageWrap } from 'hooks/use-local-storage'
 import { IWallet, useWalletList } from 'hooks/use-wallet-list/use-wallet-list'
 import { IAddChainConnector, ISwitchChainConnector } from 'hooks/use-wallet-list'
 
@@ -31,9 +30,6 @@ function canConnectorChainBeAdded<T extends AbstractConnector>(connector: T): co
   const tConnector = connector as Partial<IAddChainConnector>
   return !(tConnector.addChain == null)
 }
-
-// const WalletStorage = new LocalStorageWrap('wallet');
-const WalletStorage = new LocalStorageWrap('wallet')
 
 interface IState {
   changeChain: (chain: Chain) => void
