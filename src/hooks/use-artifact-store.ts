@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { AbiItem } from 'types/abi'
 import { Artifact } from 'helpers/abi'
 import { DefaultAbi } from 'constants/abi'
-import { LocalStorage } from 'utils/local-storage'
+import { LocalStorage } from 'utils/local-storage-wrap'
 
 import { useLogger } from './use-logger'
 

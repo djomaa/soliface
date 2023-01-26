@@ -1,4 +1,3 @@
-import * as React from 'react'
 import {
   createBrowserRouter,
   Outlet,
@@ -19,6 +18,28 @@ import { AnalyticsCtxProvider, useAnalytics } from 'contexts/analytics'
 import { ModalCtxProvider } from 'contexts/modal'
 import { ContractCtxProvider } from 'contexts/contract'
 
+import React, { FC, ReactElement } from "react";
+import { AppBar, Typography } from "@mui/material";
+import Box from '@mui/system/Box'
+import { Cookies } from 'components/cookies'
+import { StorageCtxProvider } from 'contexts/storage'
+
+export const Footer: FC = (): ReactElement => {
+  return (
+    <AppBar
+      sx={{ top: 'auto', bottom: 0 }}
+    >
+      <Box>
+        <Typography variant='body2'>
+          Hey! This website collects to improve perfomance and for some statistics
+        </Typography>
+      </Box>
+    </AppBar>
+  );
+};
+
+export default Footer;
+
 const Layout: React.FC = () => {
   const analytics = useAnalytics();
 
@@ -27,14 +48,18 @@ const Layout: React.FC = () => {
   }, [analytics]);
 
   return (
-    <ModalCtxProvider>
-      <ContractCtxProvider>
-        <CssBaseline />
-        <main>
-          <Outlet />
-        </main>
-      </ContractCtxProvider>
-    </ModalCtxProvider>
+    <StorageCtxProvider>
+      <ModalCtxProvider>
+        <ContractCtxProvider>
+          <CssBaseline />
+          <main>
+            <Cookies />
+            <Outlet />
+          </main>
+          <Footer />
+        </ContractCtxProvider>
+      </ModalCtxProvider>
+    </StorageCtxProvider>
   )
 }
 

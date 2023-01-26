@@ -1,128 +1,20 @@
-import { createKey } from 'constants/storage'
-
-type Key = string | number
-
-const DefaultKeysParams = {
-  useBaseKey: true,
-  asRegex: false
-}
-
-export type Entry<T> = [key: string, value: T]
-
-// TODO: move to utils
-// TODO: use iterators
 export class LocalStorage {
-  _baseKey: string
-  _store = localStorage
-  _delemiter = '/'
-
-  constructor(...oKeys: string[]) {
-    const keys = [LocalStorage.PROJECT_NAME, ...oKeys]
-    this._baseKey = this.formatKey(keys, false)
-  }
-
-  serialize<T>(value: T): string {
-    return JSON.stringify(value)
-  }
-
-  deserialize<T>(value: string): T {
-    return JSON.parse(value)
-  }
-
-  get<T>(...keys: Key[]) {
-    const key = this.formatKey(keys)
-    const raw = this._store.getItem(key)
-    if (!raw) {
-      return
+  static get<T>(key: string): T | undefined {
+    const raw = localStorage.getItem(key)
+    if (raw === null) {
+      return undefined;
     }
-    const value = this.deserialize<T>(raw)
-    return value
+    const decoded = JSON.parse(raw)
+    return decoded;
   }
 
-  getAll(...keys: Key[]) {
-    const key = this.formatKey(keys, false)
-    const pattern = new RegExp(`^${key}`)
-    const values = this.keys(pattern).map(key => this.get(key))
-    return values
+  static put<T>(key: string, value: T) {
+    const encoded = JSON.stringify(value)
+    localStorage.setItem(key, encoded)
   }
 
-  getAllEntries<T>(...keys: Key[]): Array<Entry<T>> {
-    const key = this.formatKey(keys, false)
-    const pattern = new RegExp(`^${key}`)
-    const entries = this.keys(pattern).map(key => {
-      return [
-        key,
-        this.get(key)
-      ] as Entry<T>
-    })
-    return entries
+  static remove(key: string) {
+    localStorage.removeItem(key);
   }
-
-  getAllKeys(...parts: Array<RegExp | string>) {
-    const keys = parts.map(i => i.toString())
-    const fullKey = this.formatKey(keys, false)
-    const pattern = new RegExp(`^${fullKey}`)
-
-    const result = this.keys(pattern)
-    return result.map((key) => {
-      const last = key.lastIndexOf(this._delemiter)
-      return key.substring(last + 1)
-    })
-  }
-
-  set<T>(value: T, ...keys: Key[]) {
-    const key = this.formatKey(keys)
-    const raw = this.serialize(value)
-    this._store.setItem(key, raw)
-  }
-
-  remove(...keys: Key[]) {
-    const key = this.formatKey(keys)
-    this._store.removeItem(key)
-  }
-
-  _keys?: string[]
-  keys(pattern?: RegExp) {
-    if (this._keys == null) {
-      const keys = []
-      for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i)
-        if (key === null) {
-          break
-        }
-        if (!key.startsWith(this._baseKey)) {
-          continue
-        }
-        const normalizedKey = this.removeKey(key, this._baseKey)
-        keys.push(normalizedKey)
-      }
-      this._keys = keys
-    }
-
-    if (pattern == null) {
-      return this._keys
-    }
-    const keys = this._keys.filter((key) => {
-      return pattern.test(key)
-    })
-    return keys
-  }
-
-  formatKey(keys: Key[], useBaseKey: boolean = true) {
-    const part = createKey(...keys)
-    return useBaseKey ? createKey(this._baseKey, part) : part
-  }
-
-  removeKey(value: string, key: string) {
-    return value.substring(key.length + 1)
-  }
-
-  removeKeys(value: string, keys: string[]) {
-    const totalLength = keys.reduce((acc, key) => acc + key.length + 1, 0)
-    return value.substring(keys.length)
-  }
-
-  static PROJECT_NAME = 'soliface'
 }
 
-// export const LocalStorage = new LocalStorageWrap()

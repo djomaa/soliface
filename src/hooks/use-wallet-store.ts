@@ -1,10 +1,11 @@
 
 import { useCallback, useMemo } from 'react';
-import { useStore } from './use-store'
+// import { useStoreV1 } from './use-store-v1';
+import { useStoreV2 } from './use-store-v2';
 import { IWallet, useWalletList } from './use-wallet-list'
 
 export const useWalletStore = () => {
-  const [walletName, oSet, remove] = useStore<string>(['wallet'])
+  const [walletName, oSet, remove] = useStoreV2<string>(['wallet'])
 
   const { wallets } = useWalletList();
 
@@ -13,7 +14,7 @@ export const useWalletStore = () => {
   }, [walletName, wallets]);
 
   const set = useCallback((wallet: IWallet) => {
-    oSet(wallet.name);
+    oSet(() => wallet.name);
   }, [oSet]);
 
   return [wallet, set, remove] as const;
