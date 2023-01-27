@@ -1,10 +1,18 @@
-import { useState } from 'react'
+import { useMemo } from 'react'
 import { ChainList } from 'constants/chain-list'
 import { Chain } from 'types/chain'
 import { hexToNumber } from 'utils/number.utils'
+import { useChainListQuery } from './chain-list.query'
 
 export const useChainList = () => {
-  const [chainList, setChainList] = useState(ChainList)
+  const remote = useChainListQuery();
+
+  const chainList = useMemo(() => {
+    if (remote.isLoading || remote.isError) {
+      return ChainList;
+    }
+    return remote.data!;
+  }, [remote])
 
   return { chainList }
 }

@@ -5,7 +5,7 @@ import Alert from '@mui/material/Alert'
 import Container from '@mui/material/Container'
 
 import { Data } from 'components/chain'
-import { useChainList } from 'hooks/use-chain-list'
+import { useChainList } from 'hooks/use-chain-list/use-chain-list'
 
 import { useAppTitle } from 'hooks/use-app-title'
 import { Chain } from 'types/chain'

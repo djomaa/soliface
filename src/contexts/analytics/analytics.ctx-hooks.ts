@@ -7,5 +7,3 @@ export const useAnalytics = () => {
   }
   return original;
 }
-
-

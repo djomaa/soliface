@@ -26,14 +26,13 @@ export const CallAction: React.FC = () => {
       to: contractCtx.address,
       data,
       ...tx
-    })
-    console.log('Gas limit !!!', est)
+    });
     const result = await web3.eth.call({
       from: ZERO_ADDRESS,
       to: contractCtx.address,
       data,
       ...tx
-    })
+    });
     return result
   }, [web3, abi])
 

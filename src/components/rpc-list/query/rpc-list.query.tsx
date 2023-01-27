@@ -17,7 +17,7 @@ export const createRpcQuery = (url: string): QueryOptions<IData> => {
   return {
     queryKey: ['get-rpc-data', url],
     queryFn: async () => await fn(url),
-    retry: false
+    retry: false,
   }
 }
 

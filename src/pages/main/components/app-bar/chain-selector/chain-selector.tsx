@@ -15,7 +15,7 @@ import { useSearch } from 'hooks/use-search'
 import { Status, useChainCtx } from 'contexts/chain'
 import { ChangeChainModal } from 'modals/connect-chain.modal'
 import { ModalCtxProvider, useModalCtx } from 'contexts/modal'
-import { searchChain, useChainList } from 'hooks/use-chain-list'
+import { searchChain, useChainList } from 'hooks/use-chain-list/use-chain-list'
 
 export const ChainSelectorCore: React.FC = () => {
   const chainCtx = useChainCtx()

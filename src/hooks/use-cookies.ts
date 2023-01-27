@@ -8,6 +8,7 @@ export interface ICookies {
     wallet: boolean;
     chainId: boolean;
     abiHash: boolean;
+    contractAddress: boolean;
   };
   accepted: boolean;
   version: string;
@@ -19,6 +20,7 @@ const DefaultValue: ICookies = {
     wallet: true,
     chainId: true,
     abiHash: true,
+    contractAddress: true,
   },
   accepted: false,
   version: '0.0.1',
@@ -62,4 +64,9 @@ export const useCookies = () => {
   }, [oValue, oSet]);
 
   return { value: oValue, updateConfig, acceptAll, accept };
+}
+
+export const useCookiesConfig = () => {
+  const cookies = useCookies();
+  return cookies.value.config;
 }

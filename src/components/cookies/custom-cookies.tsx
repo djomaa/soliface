@@ -12,6 +12,7 @@ const Label: Record<keyof ICookies['config'], string> = {
   wallet: 'Connected wallet (MetaMask, WalletConnect, etc)',
   chainId: 'Unique identifier of blockchain you are connected to',
   abiHash: 'Hash of ABI methods (ABI is stored only in the local storage)',
+  contractAddress: 'Contract you interact with (address)'
 }
 
 export const CustomCookies: React.FC = () => {
@@ -31,6 +32,7 @@ export const CustomCookies: React.FC = () => {
       <FormControl variant="outlined">
         <FormGroup>
           {Object.keys(cookies.value.config).map((oKey) => {
+            console.log("🚀 ~ file: custom-cookies.tsx:35 ~ {Object.keys ~ oKey", oKey)
             const key = oKey as keyof ICookies['config'];
             return (
               <FormControlLabel

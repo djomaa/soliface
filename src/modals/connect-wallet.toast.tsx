@@ -21,9 +21,13 @@ export const ConnectWalletToast: AsyncModal<IProps> = ({ wallet, ...props }) => 
   const chainCtx = useChainCtx()
 
   const state = useAsync(async () => {
-    await chainCtx.connectWallet(wallet)
+    try {
+      await chainCtx.connectWallet(wallet)
+    } catch (error) {
+      Logger.warn('Failure', error)
+    }
+
   }, [chainCtx.changeChain, wallet])
-  console.log("🚀 ~ file: connect-wallet.toast.tsx:26 ~ state ~ state", state)
 
   if (state.loading) {
     return <LoadingToast text='Connecting..' {...props} />
