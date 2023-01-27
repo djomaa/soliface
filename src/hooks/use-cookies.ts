@@ -1,6 +1,6 @@
+import { useStoreWithDefault } from 'contexts/storage';
 import { useCallback } from 'react';
 import { useLogger } from './use-logger';
-import { useStoreV4WDV } from './use-store-v4-wdv';
 
 export interface ICookies {
   config: {
@@ -27,7 +27,7 @@ const DefaultValue: ICookies = {
 export const useCookies = () => {
   const [Logger] = useLogger(useCookies.name);
   // const [oValue, oSet] = useStore<ICookies, ICookies>(['cookies'], DefaultValue);
-  const [oValue, oSet] = useStoreV4WDV(['cookies'], DefaultValue);
+  const [oValue, oSet, oRemove, oClone] = useStoreWithDefault(['cookies'], DefaultValue);
 
   const updateConfig = useCallback((v: Partial<ICookies['config']>) => {
     oSet({
@@ -40,18 +40,30 @@ export const useCookies = () => {
   }, [oValue, oSet]);
 
   const setDefaultConfig = useCallback(() => {
-    oSet((prev) => ({
-      ...DefaultValue,
-      ...prev,
-      config: { ...DefaultValue.config },
-    }));
+    Logger.debug('Set default config');
+    // oSet((prev) => ({
+    //   ...DefaultValue,
+    //   ...prev,
+    //   config: { ...DefaultValue.config },
+    // }));
+    oSet((prev) => {
+      const r = {
+        ...oClone(),
+        ...prev,
+        config: { ...DefaultValue.config },
+      }
+      console.log('RESULT!!!', r);
+      return r;
+    });
   }, [oValue, oSet]);
 
   const accept = useCallback(() => {
-    oSet({
-      ...oValue,
+    Logger.debug('Accepted');
+    oSet((prev) => ({
+      ...oClone(),
+      ...prev,
       accepted: true,
-    });
+    }));
   }, [oValue, oSet]);
 
   return { value: oValue, updateConfig, setDefaultConfig, accept };

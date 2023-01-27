@@ -1,9 +1,8 @@
 import { createKey } from 'constants/storage';
 import { useMemo } from 'react';
 
-type Key = string | number;
-export const useKey = (keys: Key[]) => {
+export const useKey = (...params: Parameters<typeof createKey>) => {
   return useMemo(() => {
-    return createKey(...keys);
-  }, [keys])
+    return createKey(...params);
+  }, [params])
 }
