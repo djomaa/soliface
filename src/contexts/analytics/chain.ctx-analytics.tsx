@@ -1,10 +1,11 @@
 import { useEffect } from 'react';
 
+import React from 'react';
+
 import { useChainCtx } from 'contexts/chain';
+import { useCookiesConfig } from 'hooks/use-cookies';
 
 import { useAnalytics } from './analytics.ctx-hooks';
-import React from 'react';
-import { useCookiesConfig } from 'hooks/use-cookies';
 
 export const ChainCtxAnalytics: React.FC = () => {
   const ctx = useChainCtx();

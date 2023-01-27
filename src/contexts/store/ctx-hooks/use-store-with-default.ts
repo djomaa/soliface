@@ -3,8 +3,8 @@ import { useKey } from 'hooks/use-key';
 import { useLogger } from 'hooks/use-logger';
 import { useEffect, useState } from 'react';
 import { IHookStateSetAction } from 'react-use/lib/misc/hookState';
-import { StoreKey, StoreValue } from '../storage.ctx';
-import { useStoreCtx } from './use-storage-ctx';
+import { StoreKey, StoreValue } from '../store.ctx';
+import { useStoreCtx } from './use-store-ctx';
 import { useStore } from './use-store';
 
 let id = 0;

@@ -1,4 +1,4 @@
-import { useStore } from 'contexts/storage'
+import { useStore } from 'contexts/store'
 import { Chain } from 'types/chain'
 
 // import { useStore } from './use-store'

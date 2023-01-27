@@ -1,5 +1,5 @@
 
-import { useStore } from 'contexts/storage';
+import { useStore } from 'contexts/store';
 import { useCallback, useMemo } from 'react';
 import { IWallet, useWalletList } from './use-wallet-list'
 

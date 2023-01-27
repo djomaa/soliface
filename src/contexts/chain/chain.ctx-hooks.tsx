@@ -1,20 +1,15 @@
 import Web3 from 'web3'
-import { useCallback, useContext } from 'react'
+import { useCallback } from 'react'
 
 import { abiCoder } from 'helpers/abi'
+import { createUseCtx } from 'contexts/ctx-factory'
 
+import { ChainCtx } from './chain.ctx'
 import { EncodeFailedAbiCoderError } from './abi-coder.errors'
-import { ChainCtx } from './chain.context'
 
 type EncodeFunctionCall = Web3['eth']['abi']['encodeFunctionCall']
 
-export const useChainCtx = () => {
-  const ctx = useContext(ChainCtx)
-  if (ctx == null) {
-    throw new Error('useChainCtx: Web3Context is null')
-  }
-  return ctx
-}
+export const useChainCtx = createUseCtx(ChainCtx);
 
 export const useWeb3 = () => {
   const ctx = useChainCtx()

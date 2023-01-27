@@ -1,4 +1,4 @@
-import { useStoreWithDefault } from 'contexts/storage';
+import { useStoreWithDefault } from 'contexts/store';
 import { useCallback } from 'react';
 import { useLogger } from './use-logger';
 

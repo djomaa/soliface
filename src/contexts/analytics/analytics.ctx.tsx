@@ -1,8 +1,8 @@
 import React from 'react'
 import Analytics from 'analytics'
+import { AnalyticsProvider } from 'use-analytics'
 // @ts-ignore
 import googleAnalytics from '@analytics/google-analytics'
-import { AnalyticsProvider } from 'use-analytics'
 
 /* Initialize analytics & load plugins */
 const analytics = Analytics({

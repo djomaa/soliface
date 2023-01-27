@@ -3,15 +3,10 @@ import { useKey } from 'hooks/use-key';
 import { useLogger } from 'hooks/use-logger';
 import { useEffect, useState } from 'react';
 import { IHookStateResolvable } from 'react-use/lib/misc/hookState';
-import { StoreKey, StoreValue } from '../storage.ctx';
-import { useStoreCtx } from './use-storage-ctx'
-
-type SetCbPrev<T> = (handler: T | undefined) => T;
+import { StoreKey, StoreValue } from '../store.ctx';
+import { useStoreCtx } from './use-store-ctx'
 
 let id = 0;
-
-type ISetState<T> = (prev: T) => T;
-
 export const useStore = <T extends StoreValue>(keys: StoreKey[]) => {
   const key = useKey(APP_NAME, ...keys);
   const [Logger] = useLogger(useStore, key, id++);
