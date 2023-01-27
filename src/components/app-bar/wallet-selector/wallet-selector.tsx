@@ -25,7 +25,6 @@ export const WalletSelectorCore: React.FC = () => {
   const connect = (wallet: IWallet) => {
     setAnchor(undefined)
     modalCtx.addModal(ConnectWalletToast, { wallet });
-    // chainCtx.connectWallet(wallet)
   }
 
   const disconnect = () => {
@@ -82,8 +81,6 @@ export const WalletSelectorCore: React.FC = () => {
 
       >
         {wallets.map((wallet) => {
-          console.log("🚀 ~ file: wallet-selector.tsx:95 ~ {wallets.map ~ wallets", wallets)
-
           const isDisabled = !(chainCtx.wallet == null) && chainCtx.wallet.name === wallet.name
           return (
             <MenuItem

@@ -1,12 +1,12 @@
 import { useLogger } from 'hooks/use-logger';
-import React, { createContext, useCallback, useEffect } from 'react'
-import { useMap, usePrevious } from 'react-use'
+import React, { createContext, useCallback } from 'react'
+import { useMap } from 'react-use'
 import { StringifyAble } from 'types/common';
 import { LocalStorage } from 'utils/local-storage';
 
 export type StoreKey = StringifyAble;
 export type StoreValue = object | string | number | null;
-
+type StoreItem = { value: StoreValue | undefined };
 
 interface IState {
   store: Record<string, any>;
@@ -19,65 +19,48 @@ interface IState {
 
 export const StorageCtx = createContext<IState | null>(null)
 
+function methods(state: Record<string, StoreValue>) {
+  return {
+    set(key: string) {
+      return state;
+    }
+  }
+}
+
 export const StorageCtxProvider: React.FC<{ children: React.ReactElement | React.ReactElement[] }> = (props) => {
   const [Logger] = useLogger(StorageCtxProvider);
 
-  const [store, storeActions] = useMap<Record<string, StoreValue | undefined>>();
+  // const store1 = useMethods(methods, {});
+  // const [s, sActions] = useMethods(methods, {});
+
+  const [store, storeActions] = useMap<Record<string, StoreItem>>();
+  // const [store, setStore] = useState<Record<string, StoreValue | undefined>>({});
   const [map, mapActions] = useMap<Record<string, number>>();
 
-  const pMap = usePrevious(map);
-  useEffect(() => {
-    const logger = Logger.sub('refresh');
-    logger.debug('Started', { pMap, map });
-    for (const key in map) {
-      if (pMap) {
-        const prevWatchers = pMap[key];
-        if (prevWatchers) {
-          continue;
-        }
-      }
-      const value = LocalStorage.get<StoreValue>(key);
-      Logger.sub(key, 'refresh').debug('Obtain to memory store ', { value });
-      storeActions.set(key, value);
-    }
-    if (pMap) {
-      for (const pKey in pMap) {
-        const currentWatchers = map[pKey];
-        if (!currentWatchers) {
-          // rm from store to clear memory
-          Logger.sub(pKey, 'refresh').debug('Remove from memory store');
-          storeActions.remove(pKey);
-        }
-      }
-    }
-    logger.debug('Done');
-  }, [map, storeActions]);
+  const obtain = (key: string) => {
+    const value = LocalStorage.get<StoreValue>(key);
+    Logger.sub(key, 'obtain').debug('Done', { value });
+    return value
+  }
 
-  // useEffect(() => {
-  //   const logger = Logger.sub('update');
-  //   logger.debug('Starting', { store });
-  //   for (const key in map) {
-  //     // TODO: compare
-  //     if (store[key] === undefined) {
-  //       // logger.sub(key).debug('Remove');
-  //       // LocalStorage.remove(key);
-  //     } else {
-  //       // const value = store[key];
-  //       // logger.sub(key).debug('Set', { value })
-  //       // LocalStorage.put(key, value);
-  //     }
-  //   }
-  // }, [store])
+  const get = useCallback((key: string) => {
+    const hasKey = key in store;
+    console.log("🚀 ~ file: storage.ctx.tsx:44 ~ get ~ hasKey", hasKey)
+    if (hasKey) {
+      return store[key].value;
+    }
+    return obtain(key);
+  }, [store]);
 
-  const set = useCallback((key: string, value: any) => {
-    Logger.sub(key, 'storage').debug('Set to storage', { value })
-    storeActions.set(key, value);
+  const set = useCallback((key: string, value: StoreValue) => {
+    Logger.sub(key, 'storage').debug('Set', { value })
+    storeActions.set(key, { value });
     LocalStorage.put(key, value);
   }, [storeActions]);
 
   const remove = useCallback((key: string) => {
-    Logger.sub(key, 'storage').debug('Clear storage', { value })
-    storeActions.set(key, undefined);
+    Logger.sub(key, 'storage').debug('Remove', { value })
+    storeActions.set(key, { value: undefined });
     LocalStorage.remove(key);
   }, [storeActions]);
 
@@ -89,12 +72,11 @@ export const StorageCtxProvider: React.FC<{ children: React.ReactElement | React
     if (current) {
       const newValue = current + 1;
       logger.debug('Increased', { newValue });
-      // mapActions.set(key, current + 1);
       map[key] = current + 1;
     } else {
       logger.debug('Create', { key });
-      // mapActions.set(key, 1);
       map[key] = 1;
+      storeActions.set(key, { value });
     }
   }, [mapActions, map]);
 
@@ -119,7 +101,7 @@ export const StorageCtxProvider: React.FC<{ children: React.ReactElement | React
 
   const value: IState = {
     store,
-    get: storeActions.get,
+    get,
     set,
     remove,
     watch,

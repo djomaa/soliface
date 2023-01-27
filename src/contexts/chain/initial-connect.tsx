@@ -16,8 +16,10 @@ export const InitialWalletConnect: React.FC = () => {
   useEffect(() => {
     const logger = Logger.sub('useEffect:[]')
     if (wallet) {
-      logger.debug('Wallet was update in ')
+      logger.debug('Initital wallet', { wallet })
       modalCtx.addModal(ConnectWalletToast, { wallet })
+    } else {
+      logger.debug('No initital wallet');
     }
   }, []);
 

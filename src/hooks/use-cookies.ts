@@ -27,7 +27,7 @@ const DefaultValue: ICookies = {
 export const useCookies = () => {
   const [Logger] = useLogger(useCookies.name);
   // const [oValue, oSet] = useStore<ICookies, ICookies>(['cookies'], DefaultValue);
-  const [oValue, oSet, oRemove, oClone] = useStoreWithDefault(['cookies'], DefaultValue);
+  const [oValue, oSet, , oClone] = useStoreWithDefault(['cookies'], DefaultValue);
 
   const updateConfig = useCallback((v: Partial<ICookies['config']>) => {
     oSet({
@@ -39,26 +39,21 @@ export const useCookies = () => {
     });
   }, [oValue, oSet]);
 
-  const setDefaultConfig = useCallback(() => {
-    Logger.debug('Set default config');
-    // oSet((prev) => ({
-    //   ...DefaultValue,
-    //   ...prev,
-    //   config: { ...DefaultValue.config },
-    // }));
+  const acceptAll = useCallback(() => {
+    Logger.debug('Accept all');
     oSet((prev) => {
       const r = {
         ...oClone(),
         ...prev,
         config: { ...DefaultValue.config },
+        accepted: true,
       }
-      console.log('RESULT!!!', r);
       return r;
     });
   }, [oValue, oSet]);
 
   const accept = useCallback(() => {
-    Logger.debug('Accepted');
+    Logger.debug('Accept');
     oSet((prev) => ({
       ...oClone(),
       ...prev,
@@ -66,5 +61,5 @@ export const useCookies = () => {
     }));
   }, [oValue, oSet]);
 
-  return { value: oValue, updateConfig, setDefaultConfig, accept };
+  return { value: oValue, updateConfig, acceptAll, accept };
 }

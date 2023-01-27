@@ -25,6 +25,7 @@ export const useRpcListColumns = (chain: Chain) => {
   const chainCtx = useChainCtx()
   const modalCtx = useModalCtx()
   const [defaultRpc, setDefaultRpc] = useDefaultRpc(chain.chainId)
+  console.log("🚀 ~ file: rpc-list.columns.tsx:28 ~ useRpcListColumns ~ defaultRpc", defaultRpc)
 
   const addChain = useCallback((chain: Chain, rpc: string) => {
     modalCtx.addModal(AddChainModal, { chain: { ...chain, rpc: [rpc] } })

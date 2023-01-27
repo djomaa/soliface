@@ -24,17 +24,14 @@ export const useStore = <T extends StoreValue>(keys: StoreKey[]) => {
   });
 
   const value = useMemo(() => {
-    return ctx.store[key] as T;
+    return ctx.get(key) as T | undefined;
   }, [ctx.store, key]);
 
   const set = useCallback((value: T | SetCbPrev<T>) => {
     const logger = Logger.sub('set');
     logger.debug('Start', { value });
     if (typeof value === 'function') {
-
-      // const prev = ctx.get(key) as T;
-      const prev = ctx.store[key] as T;
-      logger.error('test', { a: ctx.get(key), b: ctx.store[key] });
+      const prev = ctx.get(key) as T;
       const finalValue = value(prev) as T;
       logger.debug('Set (using factory)', { value: finalValue, prev });
       ctx.set(key, finalValue);

@@ -10,7 +10,6 @@ export const useAppTitle = (part?: string) => {
   useEffect(() => {
     const title = part ? `${AppName} | ${part}` : AppName;
     document.title = title;
-    console.log("[title]", st[0], title)
     return () => {
       document.title = prevTitleRef.current;
     };

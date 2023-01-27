@@ -13,18 +13,22 @@ import { CustomCookies } from './custom-cookies';
 export const Cookies: React.FC = () => {
   // called to create instance in storage if user will not press customize
   const cookies = useCookies();
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(!cookies.value.accepted);
   const [expanded, setExpanded] = useState(false);
 
   const acceptAll = () => {
-    cookies.setDefaultConfig();
-    cookies.accept();
+    cookies.acceptAll();
     setOpen(false);
   }
 
   const accept = () => {
+    cookies.accept();
     setOpen(false);
   };
+
+  if (cookies.value.accepted) {
+    return <></>;
+  }
 
   return (
     <Dialog

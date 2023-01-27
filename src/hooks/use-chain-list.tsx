@@ -9,8 +9,7 @@ export const useChainList = () => {
   return { chainList }
 }
 
-export function searchChain (list: Chain[], query: string) {
-  console.log('asdasd')
+export function searchChain(list: Chain[], query: string) {
   // TODO:- add timings for filtering and mapping
   const regExpQuery = new RegExp(query, 'i')
   const numberQuery = Number(query)
