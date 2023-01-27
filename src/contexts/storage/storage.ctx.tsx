@@ -1,111 +1,105 @@
 import { useLogger } from 'hooks/use-logger';
-import React, { createContext, useCallback } from 'react'
-import { useMap } from 'react-use'
+import React, { createContext } from 'react'
+import { IHookStateInitAction, IHookStateSetAction, resolveHookState } from 'react-use/lib/misc/hookState';
 import { StringifyAble } from 'types/common';
 import { LocalStorage } from 'utils/local-storage';
 
 export type StoreKey = StringifyAble;
-export type StoreValue = object | string | number | null;
+export type StoreValue = object | string | number;
 type StoreItem = { value: StoreValue | undefined };
-
+type Watcher = Function;
 interface IState {
-  store: Record<string, any>;
-  set: (key: string, value: any) => void;
-  get: (key: string) => StoreValue | undefined;
-  remove: (key: string) => void;
-  watch: (key: string) => void;
-  unwatch: (key: string) => void;
+  getOriginalState(key: string): StoreValue | undefined;
+  addWatcher(key: string, watcher: Watcher): void;
+  removeWatcher(key: string, watcher: Watcher): void;
+  set(key: string, value: IHookStateSetAction<StoreValue | undefined>): void;
 }
 
 export const StorageCtx = createContext<IState | null>(null)
 
-function methods(state: Record<string, StoreValue>) {
-  return {
-    set(key: string) {
-      return state;
-    }
-  }
-}
 
 export const StorageCtxProvider: React.FC<{ children: React.ReactElement | React.ReactElement[] }> = (props) => {
   const [Logger] = useLogger(StorageCtxProvider);
 
-  // const store1 = useMethods(methods, {});
-  // const [s, sActions] = useMethods(methods, {});
+  // const [store] = useMap<Record<string, StoreItem>>({});
+  const store: Record<string, StoreItem> = {};
+  // const [watchers] = useMap<Record<string, Function[]>>({});
+  const watchers: Record<string, Watcher[]> = {};
 
-  const [store, storeActions] = useMap<Record<string, StoreItem>>();
-  // const [store, setStore] = useState<Record<string, StoreValue | undefined>>({});
-  const [map, mapActions] = useMap<Record<string, number>>();
-
-  const obtain = (key: string) => {
+  const getInitialState = (key: string) => {
+    const logger = Logger.sub(key, getInitialState.name);
+    if (key in store) {
+      const value = store[key].value;
+      logger.debug('Read from store', { result: value });
+      return value;
+    }
     const value = LocalStorage.get<StoreValue>(key);
-    Logger.sub(key, 'obtain').debug('Done', { value });
-    return value
+    logger.debug('Read original', { result: value });
+    store[key] = { value };
+    return value;
   }
 
-  const get = useCallback((key: string) => {
-    const hasKey = key in store;
-    console.log("🚀 ~ file: storage.ctx.tsx:44 ~ get ~ hasKey", hasKey)
-    if (hasKey) {
-      return store[key].value;
-    }
-    return obtain(key);
-  }, [store]);
-
-  const set = useCallback((key: string, value: StoreValue) => {
-    Logger.sub(key, 'storage').debug('Set', { value })
-    storeActions.set(key, { value });
-    LocalStorage.put(key, value);
-  }, [storeActions]);
-
-  const remove = useCallback((key: string) => {
-    Logger.sub(key, 'storage').debug('Remove', { value })
-    storeActions.set(key, { value: undefined });
-    LocalStorage.remove(key);
-  }, [storeActions]);
-
-  const watch = useCallback((key: string) => {
-    const logger = Logger.sub(key, 'watch')
-    // const current = mapActions.get(key);
-    const current = map[key];
-    logger.debug('Current watcher count', { current, map })
-    if (current) {
-      const newValue = current + 1;
-      logger.debug('Increased', { newValue });
-      map[key] = current + 1;
-    } else {
-      logger.debug('Create', { key });
-      map[key] = 1;
-      storeActions.set(key, { value });
-    }
-  }, [mapActions, map]);
-
-  const unwatch = useCallback((key: string) => {
-    const logger = Logger.sub(key, 'unwatch');
-    const current = mapActions.get(key);
-    logger.debug('Doing', { current });
-    if (!current) {
-      throw new Error(`${StorageCtxProvider.name}: key not watched "${key}"`);
-    }
-    if (current > 1) {
-      // there are more watchers
-      logger.debug('There are more watchers, decreasing')
-      mapActions.set(key, current - 1);
+  const addWatcher = (key: string, watcher: Watcher) => {
+    const logger = Logger.sub(key, addWatcher.name);
+    logger.debug('Adding', { watcher });
+    if (!watchers[key]) {
+      logger.debug('Created');
+      watchers[key] = [watcher];
       return;
     }
-    // that's the last listener, so clear everything
-    logger.debug('That was last, clearing');
-    mapActions.remove(key);
-    storeActions.remove(key);
-  }, []);
+    if (watchers[key].includes(watcher)) {
+      throw new Error('already watched');
+    }
+    logger.debug('Pushed');
+    watchers[key].push(watcher);
+    // const value = LocalStorage.get<StoreValue | undefined>(key);
+    // store[key] = { value };
+  }
+
+  const removeWatcher = (key: string, watcher: Watcher) => {
+    const logger = Logger.sub(key, removeWatcher.name);
+    logger.debug('Removing', { watcher });
+    if (!watchers[key]) {
+      throw new Error('key not in watchers');
+    }
+    if (!watchers[key].includes(watcher)) {
+      throw new Error('watcher not found');
+    }
+    watchers[key] = watchers[key].filter((w) => w !== watcher);
+    logger.debug('Removed', { watcher });
+    if (watchers[key].length === 0) {
+      logger.debug('That was last one, clearing');
+      delete watchers[key];
+      delete store[key];
+    }
+  }
+
+  const set = (key: string, nextState: IHookStateInitAction<StoreValue | undefined>) => {
+    const logger = Logger.sub(key, set.name);
+    logger.debug('Setting', { nextState });
+    if (!watchers[key]) {
+      throw new Error('no watchers exists');
+    }
+    const current = store[key].value;
+    const newValue = resolveHookState(nextState, current);
+    if (newValue === undefined) {
+      LocalStorage.remove(key);
+    } else {
+      LocalStorage.put(key, newValue);
+    }
+    store[key] = { value: newValue };
+    logger.debug('Set', { current, newValue });
+    for (const watcher of watchers[key]) {
+      watcher(newValue);
+    }
+    logger.debug('Emitted', { count: watchers[key] });
+  }
 
   const value: IState = {
-    store,
-    get,
+    getOriginalState: getInitialState,
+    addWatcher,
+    removeWatcher,
     set,
-    remove,
-    watch,
-    unwatch,
   }
 
   return (
