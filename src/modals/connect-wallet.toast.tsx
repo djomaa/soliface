@@ -6,6 +6,7 @@ import { AsyncModal } from 'contexts/modal'
 import { useChainCtx } from 'contexts/chain'
 import { useLogger } from 'hooks/use-logger'
 import { IWallet } from 'hooks/use-wallet-list'
+
 import { LoadingToast } from './base-toast/loading.toast-content'
 import { SuccessToast } from './base-toast/success.toast-content'
 import { ConnectWalletModal } from './connect-wallet-failure.modal'

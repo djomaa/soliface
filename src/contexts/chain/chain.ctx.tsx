@@ -1,18 +1,16 @@
 import Web3 from 'web3'
-import { Web3ReactProvider, useWeb3React } from '@web3-react/core'
 import { NetworkConnector } from '@web3-react/network-connector'
 import { AbstractConnector } from '@web3-react/abstract-connector'
+import { Web3ReactProvider, useWeb3React } from '@web3-react/core'
 import React, { createContext, useCallback, useMemo } from 'react'
 
 import { Chain } from 'types/chain'
-import { useLogger } from 'hooks/use-logger'
-import { IWallet, useWalletList } from 'hooks/use-wallet-list/use-wallet-list'
-import { IAddChainConnector, ISwitchChainConnector } from 'hooks/use-wallet-list'
-import { ChainCtxAnalytics } from 'contexts/analytics'
 import { IParentProps } from 'types/react'
+import { useLogger } from 'hooks/use-logger'
+import { ChainCtxAnalytics } from 'contexts/analytics'
 import { useWalletStore } from 'hooks/use-wallet-store'
-import { ModalCtxProvider } from 'contexts/modal'
 import { InitialWalletConnect } from './initial-connect'
+import { IWallet, useWalletList, IAddChainConnector, ISwitchChainConnector } from 'hooks/use-wallet-list'
 
 export enum Status {
   NotConnected,
@@ -190,9 +188,7 @@ export const ChainCtxProviderCore: React.FC<IProps> = (props) => {
   return (
     <ChainCtx.Provider value={value}>
       <ChainCtxAnalytics />
-      <ModalCtxProvider>
-        <InitialWalletConnect />
-      </ModalCtxProvider>
+      <InitialWalletConnect />
       {props.children}
     </ChainCtx.Provider>
   )

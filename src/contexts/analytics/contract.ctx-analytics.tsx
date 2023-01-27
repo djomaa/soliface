@@ -1,8 +1,7 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 
 
 import { useAnalytics } from './analytics.ctx-hooks';
-import React from 'react';
 import { useContractCtx } from 'contexts/contract';
 import { useCookiesConfig } from 'hooks/use-cookies';
 

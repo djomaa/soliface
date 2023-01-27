@@ -12,12 +12,12 @@ import ListItemButton from '@mui/material/ListItemButton'
 import { Chain } from 'types/chain'
 import { useFocus } from 'hooks/use-focus'
 import { useSearch } from 'hooks/use-search'
+import { useModalCtx } from 'contexts/modal'
 import { Status, useChainCtx } from 'contexts/chain'
 import { ChangeChainModal } from 'modals/connect-chain.modal'
-import { ModalCtxProvider, useModalCtx } from 'contexts/modal'
 import { searchChain, useChainList } from 'hooks/use-chain-list/use-chain-list'
 
-export const ChainSelectorCore: React.FC = () => {
+export const ChainSelector: React.FC = () => {
   const chainCtx = useChainCtx()
   const modalCtx = useModalCtx()
   const { chainList } = useChainList()
@@ -99,13 +99,5 @@ export const ChainSelectorCore: React.FC = () => {
         </List>
       </Popover>
     </Box>
-  )
-}
-
-export const ChainSelector: React.FC = () => {
-  return (
-    <ModalCtxProvider>
-      <ChainSelectorCore />
-    </ModalCtxProvider>
   )
 }
