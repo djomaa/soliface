@@ -1,35 +1,37 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 
+import Alert from '@mui/material/Alert'
+import Stack from '@mui/material/Stack'
+import Button from '@mui/material/Button'
+import AlertTitle from '@mui/material/AlertTitle'
+import CloseIcon from '@mui/icons-material/Close'
 import DialogTitle from '@mui/material/DialogTitle'
 import DialogContent from '@mui/material/DialogContent'
 
-import { AsyncModal } from 'contexts/modal'
-
-import { useLogger } from 'hooks/use-logger'
-import { Dialog } from './base-modal/base.dialog'
-import Alert from '@mui/material/Alert'
-import AlertTitle from '@mui/material/AlertTitle'
-import Button from '@mui/material/Button'
-import CloseIcon from '@mui/icons-material/Close'
-
-import style from 'styles/common.module.scss';
 import { parseError } from 'utils/error'
-import Stack from '@mui/material/Stack'
+import style from 'styles/common.module.scss';
 
-interface IProps {
+import { Dialog, IDialogProps } from '../base-dialog/base.dialog'
+import { DialogProps } from '@mui/material/Dialog'
+
+interface IProps extends Pick<DialogProps, 'onClose'> {
   title: string;
   error: Error;
+  dialogProps?: IDialogProps;
 }
 
-export const ConnectWalletModal: AsyncModal<IProps> = (props) => {
-  const [Logger, { logState }] = useLogger(ConnectWalletModal.name)
+export const ErrorModal: React.FC<IProps> = (props) => {
+  const [open, setOpen] = useState(true)
 
   const parsed = useMemo(() => {
     return parseError(props.error);
   }, [props.error])
 
   return (
-    <Dialog>
+    <Dialog
+      open={open}
+      {...props.dialogProps}
+    >
       <DialogTitle>
         <Stack
           direction='row'
@@ -40,7 +42,7 @@ export const ConnectWalletModal: AsyncModal<IProps> = (props) => {
             color='error'
             variant='outlined'
             startIcon={<CloseIcon />}
-            onClick={props.handleClose}
+            onClick={() => setOpen(false)}
           >
             Close
           </Button>

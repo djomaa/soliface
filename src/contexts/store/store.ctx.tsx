@@ -8,14 +8,15 @@ export type StoreKey = StringifyAble;
 export type StoreValue = object | string | number;
 type StoreItem = { value: StoreValue | undefined };
 type Watcher = Function;
-interface IState {
+
+export interface StoreCtxState {
   getOriginalState(key: string): StoreValue | undefined;
   addWatcher(key: string, watcher: Watcher): void;
   removeWatcher(key: string, watcher: Watcher): void;
   set(key: string, value: IHookStateSetAction<StoreValue | undefined>): void;
 }
 
-export const StorageCtx = createContext<IState | null>(null)
+export const StorageCtx = createContext<StoreCtxState | null>(null)
 
 
 export const StorageCtxProvider: React.FC<{ children: React.ReactElement | React.ReactElement[] }> = (props) => {
@@ -95,7 +96,7 @@ export const StorageCtxProvider: React.FC<{ children: React.ReactElement | React
     logger.debug('Emitted', { count: watchers[key] });
   }
 
-  const value: IState = {
+  const value: StoreCtxState = {
     getOriginalState: getInitialState,
     addWatcher,
     removeWatcher,

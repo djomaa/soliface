@@ -1,26 +1,27 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import Alert from '@mui/material/Alert'
+import Snackbar from '@mui/material/Snackbar';
 import IconButton from '@mui/material/IconButton'
 import CloseIcon from '@mui/icons-material/Close'
 
-import { IAsyncModalBaseProps } from 'contexts/modal'
-import Snackbar from '@mui/material/Snackbar';
 
-interface IProps extends Pick<IAsyncModalBaseProps, 'handleClose'> {
+interface IProps {
   text: string;
 }
 export const ErrorToast: React.FC<IProps> = (props) => {
+  const [open, setOpen] = useState(true);
+
   return (
     <Snackbar
-      open={true}
-      onClose={props.handleClose}
+      open={open}
+      onClose={() => setOpen(false)}
     >
       <Alert
         severity='error'
         variant='filled'
         action={(
-          <IconButton onClick={props.handleClose} size='small' color='inherit'>
+          <IconButton onClick={() => setOpen(false)} size='small' color='inherit'>
             <CloseIcon fontSize='inherit' color='inherit' />
           </IconButton>
         )}

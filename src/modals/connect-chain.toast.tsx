@@ -1,84 +1,39 @@
+import React from 'react'
 import { useAsync } from 'react-use'
-import React, { useMemo } from 'react'
-
-import IconButton from '@mui/material/IconButton'
-import CloseIcon from '@mui/icons-material/Close'
-import Alert, { AlertProps } from '@mui/material/Alert'
-import CircularProgress from '@mui/material/CircularProgress'
-import Snackbar, { SnackbarProps } from '@mui/material/Snackbar'
 
 import { Chain } from 'types/chain'
-import { AsyncModal } from 'contexts/modal'
 import { useChainCtx } from 'contexts/chain'
-import { useLogger } from 'hooks/use-logger'
-import { useDefaultRpc } from 'hooks/use-default-rpc'
+
+import { StateToast } from './base-toast/state.toast'
 
 
 interface IProps {
-  chain: Chain
+  chain: Chain;
+  onDone?: () => void;
+  onClose?: () => void;
 }
 
-
-interface ContentProps extends AlertProps, Pick<SnackbarProps, 'autoHideDuration'> {
-  text: string
-}
-
-export const ConnectChainToast: AsyncModal<IProps> = ({ chain, ...props }) => {
-  const [Logger, { logState }] = useLogger(ConnectChainToast.name, chain.chainId)
-
+export const ConnectChainToast: React.FC<IProps> = ({ chain, ...props }) => {
   const chainCtx = useChainCtx()
-  const [defaultRpc] = useDefaultRpc(chain.chainId)
-
-  logState('defaultRpc', defaultRpc)
 
   const state = useAsync(async () => {
-    await chainCtx.changeChain(chain)
-  }, [chainCtx.changeChain, chain])
-
-  const { text, autoHideDuration, ...alertProps } = useMemo<ContentProps>(() => {
-    console.log('state', state);
-
-    if (state.loading) {
-      return {
-        severity: 'info',
-        icon: <CircularProgress color='inherit' size={20} />,
-        text: 'Connecting..'
+    try {
+      await chainCtx.changeChain(chain);
+    } finally {
+      if (props.onDone) {
+        props.onDone();
       }
     }
-    const closeAction = (
-      <IconButton onClick={props.handleClose} size='small' color='inherit'>
-        <CloseIcon fontSize='inherit' color='inherit' />
-      </IconButton>
-    )
-    if (state.error != null) {
-      return {
-        severity: 'error',
-        action: closeAction,
-        text: state.error.message
-      }
-    }
-
-    return {
-      severity: 'success',
-      text: 'Connected',
-      action: closeAction,
-      autoHideDuration: 5e3
-    }
-  }, [state.error, state.loading])
+    return true;
+  }, [chainCtx.changeChain, chain]);
 
   return (
-    <Snackbar
-      open={true}
-      onClose={props.handleClose}
-      message="Note archived"
-      autoHideDuration={autoHideDuration}
-    >
-      <Alert
-        {...alertProps}
-        variant='filled'
-      >
-        {text}
-      </Alert>
-    </Snackbar>
+    <StateToast
+      state={state}
+      loadingText='Connecting chain..'
+      errorText='Failed to connect chain'
+      successText='Chain connected'
+      onClose={props.onClose}
+    />
   )
 }

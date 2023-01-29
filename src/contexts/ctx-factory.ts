@@ -8,11 +8,11 @@ export class NoCtxProviderError extends Error {
   }
 }
 
-export const createUseCtx = <T>(Ctx: Context<T | null>) => {
+export const createUseCtx = <T>(Ctx: Context<T | null>, ctxName: string) => {
   return () => {
     const ctx = useContext(Ctx);
-    if (ctx === null) {
-      throw new NoCtxProviderError(Ctx);
+    if (!ctx) {
+      throw new NoCtxProviderError(ctxName);
     }
     return ctx;
   }

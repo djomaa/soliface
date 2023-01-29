@@ -3,6 +3,7 @@ import {
   createBrowserRouter,
   Outlet,
   RouterProvider,
+  useLocation,
 } from 'react-router-dom'
 
 import CssBaseline from '@mui/material/CssBaseline'
@@ -19,24 +20,45 @@ import { StorageCtxProvider } from 'contexts/store'
 import { ChainManagerPage } from 'pages/chain-manager'
 import { ContractCtxProvider } from 'contexts/contract'
 import { AnalyticsCtxProvider, useAnalytics } from 'contexts/analytics'
+// import 'material-react-toastify/dist/ReactToastify.css';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
+import Box from '@mui/material/Box';
+import { ModalContainer } from 'libs/modals/modal';
+import { useLogger } from 'hooks/use-logger';
+
 
 const Layout: React.FC = () => {
+  const [Logger] = useLogger(Layout);
   const analytics = useAnalytics();
+  const location = useLocation();
+
+  // useEffect(() => {
+  //   Logger.debug('Page changed', { to: location });
+  // }, [location])
 
   useEffect(() => {
+    Logger.debug('Page changed', location);
     analytics.page({})
-  }, [analytics]);
+  }, [analytics, location]);
 
   return (
     <StorageCtxProvider>
       <QueryCtxProvider>
         <ModalCtxProvider>
           <ContractCtxProvider>
-            <CssBaseline />
-            <main>
-              <Cookies />
-              <Outlet />
-            </main>
+            <Box>
+              <CssBaseline />
+              <main>
+                <Cookies />
+                <Outlet />
+              </main>
+              <ToastContainer
+                position="bottom-left"
+                closeButton
+              />
+              <ModalContainer />
+            </Box>
           </ContractCtxProvider>
         </ModalCtxProvider>
       </QueryCtxProvider>

@@ -9,7 +9,7 @@ import { EncodeFailedAbiCoderError } from './abi-coder.errors'
 
 type EncodeFunctionCall = Web3['eth']['abi']['encodeFunctionCall']
 
-export const useChainCtx = createUseCtx(ChainCtx);
+export const useChainCtx = createUseCtx(ChainCtx, 'ChainCtx');
 
 export const useWeb3 = () => {
   const ctx = useChainCtx()

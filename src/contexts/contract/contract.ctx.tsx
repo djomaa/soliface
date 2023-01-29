@@ -3,13 +3,13 @@ import React, { createContext, useState } from 'react'
 import { Artifact } from 'helpers/abi'
 import { useLogger } from 'hooks/use-logger'
 
-interface IState {
+export interface ContractCtxState {
   artifact?: Artifact
   address?: string
   setAddress: (address: string) => void
   setArtifact: (artifact: Artifact) => void
 }
-export const ContractCtx = createContext<IState | null>(null)
+export const ContractCtx = createContext<ContractCtxState | null>(null)
 
 interface iProps {
   children: React.ReactNode | React.ReactNode[]

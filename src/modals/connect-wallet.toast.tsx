@@ -1,22 +1,21 @@
-import { useAsync } from 'react-use'
 import React from 'react'
+import { useAsync } from 'react-use'
 
 
-import { AsyncModal } from 'contexts/modal'
 import { useChainCtx } from 'contexts/chain'
 import { useLogger } from 'hooks/use-logger'
 import { IWallet } from 'hooks/use-wallet-list'
 
-import { LoadingToast } from './base-toast/loading.toast-content'
-import { SuccessToast } from './base-toast/success.toast-content'
-import { ConnectWalletModal } from './connect-wallet-failure.modal'
+import { StateToast } from './base-toast/state.toast'
 
 
-interface IProps {
-  wallet: IWallet
+interface IConnectWalletToastProps {
+  wallet: IWallet;
+  onClose?: () => void;
+  onDone?: () => void;
 }
 
-export const ConnectWalletToast: AsyncModal<IProps> = ({ wallet, ...props }) => {
+export const ConnectWalletToast: React.FC<IConnectWalletToastProps> = ({ wallet, ...props }) => {
   const [Logger, { logState }] = useLogger(ConnectWalletToast.name, wallet.name)
 
   const chainCtx = useChainCtx()
@@ -26,21 +25,21 @@ export const ConnectWalletToast: AsyncModal<IProps> = ({ wallet, ...props }) => 
       await chainCtx.connectWallet(wallet)
     } catch (error) {
       Logger.warn('Failure', error)
+    } finally {
+      if (props.onDone) {
+        props.onDone();
+      }
     }
-
   }, [chainCtx.changeChain, wallet])
 
-  if (state.loading) {
-    return <LoadingToast text='Connecting..' {...props} />
-  }
+  return (
+    <StateToast
+      state={state}
+      loadingText={'Connecting wallet..'}
+      successText={'Wallet connected'}
+      errorText={'Failed to connect wallet'}
+      onClose={props.onClose}
+    />
+  )
 
-  // if (state.error) {
-  //   return <ErrorToast text='Failed to connect wallet' {...props} />
-  // }
-
-  if (state.error) {
-    return <ConnectWalletModal title='Failed to connect wallet' error={state.error} {...props} />
-  }
-
-  return <SuccessToast text='Wallet connected' {...props} />
 }

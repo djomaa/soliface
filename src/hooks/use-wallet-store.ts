@@ -13,7 +13,7 @@ export const useWalletStore = () => {
   }, [walletName, wallets]);
 
   const set = useCallback((wallet: IWallet) => {
-    oSet(() => wallet.name);
+    oSet(wallet.name);
   }, [oSet]);
 
   return [wallet, set, remove] as const;

@@ -1,19 +1,19 @@
 import React from 'react'
 
-import MuiDialog from '@mui/material/Dialog'
+import MuiDialog, { DialogProps } from '@mui/material/Dialog'
 
 import { IParentProps } from 'types/react'
 import style from 'styles/dialog.module.scss'
 
-interface IProps extends IParentProps {
-
+export interface IDialogProps extends Partial<Pick<DialogProps, 'open' | 'onClose'>> {
 }
-export const Dialog: React.FC<IProps> = (props) => {
+export const Dialog: React.FC<IDialogProps & IParentProps> = (props) => {
   return (
     <MuiDialog
-      open
       fullWidth
       scroll='paper'
+      open={true}
+      {...props}
       classes={{
         scrollPaper: style.DialogContainer,
         paperScrollBody: style.DialogContainer

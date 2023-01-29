@@ -14,10 +14,12 @@ type IAddModal = <T>(component: React.FC<IAsyncModalBaseProps & T>, props: T) =>
 
 export type AsyncModal<T = {}> = React.FC<IAsyncModalBaseProps & T>
 
-interface IState {
-  addModal: IAddModal
+export interface ModalCtxState {
+  addModal: IAddModal;
+  addModal1: (modal: React.ReactElement<IAsyncModalBaseProps>) => void;
+  getProps: () => IAsyncModalBaseProps;
 }
-export const ModalCtx = createContext<IState | null>(null)
+export const ModalCtx = createContext<ModalCtxState | null>(null)
 
 
 interface IProps {
@@ -35,6 +37,19 @@ export const ModalCtxProvider: React.FC<IProps> = ({ children }) => {
     return filter((modal) => modal.props.id !== id);
   }
 
+  const getProps = () => {
+    const cId = id++;
+    return {
+      key: cId,
+      id: cId,
+      handleClose: () => closeModal(cId),
+    };
+  }
+
+  const addModal1 = (modal: React.ReactElement<IAsyncModalBaseProps>) => {
+    push(modal);
+  }
+
   const addModal: IAddModal = (Component, props) => {
     const cId = id++
     logger.debug('Add', cId)
@@ -43,7 +58,6 @@ export const ModalCtxProvider: React.FC<IProps> = ({ children }) => {
         key={cId}
         id={cId}
         handleClose={() => {
-          console.log('handle close');
           closeModal(cId)
         }}
         {...props} />
@@ -56,7 +70,9 @@ export const ModalCtxProvider: React.FC<IProps> = ({ children }) => {
 
   logState('modals', modals)
   const value = {
-    addModal
+    addModal,
+    addModal1,
+    getProps,
   }
   return (
     <ModalCtx.Provider value={value}>

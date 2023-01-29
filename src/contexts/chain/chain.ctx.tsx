@@ -33,7 +33,7 @@ function canConnectorChainBeAdded<T extends AbstractConnector>(connector: T): co
   return !(tConnector.addChain == null)
 }
 
-interface IState {
+export interface ChainCtxState {
   changeChain: (chain: Chain) => Promise<void>
   addChain: (chain: Chain) => Promise<void>
   connectWallet: (wallet: IWallet) => Promise<void>
@@ -46,7 +46,7 @@ interface IState {
   canSwitchChain: boolean | null
   canAddChain: boolean | null
 }
-export const ChainCtx = createContext<IState | null>(null)
+export const ChainCtx = createContext<ChainCtxState | null>(null)
 
 interface IProps {
   children: React.ReactNode | React.ReactNode[]
@@ -171,7 +171,7 @@ export const ChainCtxProviderCore: React.FC<IProps> = (props) => {
 
 
 
-  const value: IState = {
+  const value: ChainCtxState = {
     status,
     connectWallet: connect,
     disconnect,
