@@ -6,7 +6,7 @@ import LoadingButton from '@mui/lab/LoadingButton'
 import { ZERO_ADDRESS } from 'constants/chain'
 import { useContractCtx } from 'contexts/contract'
 import { useAsyncAction } from 'hooks/use-async-action'
-import { useWeb3, useWeb3SafeAbiCoder } from 'contexts/web3'
+import { useWeb3, useWeb3SafeAbiCoder } from 'contexts/chain'
 
 import { useMethodCtx } from '../method.context'
 import { IMethodActionConf } from '../types'
@@ -26,14 +26,13 @@ export const CallAction: React.FC = () => {
       to: contractCtx.address,
       data,
       ...tx
-    })
-    console.log('Gas limit !!!', est)
+    });
     const result = await web3.eth.call({
       from: ZERO_ADDRESS,
       to: contractCtx.address,
       data,
       ...tx
-    })
+    });
     return result
   }, [web3, abi])
 

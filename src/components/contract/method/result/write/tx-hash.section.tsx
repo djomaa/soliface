@@ -14,8 +14,8 @@ import { SvgIconTypeMap } from '@mui/material/SvgIcon'
 import DialogContent from '@mui/material/DialogContent'
 
 import { Chain } from 'types/chain'
-import { useChainCtx } from 'contexts/web3'
-import { useChainList } from 'hooks/use-chain-list'
+import { useChainCtx } from 'contexts/chain'
+import { useChainList } from 'hooks/use-chain-list/use-chain-list'
 import { generateTxLinkByChain } from 'helpers/explorer'
 
 const LaunchIcon: React.FC<SvgIconTypeMap['props']> = (props) => <OriginalLaunchIcon {...props} fontSize='small' />

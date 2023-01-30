@@ -1,7 +1,7 @@
 export class EventEmitter {
   private readonly store = new Map<string, Function[]>()
 
-  emit (key: string, toIgnore: Function) {
+  emit(key: string, toIgnore: Function) {
     if (!this.store.has(key)) {
       return
     }
@@ -13,7 +13,7 @@ export class EventEmitter {
     }
   }
 
-  on (key: string, listener: Function) {
+  on(key: string, listener: Function) {
     if (this.store.has(key)) {
       this.store.get(key)!.push(listener)
     } else {
@@ -21,7 +21,7 @@ export class EventEmitter {
     }
   }
 
-  off (key: string, listener: Function) {
+  off(key: string, listener: Function) {
     const arr = this.store.get(key)
     if (arr == null) {
       throw new Error('No array found')

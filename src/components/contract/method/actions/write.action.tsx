@@ -5,7 +5,7 @@ import LoadingButton from '@mui/lab/LoadingButton'
 
 import { useContractCtx } from 'contexts/contract'
 import { useAsyncAction } from 'hooks/use-async-action'
-import { useChainCtx, useWeb3, useWeb3SafeAbiCoder } from 'contexts/web3'
+import { useChainCtx, useWeb3, useWeb3SafeAbiCoder } from 'contexts/chain'
 
 import { useMethodCtx } from '../method.context'
 import { IMethodActionConf } from '../types'

@@ -1,24 +1,15 @@
-import React, { createContext, useContext, useState } from 'react'
+import React, { createContext, useState } from 'react'
 
 import { Artifact } from 'helpers/abi'
 import { useLogger } from 'hooks/use-logger'
 
-interface IState {
+export interface ContractCtxState {
   artifact?: Artifact
   address?: string
   setAddress: (address: string) => void
   setArtifact: (artifact: Artifact) => void
 }
-export const ContractContext = createContext<IState>({
-  artifact: undefined,
-  address: undefined,
-  setAddress: () => { },
-  setArtifact: () => { }
-})
-
-export const useContractCtx = () => {
-  return useContext(ContractContext)
-}
+export const ContractCtx = createContext<ContractCtxState | null>(null)
 
 interface iProps {
   children: React.ReactNode | React.ReactNode[]
@@ -39,8 +30,8 @@ export const ContractCtxProvider: React.FC<iProps> = ({ children }) => {
   }
 
   return (
-    <ContractContext.Provider value={value}>
+    <ContractCtx.Provider value={value}>
       {children}
-    </ContractContext.Provider>
+    </ContractCtx.Provider>
   )
 }

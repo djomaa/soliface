@@ -4,7 +4,7 @@ import Stack from '@mui/material/Stack'
 import Switch from '@mui/material/Switch'
 import Typography from '@mui/material/Typography'
 
-import { useWeb3 } from 'contexts/web3'
+import { useWeb3 } from 'contexts/chain'
 import { useLogger } from 'hooks/use-logger'
 import { IAction } from 'hooks/use-async-action'
 

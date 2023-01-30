@@ -7,10 +7,11 @@ import Grid from '@mui/material/Unstable_Grid2'
 import Typography from '@mui/material/Typography'
 
 import { useLogger } from 'hooks/use-logger'
-import { searchChain, useChainList } from 'hooks/use-chain-list'
+import { searchChain, useChainList } from 'hooks/use-chain-list/use-chain-list'
 
 import { ChainCard } from './chain-card'
 import { useSearch } from 'hooks/use-search'
+import Link from '@mui/material/Link'
 
 export const ChainManager: React.FC = () => {
   const [Logger] = useLogger(ChainManager.name)
@@ -35,9 +36,20 @@ export const ChainManager: React.FC = () => {
           variant="h2"
           align="center"
           color="text.primary"
-          gutterBottom
         >
           Chains Manager
+        </Typography>
+        <Typography
+          align='center'
+          variant='body1'
+        >
+          Inspired by <Link href='https://chainlist.org' target='_blank'>chainlist.org</Link>.
+        </Typography>
+        <Typography
+          align='center'
+          variant='body1'
+        >
+          Also that's the source of chain list
         </Typography>
         <TextField
           fullWidth

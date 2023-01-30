@@ -1,8 +1,13 @@
-export const APP_NAME = 'soliface'
+// import { AppName } from './common'
 
-const DELEMITER = '/'
+import { StringifyAble } from 'types/common';
 
-export function createKey (...keys: Array<string | number>) {
+// export const APP_NAME = AppName;
+export const APP_NAME = 'soliface';
+
+export const DELEMITER = '/'
+
+export function createKey(...keys: StringifyAble[]) {
   return keys.join(DELEMITER)
 }
 

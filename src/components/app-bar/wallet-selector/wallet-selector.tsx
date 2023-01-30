@@ -11,22 +11,27 @@ import InputAdornment from '@mui/material/InputAdornment'
 import ChangeCircleOutlinedIcon from '@mui/icons-material/ChangeCircleOutlined'
 
 import { cutAddress } from 'utils/address'
-import { useChainCtx } from 'contexts/web3'
-import { useWalletList, IWallet } from 'hooks/use-wallet-list'
+import { useChainCtx } from 'contexts/chain'
+import { IWallet, useWalletList } from 'hooks/use-wallet-list'
+import { useConnectWalletAction } from 'actions/connect-wallet'
 
 export const WalletSelector: React.FC = () => {
-  const [anchor, setAnchor] = useState<HTMLElement>()
+  const chainCtx = useChainCtx()
   const { wallets } = useWalletList()
-  const web3Ctx = useChainCtx()
+
+  const [anchor, setAnchor] = useState<HTMLElement>()
+
+  const { connectWallet } = useConnectWalletAction();
 
   const connect = (wallet: IWallet) => {
     setAnchor(undefined)
-    web3Ctx.connectWallet(wallet)
+    // setToastProps({ wallet });
+    connectWallet(wallet);
   }
 
   const disconnect = () => {
     setAnchor(undefined)
-    web3Ctx.disconnect()
+    chainCtx.disconnect()
   }
 
   const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -38,7 +43,7 @@ export const WalletSelector: React.FC = () => {
   }
   return (
     <>
-      {(web3Ctx.wallet != null)
+      {(chainCtx.wallet != null)
         ? (
           <Stack direction='row' alignItems='center'>
             <IconButton onClick={handleOpen}>
@@ -48,14 +53,14 @@ export const WalletSelector: React.FC = () => {
               <TextField
                 disabled
                 size='small'
-                value={cutAddress(web3Ctx.account)}
+                value={cutAddress(chainCtx.account)}
                 inputProps={{
                   size: 8 + 4
                 }}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
-                      <web3Ctx.wallet.icon />
+                      <chainCtx.wallet.icon />
                     </InputAdornment>
                   )
                 }}
@@ -78,7 +83,7 @@ export const WalletSelector: React.FC = () => {
 
       >
         {wallets.map((wallet) => {
-          const isDisabled = !(web3Ctx.wallet == null) && web3Ctx.wallet.name === wallet.name
+          const isDisabled = !(chainCtx.wallet == null) && chainCtx.wallet.name === wallet.name
           return (
             <MenuItem
               key={wallet.name}
@@ -89,7 +94,7 @@ export const WalletSelector: React.FC = () => {
             </MenuItem>
           )
         })}
-        {(web3Ctx.wallet != null) && (
+        {(chainCtx.wallet != null) && (
           <MenuItem
             onClick={() => { disconnect() }}
           >

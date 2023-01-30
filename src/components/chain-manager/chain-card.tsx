@@ -9,24 +9,71 @@ import CardHeader from '@mui/material/CardHeader'
 import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
 import CardActions from '@mui/material/CardActions'
+import MuiLink from '@mui/material/Link'
 
 import { Chain } from 'types/chain'
-import { Link } from 'react-router-dom'
 import { createRoute, Route } from 'constants/route'
+import Grid from '@mui/system/Unstable_Grid'
+import { Link } from 'react-router-dom'
+
+const CustomAvatar: React.FC<Chain> = (chain) => {
+  const url = `https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${chain.infoURL}&size=64`
+  return (
+    <Avatar
+      src={url}
+    >
+      ?
+    </Avatar>
+  )
+}
 
 export const ChainCard: React.FC<Chain> = (chain: Chain) => {
-  const url = chain.icon ? `https://icons.llamao.fi/icons/chains/rsz_${chain.icon}.jpg` : '/unknown-logo.png'
   return (
     <Card>
       <CardHeader
         title={chain.name}
         subheader={chain.shortName}
-        avatar={
-          <Avatar src={url} />
-        }
+        avatar={<CustomAvatar {...chain} />}
       />
       <CardContent>
-        <Stack direction='row' justifyContent='space-evenly'>
+        <Grid
+          container
+          rowSpacing={2}
+        >
+          <Grid xs={12} justifyContent='space-around'>
+            <Stack alignItems='center'>
+              <Typography color="text.secondary">
+                Website:
+              </Typography>
+              <Typography color="text.primary">
+                <MuiLink href={chain.infoURL} target='_blank' >{chain.infoURL}</MuiLink>
+              </Typography>
+            </Stack>
+          </Grid>
+          <Grid xs={6}>
+            <Stack alignItems='center'>
+              <Typography color="text.secondary">
+                Chain ID:
+              </Typography>
+              <Typography color="text.primary">
+                {chain.chainId}
+              </Typography>
+            </Stack>
+          </Grid>
+          <Grid xs={6}>
+            <Tooltip title={`Decimals: ${chain.nativeCurrency.decimals} | Name: ${chain.nativeCurrency.name}`}>
+              <Stack alignItems='center'>
+                <Typography color="text.secondary">
+                  Currency:
+                </Typography>
+                <Typography color="text.primary">
+                  {chain.nativeCurrency.symbol}
+                </Typography>
+              </Stack>
+            </Tooltip>
+          </Grid>
+        </Grid>
+        {/* <Stack direction='row' justifyContent='space-evenly'>
           <Stack alignItems='center'>
             <Typography color="text.secondary">
               Chain ID:
@@ -45,17 +92,21 @@ export const ChainCard: React.FC<Chain> = (chain: Chain) => {
               </Typography>
             </Stack>
           </Tooltip>
-        </Stack>
+        </Stack> */}
       </CardContent >
       <CardActions sx={{ width: '100%' }}>
-        <Button
-          fullWidth
-          size='small'
-          component={Link}
-          to={createRoute[Route.Chain](chain.chainId)}
+        <Stack
+          direction='row'
         >
-          More
-        </Button>
+          <Button
+            fullWidth
+            size='small'
+            component={Link}
+            to={createRoute[Route.Chain](chain.chainId)}
+          >
+            More
+          </Button>
+        </Stack>
       </CardActions>
     </Card >
   )

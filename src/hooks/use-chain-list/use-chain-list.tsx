@@ -1,16 +1,23 @@
-import { useState } from 'react'
+import { useMemo } from 'react'
 import { ChainList } from 'constants/chain-list'
 import { Chain } from 'types/chain'
 import { hexToNumber } from 'utils/number.utils'
+import { useChainListQuery } from './chain-list.query'
 
 export const useChainList = () => {
-  const [chainList, setChainList] = useState(ChainList)
+  const remote = useChainListQuery();
+
+  const chainList = useMemo(() => {
+    if (remote.isLoading || remote.isError) {
+      return ChainList;
+    }
+    return remote.data!;
+  }, [remote])
 
   return { chainList }
 }
 
-export function searchChain (list: Chain[], query: string) {
-  console.log('asdasd')
+export function searchChain(list: Chain[], query: string) {
   // TODO:- add timings for filtering and mapping
   const regExpQuery = new RegExp(query, 'i')
   const numberQuery = Number(query)

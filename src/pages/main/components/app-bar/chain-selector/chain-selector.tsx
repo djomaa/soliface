@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 
 import Box from '@mui/system/Box'
 import List from '@mui/material/List'
@@ -12,25 +12,28 @@ import ListItemButton from '@mui/material/ListItemButton'
 import { Chain } from 'types/chain'
 import { useFocus } from 'hooks/use-focus'
 import { useSearch } from 'hooks/use-search'
-import { Status, useChainCtx } from 'contexts/web3'
-import { ChangeChainModal } from 'modals/connect-chain.modal'
-import { ModalCtxProvider, useModalCtx } from 'contexts/modal'
+import { Status, useChainCtx } from 'contexts/chain'
+import { useChangeChainAction } from 'actions/change-chain'
 import { searchChain, useChainList } from 'hooks/use-chain-list'
 
-export const ChainSelectorCore: React.FC = () => {
+export const ChainSelector: React.FC = () => {
   const chainCtx = useChainCtx()
-  const modalCtx = useModalCtx()
+
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+
   const { chainList } = useChainList()
+  const [searchRef, focusSearch] = useFocus();
+  const { changeChain: connectChain } = useChangeChainAction();
   const [search, setSearch, searchList] = useSearch(chainList, searchChain)
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
-  const [searchRef, focusSearch] = useFocus()
+
+
   const chain = useMemo(() => {
     return chainList.find((n) => n.chainId === chainCtx.chainId);
-  }, [chainCtx.chainId]);
+  }, [chainCtx.chainId, chainList]);
 
   const changeChain = (chain: Chain) => {
-    setAnchorEl(null)
-    return modalCtx.addModal(ChangeChainModal, { chain })
+    setAnchorEl(null);
+    connectChain(chain);
   }
 
   const options = useMemo(() => {
@@ -60,6 +63,7 @@ export const ChainSelectorCore: React.FC = () => {
 
   return (
     <Box>
+      {/* {selectedChain && <ConnectChainModal open={true} onClose={() => setSelectedChain(undefined)} chain={selectedChain} />} */}
       <Button
         onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
           setAnchorEl(event.currentTarget)
@@ -99,13 +103,5 @@ export const ChainSelectorCore: React.FC = () => {
         </List>
       </Popover>
     </Box>
-  )
-}
-
-export const ChainSelector: React.FC = () => {
-  return (
-    <ModalCtxProvider>
-      <ChainSelectorCore />
-    </ModalCtxProvider>
   )
 }

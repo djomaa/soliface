@@ -5,7 +5,7 @@ import AlertTitle from '@mui/material/AlertTitle'
 import CircularProgress from '@mui/material/CircularProgress'
 
 import { useLogger } from 'hooks/use-logger'
-import { AbiCoderError } from 'contexts/web3'
+import { AbiCoderError } from 'contexts/chain'
 import { IAction } from 'hooks/use-async-action'
 
 export function parseActionError(error: unknown): { title: string, body: JSX.Element } {

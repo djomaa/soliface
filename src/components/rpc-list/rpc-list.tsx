@@ -1,24 +1,21 @@
 import React, { useMemo } from 'react'
-import { QueryClient, QueryClientProvider } from 'react-query'
 
 import Box from '@mui/material/Box'
 import { DataGrid } from '@mui/x-data-grid'
 
 import { Chain } from 'types/chain'
 import { useLogger } from 'hooks/use-logger'
-import { ModalCtxProvider } from 'contexts/modal'
 import { useDefaultRpc } from 'hooks/use-default-rpc'
 
 import { useRpcListQuery } from './query'
 import { useRpcListColumns } from './rpc-list.columns'
 import { getStatusWeight } from './rpc-list.utils'
 
-export const RpcListCore: React.FC<Chain> = (chain: Chain) => {
-  const [, { logState }] = useLogger(RpcListCore)
-
-  const [defaultRpc] = useDefaultRpc(chain.chainId)
+export const RpcList: React.FC<Chain> = (chain: Chain) => {
+  const [, { logState }] = useLogger(RpcList)
 
   const columns = useRpcListColumns(chain)
+  const [defaultRpc] = useDefaultRpc(chain.chainId)
 
   const rpcs = useMemo(() => {
     if (!defaultRpc) {
@@ -78,16 +75,5 @@ export const RpcListCore: React.FC<Chain> = (chain: Chain) => {
         columns={columns}
       />
     </Box>
-  )
-}
-
-const queryClient = new QueryClient()
-export const RpcList: React.FC<Chain> = (chain: Chain) => {
-  return (
-    <ModalCtxProvider>
-      <QueryClientProvider client={queryClient}>
-        <RpcListCore {...chain} />
-      </QueryClientProvider >
-    </ModalCtxProvider>
   )
 }

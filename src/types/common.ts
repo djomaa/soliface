@@ -4,3 +4,5 @@ export interface SafeError {
   message: string
   details?: string
 }
+
+export type StringifyAble = { toString(): string }; 

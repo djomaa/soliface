@@ -4,7 +4,7 @@ import Link from '@mui/material/Link'
 import Stack from '@mui/material/Stack'
 
 import { AbiItem } from 'types/abi'
-import { useChainCtx } from 'contexts/web3'
+import { useChainCtx } from 'contexts/chain'
 
 import { MethodInput } from './base/base.input'
 
