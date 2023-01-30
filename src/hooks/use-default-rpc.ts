@@ -3,6 +3,12 @@ import { Chain } from 'types/chain'
 
 // import { useStore } from './use-store'
 
-export const useDefaultRpc = (chainId: Chain['chainId']) => {
-  return useStore<string>(['chain', 'rpc', chainId])
+const generateKey = (chainId: Chain['chainId']) => {
+  return ['chain', 'rpc', chainId];
 }
+
+export const useDefaultRpc = (chainId: Chain['chainId']) => {
+  return useStore<string>(generateKey(chainId))
+}
+
+useDefaultRpc.generateKey = (chainId: Chain['chainId']) => useStore.generateKey(generateKey(chainId));

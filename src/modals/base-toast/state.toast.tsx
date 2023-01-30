@@ -3,7 +3,7 @@ import { AsyncState } from 'react-use/lib/useAsyncFn'
 
 import { LoadingToast } from './loading.toast'
 import { SuccessToast } from './success.toast'
-import { ErrorModal } from '../base-modal'
+import { ErrorModal } from '../shared'
 
 type ComponentKey<T extends string> = `${T}Component`;
 type TextKey<T extends string> = `${T}Text`;

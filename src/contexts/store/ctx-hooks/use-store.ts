@@ -8,9 +8,13 @@ import { useLogger } from 'hooks/use-logger';
 import { StoreKey, StoreValue } from '../store.ctx';
 import { useStoreCtx } from './use-store-ctx'
 
+const formatKeys = (keys: StoreKey[]) => {
+  return [APP_NAME, ...keys];
+}
+
 let id = 0;
 export const useStore = <T extends StoreValue>(keys: StoreKey[]) => {
-  const key = useKey(APP_NAME, ...keys);
+  const key = useKey(formatKeys(keys));
   const [Logger] = useLogger(useStore, key, id++);
   const ctx = useStoreCtx();
 
@@ -35,3 +39,5 @@ export const useStore = <T extends StoreValue>(keys: StoreKey[]) => {
 
   return [state, set, remove] as const;
 }
+
+useStore.generateKey = (keys: StoreKey[]) => useKey.Pure(formatKeys(keys));

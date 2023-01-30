@@ -111,6 +111,10 @@ export const ChainCtxProviderCore: React.FC<IProps> = (props) => {
       logger.debug('Empty connector, so null')
       return null
     }
+    if (ctx.connector instanceof NetworkConnector) {
+      logger.debug('Network connector, so true');
+      return true;
+    }
     const result = canConnectorChainBeSwitched(ctx.connector)
     logger.log('Updated', result)
     return result

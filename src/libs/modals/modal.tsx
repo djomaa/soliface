@@ -7,15 +7,16 @@ export interface IModalProps {
 }
 
 export type Modal<T = {}> = React.FC<IModalProps & T>
-type IAddModal = <T>(component: React.FC<IModalProps & T>, props: T) => number
+export type IAddModal<BaseProps extends IModalProps = IModalProps> = <T>(component: React.FC<BaseProps & T>, props: T) => number
 
 let _createModal: undefined | IAddModal;
-export const modal: IAddModal = (...args) => {
+export const showModal: IAddModal = (...args) => {
   if (!_createModal) {
     throw new Error('ModalLib: no ModalContainer created')
   }
   return _createModal(...args);
 }
+
 
 let id = 0;
 export const ModalContainer: React.FC = () => {

@@ -27,8 +27,8 @@ export const StorageCtxProvider: React.FC<{ children: React.ReactElement | React
   // const [watchers] = useMap<Record<string, Function[]>>({});
   const watchers: Record<string, Watcher[]> = {};
 
-  const getInitialState = (key: string) => {
-    const logger = Logger.sub(key, getInitialState.name);
+  const getOriginalState = (key: string) => {
+    const logger = Logger.sub(key, getOriginalState.name);
     if (key in store) {
       const value = store[key].value;
       logger.debug('Read from store', { result: value });
@@ -97,7 +97,7 @@ export const StorageCtxProvider: React.FC<{ children: React.ReactElement | React
   }
 
   const value: StoreCtxState = {
-    getOriginalState: getInitialState,
+    getOriginalState,
     addWatcher,
     removeWatcher,
     set,

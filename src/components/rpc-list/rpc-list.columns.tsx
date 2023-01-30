@@ -22,14 +22,13 @@ interface IRow {
 }
 
 export const useRpcListColumns = (chain: Chain) => {
-  const chainCtx = useChainCtx()
+  const chainCtx = useChainCtx.orEmpty()
   const modalCtx = useModalCtx()
   const [defaultRpc, setDefaultRpc] = useDefaultRpc(chain.chainId)
-  console.log("🚀 ~ file: rpc-list.columns.tsx:28 ~ useRpcListColumns ~ defaultRpc", defaultRpc)
 
   const addChain = useCallback((chain: Chain, rpc: string) => {
     modalCtx.addModal(AddChainModal, { chain: { ...chain, rpc: [rpc] } })
-  }, [chainCtx.addChain, modalCtx.addModal])
+  }, []);
 
   const columns = useMemo(() => {
     const ColumnsCore: GridColumns<IRow> = [
@@ -125,7 +124,7 @@ export const useRpcListColumns = (chain: Chain) => {
             />,
             // TODO: tooltip with disable reason
             <GridActionsCellItem
-              disabled={!isSuccess || !chainCtx.canAddChain}
+              disabled={!isSuccess || !chainCtx?.canAddChain}
               icon={<WalletIcon />}
               label="Add to wallet"
               className="textPrimary"
@@ -144,7 +143,7 @@ export const useRpcListColumns = (chain: Chain) => {
         disableReorder: true
       }
     })
-  }, [chain, defaultRpc, chainCtx.canAddChain])
+  }, [chain, defaultRpc, chainCtx?.canAddChain])
 
   return columns
 }

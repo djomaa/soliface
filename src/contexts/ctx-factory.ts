@@ -9,11 +9,14 @@ export class NoCtxProviderError extends Error {
 }
 
 export const createUseCtx = <T>(Ctx: Context<T | null>, ctxName: string) => {
-  return () => {
+  const useCtx = () => {
     const ctx = useContext(Ctx);
     if (!ctx) {
       throw new NoCtxProviderError(ctxName);
     }
     return ctx;
   }
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useCtx.orEmpty = () => useContext(Ctx);
+  return useCtx;
 }

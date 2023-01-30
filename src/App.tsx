@@ -46,20 +46,20 @@ const Layout: React.FC = () => {
     <StorageCtxProvider>
       <QueryCtxProvider>
         <ModalCtxProvider>
-          <ContractCtxProvider>
-            <Box>
-              <CssBaseline />
-              <main>
-                <Cookies />
+          <Box>
+            <CssBaseline />
+            <main>
+              <Cookies />
+              <ContractCtxProvider>
                 <Outlet />
-              </main>
-              <ToastContainer
-                position="bottom-left"
-                closeButton
-              />
-              <ModalContainer />
-            </Box>
-          </ContractCtxProvider>
+              </ContractCtxProvider>
+            </main>
+            <ToastContainer
+              position="bottom-left"
+              closeButton
+            />
+            <ModalContainer />
+          </Box>
         </ModalCtxProvider>
       </QueryCtxProvider>
     </StorageCtxProvider >

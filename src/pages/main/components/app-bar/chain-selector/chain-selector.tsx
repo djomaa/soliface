@@ -12,22 +12,20 @@ import ListItemButton from '@mui/material/ListItemButton'
 import { Chain } from 'types/chain'
 import { useFocus } from 'hooks/use-focus'
 import { useSearch } from 'hooks/use-search'
-import { useModalCtx } from 'contexts/modal'
 import { Status, useChainCtx } from 'contexts/chain'
-import { ChangeChainModal } from 'modals/connect-chain.modal'
 import { searchChain, useChainList } from 'hooks/use-chain-list'
-import { useModal } from 'modals/modal-factory'
+import { useConnectChainAction } from 'actions/connect-chain/connect-chain.action'
 
 export const ChainSelector: React.FC = () => {
   const chainCtx = useChainCtx()
-  const modalCtx = useModalCtx()
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
   const { chainList } = useChainList()
   const [searchRef, focusSearch] = useFocus();
-  const [changeChainModal, setChangeChainModalProps] = useModal(ChangeChainModal);
+  const { connectChain } = useConnectChainAction();
   const [search, setSearch, searchList] = useSearch(chainList, searchChain)
+
 
   const chain = useMemo(() => {
     return chainList.find((n) => n.chainId === chainCtx.chainId);
@@ -35,7 +33,7 @@ export const ChainSelector: React.FC = () => {
 
   const changeChain = (chain: Chain) => {
     setAnchorEl(null);
-    // setChangeChainModalProps({ chain });
+    connectChain(chain);
   }
 
   const options = useMemo(() => {
@@ -65,7 +63,7 @@ export const ChainSelector: React.FC = () => {
 
   return (
     <Box>
-      {changeChainModal}
+      {/* {selectedChain && <ConnectChainModal open={true} onClose={() => setSelectedChain(undefined)} chain={selectedChain} />} */}
       <Button
         onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
           setAnchorEl(event.currentTarget)
