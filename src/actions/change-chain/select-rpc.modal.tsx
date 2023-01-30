@@ -27,7 +27,7 @@ enum TabValue {
 }
 
 
-export const SelectRpcModal: AsyncModal<void, IProps> = ({ chain, ...props }) => {
+export const SelectRpcModal: AsyncModal<string, IProps> = ({ chain, ...props }) => {
 
   const [defaultRpc] = useDefaultRpc(chain.chainId);
 
@@ -36,10 +36,8 @@ export const SelectRpcModal: AsyncModal<void, IProps> = ({ chain, ...props }) =>
     if (!defaultRpc) {
       throw new Error(`${SelectRpcModal.name}: handleConnect: empty defaultRpc`)
     }
-    props.onResolve();
+    props.onResolve(defaultRpc);
     props.onClose();
-    // props.onClose();
-    // setConnectChainToastProps({ chain });
   }
 
   return (

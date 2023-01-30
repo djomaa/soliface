@@ -14,9 +14,8 @@ import { getStatusWeight } from './rpc-list.utils'
 export const RpcList: React.FC<Chain> = (chain: Chain) => {
   const [, { logState }] = useLogger(RpcList)
 
-  const [defaultRpc] = useDefaultRpc(chain.chainId)
-
   const columns = useRpcListColumns(chain)
+  const [defaultRpc] = useDefaultRpc(chain.chainId)
 
   const rpcs = useMemo(() => {
     if (!defaultRpc) {

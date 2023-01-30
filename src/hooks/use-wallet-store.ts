@@ -1,10 +1,11 @@
 
-import { useStore } from 'contexts/store';
+import { useStore, useStoreKey } from 'contexts/store';
 import { useCallback, useMemo } from 'react';
 import { IWallet, useWalletList } from './use-wallet-list'
 
+const key = useStoreKey.Pure('wallet');
 export const useWalletStore = () => {
-  const [walletName, oSet, remove] = useStore<string>(['wallet'])
+  const [walletName, oSet, remove] = useStore<string>(key);
 
   const { wallets } = useWalletList();
 
@@ -18,3 +19,5 @@ export const useWalletStore = () => {
 
   return [wallet, set, remove] as const;
 }
+
+useWalletStore.key = key;

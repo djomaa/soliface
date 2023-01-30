@@ -173,8 +173,6 @@ export const ChainCtxProviderCore: React.FC<IProps> = (props) => {
     await ctx.connector.addChain(chain)
   }
 
-
-
   const value: ChainCtxState = {
     status,
     connectWallet: connect,
@@ -192,7 +190,7 @@ export const ChainCtxProviderCore: React.FC<IProps> = (props) => {
   return (
     <ChainCtx.Provider value={value}>
       <ChainCtxAnalytics />
-      <InitialWalletConnect />
+      <InitialWalletConnect ctx={value} />
       {props.children}
     </ChainCtx.Provider>
   )

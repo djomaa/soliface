@@ -13,8 +13,8 @@ import { Chain } from 'types/chain'
 import { useFocus } from 'hooks/use-focus'
 import { useSearch } from 'hooks/use-search'
 import { Status, useChainCtx } from 'contexts/chain'
+import { useChangeChainAction } from 'actions/change-chain'
 import { searchChain, useChainList } from 'hooks/use-chain-list'
-import { useConnectChainAction } from 'actions/connect-chain/connect-chain.action'
 
 export const ChainSelector: React.FC = () => {
   const chainCtx = useChainCtx()
@@ -23,7 +23,7 @@ export const ChainSelector: React.FC = () => {
 
   const { chainList } = useChainList()
   const [searchRef, focusSearch] = useFocus();
-  const { connectChain } = useConnectChainAction();
+  const { changeChain: connectChain } = useChangeChainAction();
   const [search, setSearch, searchList] = useSearch(chainList, searchChain)
 
 

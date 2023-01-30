@@ -24,7 +24,7 @@ import { AnalyticsCtxProvider, useAnalytics } from 'contexts/analytics'
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import Box from '@mui/material/Box';
-import { ModalContainer } from 'libs/modals/modal';
+import { ModalContainer } from 'libs/modals/modal-container';
 import { useLogger } from 'hooks/use-logger';
 
 

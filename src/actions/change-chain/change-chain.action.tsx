@@ -9,27 +9,31 @@ import { useDefaultRpc } from 'hooks/use-default-rpc'
 import { modal } from 'libs/modals'
 import { SelectRpcModal } from './select-rpc.modal'
 import { createStateToast } from 'modals/state.toast'
+import { toast } from 'react-toastify'
 
 
-export const useConnectChainAction = () => {
-  const [Logger] = useLogger(useConnectChainAction);
+export const useChangeChainAction = () => {
+  const [Logger] = useLogger(useChangeChainAction);
   const chainCtx = useChainCtx();
   const storeCtx = useStoreCtx();
 
-  const connectChain = useCallback(async (chain: Chain) => {
-    const storeKey = useDefaultRpc.generateKey(chain.chainId);
+  const changeChain = useCallback(async (chain: Chain) => {
+    const storeKey = useDefaultRpc.key(chain.chainId);
     let defaultRpc = storeCtx.getOriginalState(storeKey);
     if (!defaultRpc) {
-      await modal.promise(SelectRpcModal, { chain });
+      defaultRpc = await modal.promise(SelectRpcModal, { chain });
     }
-    defaultRpc = storeCtx.getOriginalState(storeKey);
+    if (!defaultRpc) {
+      toast.info('Chain connection cancelled');
+      return;
+    }
 
     await createStateToast(() => chainCtx.changeChain(chain), {
-      loading: 'Connecting chain..',
-      error: 'Failed to connect chain',
-      success: 'Chain connected',
+      loading: `Connecting chain ${chain.chainId}..`,
+      error: `Failed to connect chain ${chain.chainId}`,
+      success: `Chain connected ${chain.chainId}`,
     }, Logger);
   }, []);
 
-  return { connectChain };
+  return { changeChain };
 }

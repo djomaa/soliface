@@ -1,25 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 import { useLogger } from 'hooks/use-logger';
-import { useModal } from 'modals/modal-factory';
 import { useWalletStore } from 'hooks/use-wallet-store';
-import { ConnectWalletToast } from 'modals/connect-wallet.toast';
 import { useConnectWalletAction } from 'actions/connect-wallet';
+import { ChainCtxState } from './chain.ctx';
 
 interface IProps {
-  onClose: () => void;
-  onDone: () => void;
+  ctx: ChainCtxState;
 }
-export const InitialWalletConnectCore: React.FC<IProps> = (props) => {
+export const InitialWalletConnect: React.FC<IProps> = (props) => {
   const [Logger] = useLogger(InitialWalletConnect)
 
   const [wallet] = useWalletStore();
+  // const chainCtx = useChainCtx();
   const { connectWallet } = useConnectWalletAction()
-
-  const [toast, setToastProps] = useModal(ConnectWalletToast)
 
   useEffect(() => {
     const logger = Logger.sub('useEffect:[]')
+    Logger.debug('Current', props.ctx.wallet)
     if (wallet) {
       logger.debug('Initital wallet', { wallet })
       connectWallet(wallet);
@@ -32,15 +30,4 @@ export const InitialWalletConnectCore: React.FC<IProps> = (props) => {
     <>
     </>
   )
-}
-
-export const InitialWalletConnect: React.FC = () => {
-  const [done, setDone] = useState(false);
-  const [closed, setClosed] = useState(false);
-
-  if (done && closed) {
-    return <></>;
-  }
-  return <InitialWalletConnectCore onClose={() => setClosed(true)} onDone={() => setDone(true)} />
-
 }

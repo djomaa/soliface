@@ -1,4 +1,4 @@
-import { useStoreWithDefault } from 'contexts/store';
+import { useStoreKey, useStoreWithDefault } from 'contexts/store';
 import { useCallback } from 'react';
 import { useLogger } from './use-logger';
 
@@ -26,10 +26,12 @@ const DefaultValue: ICookies = {
   version: '0.0.1',
 }
 
+const key = useStoreKey.Pure('cookies');
+
 export const useCookies = () => {
   const [Logger] = useLogger(useCookies.name);
   // const [oValue, oSet] = useStore<ICookies, ICookies>(['cookies'], DefaultValue);
-  const [oValue, oSet, , oClone] = useStoreWithDefault(['cookies'], DefaultValue);
+  const [oValue, oSet, , oClone] = useStoreWithDefault(key, DefaultValue);
 
   const updateConfig = useCallback((v: Partial<ICookies['config']>) => {
     oSet({
@@ -65,6 +67,8 @@ export const useCookies = () => {
 
   return { value: oValue, updateConfig, acceptAll, accept };
 }
+
+useCookies.key = key;
 
 export const useCookiesConfig = () => {
   const cookies = useCookies();

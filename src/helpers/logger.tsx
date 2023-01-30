@@ -4,7 +4,7 @@ import { StringifyAble } from 'types/common'
 export class Logger {
   public prefix: string;
   constructor(...parts: StringifyAble[]) {
-    this.prefix = Logger.Keys(AppName, ...parts);
+    this.prefix = Logger.Keys(parts);
   }
 
   log(...args: any[]) {
@@ -23,12 +23,13 @@ export class Logger {
     console.warn(`[${this.prefix}]`, ...args)
   }
 
-  sub(...parts: string[]) {
-    const prefix = Logger.Keys(this.prefix, ...parts);
+  sub(...parts: StringifyAble[]) {
+    const prefix = Logger.Keys([this.prefix, ...parts]);
     return new Logger(prefix)
   }
 
-  static Keys(...parts: StringifyAble[]) {
+  static Keys(parts: StringifyAble[]) {
+    parts = parts[0].toString().startsWith(AppName) ? parts : [AppName, ...parts];
     return parts.join(':');
   }
 }

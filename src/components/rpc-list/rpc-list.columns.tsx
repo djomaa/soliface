@@ -8,10 +8,8 @@ import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked'
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
 
 import { Chain } from 'types/chain'
-import { useChainCtx } from 'contexts/chain'
-import { useModalCtx } from 'contexts/modal'
 import { useDefaultRpc } from 'hooks/use-default-rpc'
-import { AddChainModal } from 'modals/add-chain.modal'
+import { useAddChainToWalletAction } from 'actions/add-chain-to-wallet'
 
 import { IData } from './query'
 import { getStatusIcon, getStatusWeight } from './rpc-list.utils'
@@ -22,12 +20,11 @@ interface IRow {
 }
 
 export const useRpcListColumns = (chain: Chain) => {
-  const chainCtx = useChainCtx.orEmpty()
-  const modalCtx = useModalCtx()
   const [defaultRpc, setDefaultRpc] = useDefaultRpc(chain.chainId)
+  const { addChainToWallet } = useAddChainToWalletAction.orEmpty();
 
   const addChain = useCallback((chain: Chain, rpc: string) => {
-    modalCtx.addModal(AddChainModal, { chain: { ...chain, rpc: [rpc] } })
+    addChainToWallet!({ ...chain, rpc: [rpc] })
   }, []);
 
   const columns = useMemo(() => {
@@ -124,7 +121,7 @@ export const useRpcListColumns = (chain: Chain) => {
             />,
             // TODO: tooltip with disable reason
             <GridActionsCellItem
-              disabled={!isSuccess || !chainCtx?.canAddChain}
+              disabled={!isSuccess || !addChainToWallet}
               icon={<WalletIcon />}
               label="Add to wallet"
               className="textPrimary"
@@ -143,7 +140,7 @@ export const useRpcListColumns = (chain: Chain) => {
         disableReorder: true
       }
     })
-  }, [chain, defaultRpc, chainCtx?.canAddChain])
+  }, [chain, defaultRpc, addChainToWallet])
 
   return columns
 }

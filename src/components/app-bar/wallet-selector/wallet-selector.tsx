@@ -13,8 +13,6 @@ import ChangeCircleOutlinedIcon from '@mui/icons-material/ChangeCircleOutlined'
 import { cutAddress } from 'utils/address'
 import { useChainCtx } from 'contexts/chain'
 import { IWallet, useWalletList } from 'hooks/use-wallet-list'
-import { ConnectWalletToast } from 'modals/connect-wallet.toast'
-import { useModal } from 'modals/modal-factory'
 import { useConnectWalletAction } from 'actions/connect-wallet'
 
 export const WalletSelector: React.FC = () => {
@@ -23,7 +21,6 @@ export const WalletSelector: React.FC = () => {
 
   const [anchor, setAnchor] = useState<HTMLElement>()
 
-  const [connectWalletToast, setToastProps] = useModal(ConnectWalletToast);
   const { connectWallet } = useConnectWalletAction();
 
   const connect = (wallet: IWallet) => {
@@ -46,7 +43,6 @@ export const WalletSelector: React.FC = () => {
   }
   return (
     <>
-      {connectWalletToast}
       {(chainCtx.wallet != null)
         ? (
           <Stack direction='row' alignItems='center'>

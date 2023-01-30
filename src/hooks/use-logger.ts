@@ -7,9 +7,9 @@ interface Stringifiable { toString: () => string }
 // TODO: move to utils
 export const useLogger = (keyOrFn: string | Function, ...subs: Stringifiable[]) => {
   return useMemo(() => {
-    const key = typeof keyOrFn === 'function' ? keyOrFn.name : keyOrFn
-    const prefix = [key, ...subs.map(s => s.toString())].join(':')
-    const logger = new Logger(prefix)
+
+    const firstPart = typeof keyOrFn === 'function' ? keyOrFn.name : keyOrFn;
+    const logger = new Logger(firstPart, ...subs)
 
     const logState = (text: string, state: any) => {
       const subLogger = logger.sub(text)

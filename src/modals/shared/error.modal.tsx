@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
 
 import Alert from '@mui/material/Alert'
 import Stack from '@mui/material/Stack'
@@ -8,20 +8,18 @@ import CloseIcon from '@mui/icons-material/Close'
 import DialogTitle from '@mui/material/DialogTitle'
 import DialogContent from '@mui/material/DialogContent'
 
+import { Modal } from 'libs/modals'
 import { parseError } from 'utils/error'
 import style from 'styles/common.module.scss';
 
-import { Dialog, IDialogProps } from '../base-dialog/base.dialog'
-import { DialogProps } from '@mui/material/Dialog'
+import { Dialog } from '../base-dialog/base.dialog'
 
-interface IProps extends Pick<DialogProps, 'onClose'> {
+interface IProps {
   title: string;
   error: Error;
-  dialogProps?: IDialogProps;
 }
 
-export const ErrorModal: React.FC<IProps> = (props) => {
-  const [open, setOpen] = useState(true)
+export const ErrorModal: Modal<IProps> = (props) => {
 
   const parsed = useMemo(() => {
     return parseError(props.error);
@@ -29,8 +27,8 @@ export const ErrorModal: React.FC<IProps> = (props) => {
 
   return (
     <Dialog
-      open={open}
-      {...props.dialogProps}
+      open={true}
+      onClose={() => props.onClose()}
     >
       <DialogTitle>
         <Stack
@@ -42,7 +40,7 @@ export const ErrorModal: React.FC<IProps> = (props) => {
             color='error'
             variant='outlined'
             startIcon={<CloseIcon />}
-            onClick={() => setOpen(false)}
+            onClick={() => props.onClose()}
           >
             Close
           </Button>

@@ -1,12 +1,12 @@
-import { createKey } from 'constants/storage';
+import { APP_NAME, createKey } from 'constants/storage';
 import { useMemo } from 'react';
 
-function generateKey(...params: Parameters<typeof createKey>) {
-  return createKey(...params);
+function pure(delemiter: string, ...params: Parameters<typeof createKey>) {
+  return [APP_NAME, ...params].join(delemiter);
 }
 
-export const useKey = (...params: Parameters<typeof createKey>) => {
-  return useMemo(() => generateKey(...params), [params])
+export const useKey = (delemiter: string, ...params: Parameters<typeof createKey>) => {
+  return useMemo(() => pure(delemiter, ...params), [delemiter, params])
 }
 
-useKey.Pure = generateKey;
+useKey.Pure = pure;

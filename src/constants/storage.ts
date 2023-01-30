@@ -5,7 +5,7 @@ import { StringifyAble } from 'types/common';
 // export const APP_NAME = AppName;
 export const APP_NAME = 'soliface';
 
-const DELEMITER = '/'
+export const DELEMITER = '/'
 
 export function createKey(...keys: StringifyAble[]) {
   return keys.join(DELEMITER)

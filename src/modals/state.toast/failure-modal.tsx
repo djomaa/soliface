@@ -8,10 +8,7 @@ export const FailureModal: Modal<{ error: Error }> = ({ error, ...props }) => {
     <ErrorModal
       title='Failed to connect wallet'
       error={error}
-      dialogProps={{
-        open: true,
-        onClose: props.onClose
-      }}
+      {...props}
     />
   )
 }
