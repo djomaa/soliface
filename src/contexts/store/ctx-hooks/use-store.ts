@@ -24,9 +24,9 @@ export const useStore = <T extends StoreValue>(key: string) => {
   }
 
   useEffect(() => {
-    ctx.addWatcher(key, setState);
+    ctx.addListener(key, setState);
     return () => {
-      ctx.removeWatcher(key, setState);
+      ctx.removeListener(key, setState);
     }
   }, []);
 

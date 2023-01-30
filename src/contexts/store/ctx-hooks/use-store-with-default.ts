@@ -28,12 +28,12 @@ export const useStoreWithDefault = <T extends StoreValue>(key: string, initialVa
   }
 
   useEffect(() => {
-    ctx.addWatcher(key, setState);
+    ctx.addListener(key, setState);
     if (!ctx.getOriginalState(key)) {
       ctx.set(key, clone());
     }
     return () => {
-      ctx.removeWatcher(key, setState);
+      ctx.removeListener(key, setState);
     }
   }, []);
 
