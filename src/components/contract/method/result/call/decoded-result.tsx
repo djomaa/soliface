@@ -70,7 +70,7 @@ export const MethodDecodedResult: React.FC<iProps> = ({ raw, abi, web3 }) => {
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const decoded = useMemo(() => {
-    const [value, error] = safe(() => web3.eth.abi.decodeParameters(abi.outputs!, raw));
+    const [error, value] = safe(() => web3.eth.abi.decodeParameters(abi.outputs!, raw));
     return error ?? value;
   }, [abi, raw]);
 

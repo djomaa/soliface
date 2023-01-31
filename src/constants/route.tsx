@@ -3,6 +3,7 @@ import { Chain } from 'types/chain'
 export enum Route {
   Home = '/',
   AbiManager = '/abi',
+  CreateArtifact = '/artifact/create',
   ChainManager = '/chains',
   Chain = '/chains/:id'
 }

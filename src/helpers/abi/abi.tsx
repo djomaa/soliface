@@ -3,12 +3,12 @@ import oAbiCoder from 'web3-eth-abi'
 import { SafeError } from 'types/common'
 import { AbiItem, AbiCoder } from 'types/abi'
 
-import { safe, safeObj } from './safe'
+import { safe, safeObj } from '../safe'
 
 
 export const abiCoder = oAbiCoder as unknown as AbiCoder
 
-export function makeAbiHash(abi: AbiItem[]) {
+export function generateAbiHash(abi: AbiItem[]) {
   const interfaceId = abi.reduce<bigint>((prev, item) => {
     if (item.type === 'event') {
       return prev
@@ -46,7 +46,7 @@ export class Artifact {
     if (this.originalHash) {
       this.originalHash = originalHash
     } else {
-      this.actualHash = makeAbiHash(abi)
+      this.actualHash = generateAbiHash(abi)
     }
   }
 
@@ -55,7 +55,7 @@ export class Artifact {
       return this.originalHash
     }
     if (!this.actualHash) {
-      this.actualHash = makeAbiHash(this.abi)
+      this.actualHash = generateAbiHash(this.abi)
     }
     return this.actualHash
   }
@@ -77,7 +77,7 @@ export class Artifact {
 
   // TODO: use private constructor
   static fromString(value: string) {
-    const [json, jsonError] = safe(() => JSON.parse(value))
+    const [jsonError, json] = safe(() => JSON.parse(value))
     if (jsonError != null) {
       throw new Error('Artifact.fromString: invalid json: ' + jsonError.message)
     }
@@ -90,7 +90,7 @@ export class Artifact {
     if (typeof json.abi !== 'object') {
       throw new Error('Artifact.fromString: json.abi not object')
     }
-    const [hash, hashError] = safe(() => makeAbiHash(json.abi))
+    const [hashError, hash] = safe(() => generateAbiHash(json.abi))
     if (hashError != null) {
       throw new Error('Artifact.fromString: invalid abi: ' + hashError.message)
     }
@@ -107,16 +107,27 @@ interface DecodeAndValidateAbiResult {
   abi: AbiItem[]
   hash: string
 }
-export function safeDecodeAndValidateAbi(value: string): [DecodeAndValidateAbiResult] | [undefined, SafeError] {
-  const [json, jsonError] = safe(() => JSON.parse(value))
+export function safeDecodeAndValidateAbi(value: string): [undefined, DecodeAndValidateAbiResult] | [SafeError, undefined] {
+  const [jsonError, json] = safe(() => JSON.parse(value))
   if (jsonError != null) {
-    const error = { message: 'Invalid json', details: jsonError.message }
-    return [undefined, error]
+    const error = { message: 'Invalid JSON', details: jsonError.message }
+    return [error, undefined]
   }
-  const hash = safeObj(() => makeAbiHash(json))
+
+  if (!Array.isArray(json)) {
+    const error = { message: 'Invalid ABI', details: 'Not an array' };
+    return [error, undefined]
+  }
+
+  if (json.length === 0) {
+    const error = { message: 'Invalid ABI', details: 'ABI cannot be empty' };
+    return [error, undefined]
+  }
+
+  const hash = safeObj(() => generateAbiHash(json))
   if (hash.error != null) {
-    const error = { message: 'Invalid abi', details: hash.error.message }
-    return [undefined, error]
+    const error = { message: 'Invalid ABI', details: hash.error.message }
+    return [error, undefined]
   }
-  return [{ abi: json, hash: hash.result }]
+  return [undefined, { abi: json, hash: hash.result }]
 }

@@ -18,7 +18,7 @@ export const AppBar: React.FC<IAppBarProps> = ({ left = [], center = [], right =
     <MuiAppBar
       position="sticky"
       color='default'
-      sx={{ mb: 6 }}
+    // sx={{ mb: 6 }} 
     >
       <Toolbar>
         <Stack direction='row' alignItems='center' justifyContent='space-between' width='100%'>

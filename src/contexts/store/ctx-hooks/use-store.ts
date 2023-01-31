@@ -12,7 +12,7 @@ export const useStore = <T extends StoreValue>(key: string) => {
   const ctx = useStoreCtx();
 
   const [state, setState] = useState(() => {
-    return ctx.getOriginalState(key) as T | undefined;
+    return ctx.getState(key) as T | undefined;
   });
 
   const set = (value: IHookStateResolvable<T | undefined>) => {
@@ -24,9 +24,12 @@ export const useStore = <T extends StoreValue>(key: string) => {
   }
 
   useEffect(() => {
-    ctx.addListener(key, setState);
+    const setter = (value: StoreValue | undefined) => {
+      setState(value as T | undefined);
+    }
+    ctx.addListener(key, setter);
     return () => {
-      ctx.removeListener(key, setState);
+      ctx.removeListener(key, setter);
     }
   }, []);
 

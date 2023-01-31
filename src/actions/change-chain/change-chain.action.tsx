@@ -19,7 +19,7 @@ export const useChangeChainAction = () => {
 
   const changeChain = useCallback(async (chain: Chain) => {
     const storeKey = useDefaultRpc.key(chain.chainId);
-    let defaultRpc = storeCtx.getOriginalState(storeKey);
+    let defaultRpc = storeCtx.getState(storeKey);
     if (!defaultRpc) {
       defaultRpc = await modal.promise(SelectRpcModal, { chain });
     }

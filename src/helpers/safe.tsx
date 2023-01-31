@@ -1,6 +1,6 @@
 import { TypedFunction } from 'types/common'
 
-export function safeJsonParse (obj: string) {
+export function safeJsonParse(obj: string) {
   try {
     const value = JSON.parse(obj)
     return [value]
@@ -11,22 +11,22 @@ export function safeJsonParse (obj: string) {
 
 export function safe<
   T extends TypedFunction,
-> (
+>(
   fn: T,
   ...args: Parameters<T>
 ):
-  [ReturnType<T>] | [undefined, Error] {
+  [undefined, ReturnType<T>] | [Error, undefined] {
   try {
     const result = fn(...args)
-    return [result]
+    return [undefined, result]
   } catch (e) {
-    return [undefined, e as Error]
+    return [e as Error, undefined]
   }
 }
 
 export function safeObj<
   T extends TypedFunction,
-> (
+>(
   fn: T,
   ...args: Parameters<T>
 ): { result: ReturnType<T>, error: null } | { result: null, error: Error } {
@@ -39,19 +39,20 @@ export function safeObj<
 }
 
 export function safeValue<
-  T extends TypedFunction
-> (
+  TReturn,
+  T extends TypedFunction<[], TReturn>
+>(
   fn: TypedFunction,
   ...args: Parameters<T>
 ): ReturnType<T> | undefined {
-  const [value, error] = safe(fn, ...args)
+  const [, value] = safe(fn, ...args)
 
   return value
 }
 
 export async function safeObjAsync<
   T extends TypedFunction,
-> (
+>(
   fn: T,
   ...args: Parameters<T>
 ): Promise<{ result: ReturnType<T>, error: null } | { result: null, error: Error }> {
@@ -66,7 +67,7 @@ export async function safeObjAsync<
 export async function safeAsync<
   TErr extends object,
   TFn extends TypedFunction,
-> (
+>(
   fn: TFn,
   ...args: Parameters<TFn>
 ):

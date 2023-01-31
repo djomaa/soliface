@@ -26,6 +26,7 @@ import { ToastContainer } from 'react-toastify';
 import Box from '@mui/material/Box';
 import { ModalContainer } from 'libs/modals/modal-container';
 import { useLogger } from 'hooks/use-logger';
+import { CreateArtifactPage } from 'pages/artifact/create';
 
 
 const Layout: React.FC = () => {
@@ -86,6 +87,10 @@ const router = createBrowserRouter([
       {
         path: Route.Chain,
         element: <ChainPage />
+      },
+      {
+        path: Route.CreateArtifact,
+        element: <CreateArtifactPage />
       },
       {
         path: '*',

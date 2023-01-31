@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react';
-import { IHookStateSetAction } from 'react-use/lib/misc/hookState';
+import { SetStateAction, useEffect, useState } from 'react';
 
 import { useLogger } from 'hooks/use-logger';
 
@@ -15,11 +14,11 @@ export const useStoreWithDefault = <T extends StoreValue>(key: string, initialVa
   const clone = () => structuredClone(initialValue);
 
   const [state, setState] = useState(() => {
-    const original = ctx.getOriginalState(key) as T | undefined;
+    const original = ctx.getState(key) as T | undefined;
     return original ?? clone();
   });
 
-  const set = (value: IHookStateSetAction<T>) => {
+  const set = (value: SetStateAction<T>) => {
     ctx.set(key, value);
   }
 
@@ -28,12 +27,19 @@ export const useStoreWithDefault = <T extends StoreValue>(key: string, initialVa
   }
 
   useEffect(() => {
-    ctx.addListener(key, setState);
-    if (!ctx.getOriginalState(key)) {
+    const setter = (value: StoreValue | undefined) => {
+      if (value === undefined) {
+        ctx.set(key, clone());
+      } else {
+        setState(value as T);
+      }
+    }
+    ctx.addListener(key, setter);
+    if (!ctx.getState(key)) {
       ctx.set(key, clone());
     }
     return () => {
-      ctx.removeListener(key, setState);
+      ctx.removeListener(key, setter);
     }
   }, []);
 

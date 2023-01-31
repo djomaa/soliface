@@ -1,9 +1,10 @@
-import React, { useMemo, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 
 import Link from '@mui/material/Link'
 import Alert from '@mui/material/Alert'
 import Dialog from '@mui/material/Dialog'
 import Button from '@mui/material/Button'
+import Divider from '@mui/material/Divider'
 import TextField from '@mui/material/TextField'
 import AlertTitle from '@mui/material/AlertTitle'
 import DialogTitle from '@mui/material/DialogTitle'
@@ -16,9 +17,8 @@ import DialogContentText from '@mui/material/DialogContentText'
 import BottomNavigationAction from '@mui/material/BottomNavigationAction'
 
 import { SafeError } from 'types/common'
-import { useContractCtx } from 'contexts/contract'
 import { useArtifactStore } from 'hooks/use-artifact-store'
-import { Artifact, safeDecodeAndValidateAbi } from 'helpers/abi'
+import { Artifact, safeDecodeAndValidateAbi } from 'helpers/abi/abi'
 
 // TODO: make always on top button save (and name input);
 interface iProps {
@@ -27,21 +27,29 @@ interface iProps {
   artifact: Artifact | undefined
 }
 
-export const AddArtifactDialog: React.FC<iProps> = (props) => {
+export const EditArtifactDialog: React.FC<iProps> = (props) => {
   const { close, open } = props
-  const [name, setName] = useState(props.artifact?.name ?? '')
-  const [abiStr, setAbiStr] = useState(((props.artifact?.abi) != null) ? JSON.stringify(props.artifact?.abi, null, 2) : '')
+  const [name, setName] = useState('')
+  const [abiStr, setAbiStr] = useState('')
   const [error, setError] = useState<SafeError>()
   const artifacts = useArtifactStore()
-  const { setArtifact } = useContractCtx()
   const nameInputRef = useRef<HTMLElement>(null)
   const abiInputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    if (props.artifact == null) {
+      return
+    }
+    setName(props.artifact.name)
+    const abiStr = JSON.stringify(props.artifact.abi, null, 2)
+    setAbiStr(abiStr)
+  }, [props.artifact])
 
   const decodedAbi = useMemo(() => {
     if (!abiStr) {
       return undefined
     }
-    const [value, error] = safeDecodeAndValidateAbi(abiStr)
+    const [error, value] = safeDecodeAndValidateAbi(abiStr)
     if (error != null) {
       setError(error)
       return undefined
@@ -51,6 +59,9 @@ export const AddArtifactDialog: React.FC<iProps> = (props) => {
   }, [abiStr])
 
   const createArtifact = () => {
+    if (props.artifact == null) {
+      throw new Error('Artifact not found')
+    }
     if (!abiStr) {
       setError({ message: 'Enter ABI' })
       return
@@ -68,12 +79,9 @@ export const AddArtifactDialog: React.FC<iProps> = (props) => {
       return
     }
     setError(undefined)
-    if (props.artifact != null) {
-      artifacts.remove(props.artifact)
-    }
-    const artifact = new Artifact(name, () => decodedAbi.abi, decodedAbi.hash)
-    artifacts.add(artifact)
-    setArtifact(artifact)
+    props.artifact.name = name
+    props.artifact.setAbi(decodedAbi.abi, decodedAbi.hash)
+    artifacts.save(props.artifact)
     close()
   }
 
@@ -101,12 +109,13 @@ export const AddArtifactDialog: React.FC<iProps> = (props) => {
   }, [error])
 
   return (
-    <Dialog onClose={close} open={open} fullWidth={true}>
+    <Dialog onClose={close} open={open} fullScreen>
       <DialogTitle>Add</DialogTitle>
       <DialogActions>
         <Button onClick={() => { close() }}>Cancel</Button>
         <Button onClick={() => { createArtifact() }}>Add</Button>
       </DialogActions>
+      <Divider />
       <DialogContent>
         <DialogContentText ref={nameInputRef}>
           {(error != null) && (
