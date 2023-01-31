@@ -1,8 +1,9 @@
 import React from 'react'
 
-import { AddAbiStep, useAddAbiCtx } from './ctx';
-import { Typography } from '@mui/material';
 import Stack from '@mui/system/Stack';
+import Typography from '@mui/material/Typography';
+
+import { AddAbiStep, useAddAbiCtx } from './ctx';
 
 const DoneStepCore: React.FC = () => {
   return (

@@ -17,8 +17,9 @@ import DialogContentText from '@mui/material/DialogContentText'
 import BottomNavigationAction from '@mui/material/BottomNavigationAction'
 
 import { SafeError } from 'types/common'
+import { Artifact } from 'helpers/abi/artifact'
+import { safeAbiFromString } from 'helpers/abi/parse'
 import { useArtifactStore } from 'hooks/use-artifact-store'
-import { Artifact, safeDecodeAndValidateAbi } from 'helpers/abi/abi'
 
 // TODO: make always on top button save (and name input);
 interface iProps {
@@ -49,7 +50,7 @@ export const EditArtifactDialog: React.FC<iProps> = (props) => {
     if (!abiStr) {
       return undefined
     }
-    const [error, value] = safeDecodeAndValidateAbi(abiStr)
+    const [error, value] = safeAbiFromString(abiStr)
     if (error != null) {
       setError(error)
       return undefined

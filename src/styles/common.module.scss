@@ -19,3 +19,26 @@ body { height: 100%; }
 .MethodInputLevel {
   padding-left: 0.5vw;
 }
+
+.test_test_test_test_test_test_test_test_test_test_test_test {
+  height: 80vh;
+  backgro
+
+  div textarea:nth-child(1) {
+    height: 80vh;
+  }
+}
+
+.MuiTextField-root input {
+  /* 14.5px = 18.5px - 4px (note: 18.5px is the input's default padding top and bottom) */
+  padding-top: 14.5px;
+  padding-bottom: 14.5px; 
+}
+
+.MuiTextField-root label {
+  top: -4px;
+}
+
+.MuiTextField-root label[data-shrink='true'] {
+  top: 0;
+}

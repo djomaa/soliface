@@ -1,6 +1,6 @@
 import React, { createContext, useState } from 'react'
 
-import { Artifact } from 'helpers/abi/abi'
+import { Artifact } from 'helpers/abi/artifact'
 import { useLogger } from 'hooks/use-logger'
 
 export interface ContractCtxState {

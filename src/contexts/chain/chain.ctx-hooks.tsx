@@ -1,7 +1,7 @@
 import Web3 from 'web3'
 import { useCallback } from 'react'
 
-import { abiCoder } from 'helpers/abi/abi'
+import { abiCoder } from 'helpers/abi/signature-hash'
 import { createUseCtx } from 'contexts/ctx-factory'
 
 import { ChainCtx } from './chain.ctx'

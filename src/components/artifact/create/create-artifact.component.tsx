@@ -1,10 +1,12 @@
-import Box from '@mui/system/Box'
 import React, { useRef } from 'react'
-import { AbiStep } from './add-abi.abi-step'
-import { DetailsStep } from './add-abi.details-step'
-import { DoneStep } from './add-abi.done-step'
-import { Stepper } from './add-abi.stepper'
+
+import Box from '@mui/system/Box'
+
 import { AddAbiCtxProvider } from './ctx'
+import { Stepper } from './create-artifact.stepper'
+import { AbiStep } from './create-artifact.abi-step'
+import { DoneStep } from './create-artifact.done-step'
+import { DetailsStep } from './create-artifact.details-step'
 
 interface ICoreProps {
   scrollTargetRef?: React.RefObject<HTMLElement>;

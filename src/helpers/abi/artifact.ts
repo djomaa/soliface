@@ -1,30 +1,12 @@
-import oAbiCoder from 'web3-eth-abi'
+import { safe } from 'helpers/safe'
+import { AbiItem } from 'types/abi'
 
-import { SafeError } from 'types/common'
-import { AbiItem, AbiCoder } from 'types/abi'
-
-import { safe, safeObj } from '../safe'
-
-
-export const abiCoder = oAbiCoder as unknown as AbiCoder
-
-export function generateAbiHash(abi: AbiItem[]) {
-  const interfaceId = abi.reduce<bigint>((prev, item) => {
-    if (item.type === 'event') {
-      return prev
-    }
-    const selector = abiCoder.encodeFunctionSignature(item)
-    const hex = BigInt(parseInt(selector, 16))
-    if (prev) {
-      const result = prev ^ hex
-      return result
-    }
-    return hex
-  }, BigInt(0))
-  return '0x' + interfaceId.toString(16)
-}
+import { generateAbiHash } from './signature-hash'
 
 type AbiGetter = () => AbiItem[]
+/**
+ * @deprecated
+ */
 export class Artifact {
   name: string
   originalHash: string | undefined
@@ -96,38 +78,4 @@ export class Artifact {
     }
     return new Artifact(json.name, () => json.abi, hash)
   }
-}
-
-export interface GetArtifactError {
-  title: string
-  details: string
-}
-
-interface DecodeAndValidateAbiResult {
-  abi: AbiItem[]
-  hash: string
-}
-export function safeDecodeAndValidateAbi(value: string): [undefined, DecodeAndValidateAbiResult] | [SafeError, undefined] {
-  const [jsonError, json] = safe(() => JSON.parse(value))
-  if (jsonError != null) {
-    const error = { message: 'Invalid JSON', details: jsonError.message }
-    return [error, undefined]
-  }
-
-  if (!Array.isArray(json)) {
-    const error = { message: 'Invalid ABI', details: 'Not an array' };
-    return [error, undefined]
-  }
-
-  if (json.length === 0) {
-    const error = { message: 'Invalid ABI', details: 'ABI cannot be empty' };
-    return [error, undefined]
-  }
-
-  const hash = safeObj(() => generateAbiHash(json))
-  if (hash.error != null) {
-    const error = { message: 'Invalid ABI', details: hash.error.message }
-    return [error, undefined]
-  }
-  return [undefined, { abi: json, hash: hash.result }]
 }

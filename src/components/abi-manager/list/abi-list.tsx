@@ -5,7 +5,7 @@ import {
   GridSelectionModel
 } from '@mui/x-data-grid'
 
-import { Artifact } from 'helpers/abi/abi'
+import { Artifact } from 'helpers/abi/artifact'
 import { useLogger } from 'hooks/use-logger'
 
 import { useArtifactList } from 'hooks/use-artifact'

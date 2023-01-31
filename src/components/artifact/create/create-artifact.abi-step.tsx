@@ -1,21 +1,21 @@
 import React, { useDeferredValue, useEffect, useRef, useState } from 'react'
 
-
-import TextField from '@mui/material/TextField';
-import { safeDecodeAndValidateAbi } from 'helpers/abi/abi';
-import { SafeError } from 'types/common';
-import { AddAbiStep, useAddAbiCtx } from './ctx';
-import { formatAbiError } from './abi-step.abi';
-import AlertTitle from '@mui/material/AlertTitle';
 import Alert from '@mui/material/Alert';
 import Paper from '@mui/material/Paper';
-import { DefaultAbi } from 'constants/abi';
+import AlertTitle from '@mui/material/AlertTitle';
 
-const AbiStepCore: React.FC = (props) => {
+import { SafeError } from 'types/common';
+import { safeAbiFromString } from 'helpers/abi/parse';
+import { createPositionRef } from 'utils/input/position-ref';
+
+import { AddAbiStep, useAddAbiCtx } from './ctx';
+import { TextArea } from 'components/textarea';
+
+
+const AbiStepCore: React.FC = () => {
   const ctx = useAddAbiCtx();
 
-  // const [strAbi, setStrAbi] = useState('');
-  const [strAbi, setStrAbi] = useState(JSON.stringify(DefaultAbi['Erc20']));
+  const [strAbi, setStrAbi] = useState('');
   const [abiError, setAbiError] = useState<SafeError>();
 
   const deferredStrAbi = useDeferredValue(strAbi);
@@ -28,7 +28,7 @@ const AbiStepCore: React.FC = (props) => {
       ctx.setAbi(undefined);
       return
     }
-    const [error, value] = safeDecodeAndValidateAbi(deferredStrAbi)
+    const [error, value] = safeAbiFromString(deferredStrAbi)
     if (error) {
       setAbiError(error)
       ctx.setAbi(undefined);
@@ -41,19 +41,14 @@ const AbiStepCore: React.FC = (props) => {
   return (
     <>
 
-      <TextField
+      <TextArea
         multiline
         autoFocus
-        margin="dense"
-        label="ABI"
         fullWidth
-        minRows={2}
+        label="ABI"
+        margin="dense"
+        minHeight='75vh'
         variant="outlined"
-        InputProps={{
-          style: {
-            minHeight: '80vh'
-          }
-        }}
         value={strAbi}
         inputRef={abiInputRef}
         onChange={(e) => setStrAbi(e.target.value)}
@@ -62,7 +57,7 @@ const AbiStepCore: React.FC = (props) => {
         <Paper sx={{ position: 'sticky', marginTop: '3vh', bottom: '2vh', left: 0, right: 0 }} elevation={3}>
           <Alert severity='error'>
             <AlertTitle>{abiError.message}</AlertTitle>
-            {formatAbiError({ error: abiError, abiInputRef })}
+            {abiError.details ? createPositionRef(abiInputRef, abiError.details) : <></>}
           </Alert>
         </Paper>
       )}
