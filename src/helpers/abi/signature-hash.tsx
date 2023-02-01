@@ -6,7 +6,7 @@ import { AbiItem, AbiCoder } from 'types/abi'
 
 export const abiCoder = oAbiCoder as unknown as AbiCoder
 
-export function generateAbiSignatureHash(abi: AbiItem[]) {
+export function generateAbiSignatureHash(abi: AbiItem[]): string {
   const interfaceId = abi.reduce<bigint>((prev, item) => {
     if (item.type === 'event') {
       return prev

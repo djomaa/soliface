@@ -15,7 +15,7 @@ import { useDefaultRpc } from 'hooks/use-default-rpc'
 
 import { RpcList } from 'components/rpc-list/rpc-list'
 import { Typography } from '@mui/material'
-import { Dialog } from 'modals/base-dialog/base.dialog'
+import { Dialog } from 'modals/base/base.dialog'
 
 interface IProps {
   chain: Chain;

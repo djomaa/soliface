@@ -34,12 +34,12 @@ export const useArtifactList = () => {
 
   const list = useMemo(() => {
     const result: IArtifactInfo[] = [];
-    for (const item of defaultItems.value ?? []) {
-      const stored = storedItems.find(({ hash }) => hash === item.hash);
-      if (!stored) {
-        result.push(item);
-      }
-    }
+    // for (const item of defaultItems.value ?? []) {
+    //   const stored = storedItems.find(({ hash }) => hash === item.hash);
+    //   if (!stored) {
+    //     result.push(item);
+    //   }
+    // }
     result.push(...storedItems);
     // const result = [
     //   ...defaultItems?.value ?? [],

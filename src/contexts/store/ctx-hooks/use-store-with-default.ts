@@ -1,10 +1,11 @@
-import { SetStateAction, useEffect, useState } from 'react';
+import { usePrevious } from 'react-use';
+import { SetStateAction, useEffect, useMemo, useState } from 'react';
 
 import { useLogger } from 'hooks/use-logger';
 
 import { useStore } from './use-store';
 import { useStoreCtx } from './use-store-ctx';
-import { StoreValue } from '../store.ctx';
+import { StoreValue } from '../store.ctx-types';
 
 let id = 0;
 export const useStoreWithDefault = <T extends StoreValue>(key: string, initialValue: T) => {
@@ -14,9 +15,20 @@ export const useStoreWithDefault = <T extends StoreValue>(key: string, initialVa
   const clone = () => structuredClone(initialValue);
 
   const [state, setState] = useState(() => {
+    // TODO:- thats copypaste
     const original = ctx.getState(key) as T | undefined;
     return original ?? clone();
   });
+
+  const prevKey = usePrevious(key);
+  const value = useMemo(() => {
+    if (prevKey === key) {
+      return state;
+    }
+    // TODO:- thats copypaste
+    const original = ctx.getState(key) as T | undefined;
+    return original ?? clone();
+  }, [state, key]);
 
   const set = (value: SetStateAction<T>) => {
     ctx.set(key, value);
@@ -44,5 +56,5 @@ export const useStoreWithDefault = <T extends StoreValue>(key: string, initialVa
   }, []);
 
 
-  return [state, set, reset, clone] as const;
+  return [value, set, reset, clone] as const;
 }

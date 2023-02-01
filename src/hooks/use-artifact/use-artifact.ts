@@ -2,16 +2,20 @@ import { useStore } from 'contexts/store'
 import { hashAbi } from 'helpers/abi/hash';
 import { generateAbiSignatureHash } from 'helpers/abi/signature-hash';
 import { safeObj } from 'helpers/safe';
+import { useLogger } from 'hooks/use-logger';
 import { useMemo } from 'react';
 import { useAsync } from 'react-use';
 import { AbiItem } from 'types/abi';
 import { Key } from './key'
 
 export const useArtifact = (hash: string) => {
+  const [Logger] = useLogger(useArtifact, hash);
+
   const key = useMemo(() => Key(hash), [hash]);
 
   const [name, setName] = useStore<string>(key.name);
   const [rawAbi, setRawAbi] = useStore<string>(key.abi);
+  Logger.debug('Use state', hash, key, { name, rawAbi });
 
   const isExist = useMemo(() => {
     return name !== undefined && rawAbi !== undefined;
@@ -36,10 +40,12 @@ export const useArtifact = (hash: string) => {
       return;
     }
     // TODO: deep compare before hash
+    console.log('abi', abi);
     return hashAbi(abi!);
   }, [abi]);
 
   const corruptionReason = useMemo(() => {
+    const logger = Logger.sub('corruption');
     if (!isExist || actualHash.loading) {
       return;
     }
@@ -50,9 +56,10 @@ export const useArtifact = (hash: string) => {
       return 'failed to generate hash';
     }
     if (actualHash.value !== hash) {
+      logger.warn('actual hash is different', { actual: actualHash.value, stored: hash })
       return 'actual hash is different'
     }
-  }, [isExist, signatureHash, actualHash]);
+  }, [isExist, signatureHash, actualHash, hash]);
 
   const result = useMemo(() => {
     if (!isExist) {
@@ -100,6 +107,12 @@ export const useArtifact = (hash: string) => {
   }, [name, abi, rawAbi, actualHash.loading, corruptionReason]);
 
   return result;
+}
+
+useArtifact.orEmpty = (hash: string | undefined) => {
+
+
+
 }
 
 

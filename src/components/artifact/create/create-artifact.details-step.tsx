@@ -9,10 +9,10 @@ import Alert from '@mui/material/Alert';
 import TextField from '@mui/material/TextField';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import { sha256 } from 'utils/hash';
 import { useArtifactList } from 'hooks/use-artifact';
 
 import { CreateArtifactStep, useCreateAbiCtx } from './ctx';
+import { hashAbi } from 'helpers/abi/hash';
 
 const DetailsStepCore: React.FC = () => {
   const ctx = useCreateAbiCtx();
@@ -23,8 +23,9 @@ const DetailsStepCore: React.FC = () => {
 
   const state = useAsync(() => {
     assert(ctx.abi);
-    const str = JSON.stringify(ctx.abi);
-    return sha256(str);
+    console.log('ctx.abi', ctx.abi);
+
+    return hashAbi(ctx.abi);
   }, [ctx.abi]);
 
   const stored = useMemo(() => {

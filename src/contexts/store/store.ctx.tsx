@@ -1,30 +1,13 @@
 import assert from 'assert';
-import { useLogger } from 'hooks/use-logger';
-import React, { createContext, useRef } from 'react'
+import React, { useRef } from 'react'
 import { resolveHookState } from 'react-use/lib/misc/hookState';
-import { StringifyAble } from 'types/common';
+
+import { useLogger } from 'hooks/use-logger';
 import { LocalStorage } from 'utils/local-storage';
 
-export type StoreKey = StringifyAble;
-export type StoreValue = object | string | number;
-type StoreItem = { value: StoreValue | undefined };
-// type Listener = React.Dispatch<SetStateAction<StoreValue | undefined>>;
-type Listener = (value: StoreValue | undefined) => void;
-type WatcherFn = (key: string, value: StoreValue | undefined) => void;
-type WatcherId = string;
-type Watcher = { pattern: RegExp, fn: WatcherFn };
-type WatcherRef = WeakRef<Watcher>;
-
-export interface StoreCtxState {
-  getState(key: string): StoreValue | undefined;
-  addListener(key: string, listener: Listener): void;
-  removeListener(key: string, listener: Listener): void;
-  set(key: string, value: React.SetStateAction<StoreValue | undefined>): void;
-  addWatcher(pattern: RegExp, fn: WatcherFn): WatcherId;
-  removeWatcher(watcherId: WatcherId): void
-}
-
-export const StorageCtx = createContext<StoreCtxState | null>(null)
+import { StorageCtx, StoreCtxState } from './store.ctx-state';
+import { StoreMigration } from './migrations/store-migration.component';
+import { StoreItem, Listener, WatcherId, Watcher, WatcherRef, StoreValue, WatcherFn } from './store.ctx-types';
 
 // safety check - the errors should never throw, used to test
 
@@ -205,6 +188,7 @@ export const StorageCtxProvider: React.FC<{ children: React.ReactElement | React
 
   return (
     <StorageCtx.Provider value={value}>
+      <StoreMigration />
       {props.children}
     </StorageCtx.Provider>
   )

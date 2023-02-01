@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 
 import Stack from '@mui/material/Stack'
 import MenuItem from '@mui/material/MenuItem'
@@ -6,17 +6,23 @@ import TextField from '@mui/material/TextField'
 
 import { useLogger } from 'hooks/use-logger'
 import { useContractCtx } from 'contexts/contract'
-import { useArtifactStore } from 'hooks/use-artifact-store'
+import { useArtifactList } from 'hooks/use-artifact'
 
 export const ArtifactSelector: React.FC = () => {
   const [, { logState }] = useLogger(ArtifactSelector)
 
-  const ctx = useContractCtx()
-  const artifacts = useArtifactStore()
-  // const artifacts = useArtifactList();
+  const contractCtx = useContractCtx()
+  const { artifactList } = useArtifactList();
+
+  // TODO:! remove, only for developing
+  useEffect(() => {
+    if (artifactList[1]) {
+      contractCtx.setArtifactHash(artifactList[1].hash);
+    }
+  }, [artifactList])
 
   const artifactOptions = useMemo(() => {
-    return artifacts.list.map((abi) => {
+    return artifactList.map((abi) => {
       return (
         <MenuItem
           key={abi.hash}
@@ -26,16 +32,14 @@ export const ArtifactSelector: React.FC = () => {
         </MenuItem>
       )
     })
-  }, [artifacts])
-
-  logState('artifactOptions', artifactOptions)
+  }, [artifactList])
 
   const handleChange = (value: string) => {
-    const newArtifact = artifacts.list.find((abi) => abi.hash === value)
+    const newArtifact = artifactList.find((abi) => abi.hash === value)
     if (newArtifact == null) {
       throw new Error('Unexpected error: cannot find artifact by hash')
     }
-    ctx.setArtifact(newArtifact)
+    contractCtx.setArtifactHash(newArtifact.hash)
   }
 
   return (
@@ -46,7 +50,7 @@ export const ArtifactSelector: React.FC = () => {
           label="ABI"
           fullWidth
           margin='dense'
-          value={ctx.artifact?.hash ?? ''}
+          value={contractCtx.artifactHash ?? ''}
           onChange={(e) => {
             handleChange(e.target.value)
           }}

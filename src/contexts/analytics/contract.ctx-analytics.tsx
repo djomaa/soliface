@@ -19,12 +19,12 @@ export const ChainCtxAnalytics: React.FC = () => {
   }, [ctx.address, analytics]);
 
   useEffect(() => {
-    if (cookies.abiHash && ctx.artifact) {
-      analytics.track('contract_abi_changed', {
-        abi_hash: ctx.artifact.hash,
-      });
+    if (cookies.abiHash && ctx.artifactHash) {
+      // analytics.track('contract_abi_changed', {
+      // abi_hash: ctx.artifactHash.hash,
+      // });
     }
-  }, [ctx.artifact, analytics]);
+  }, [ctx.artifactHash, analytics]);
 
   return (
     <></>

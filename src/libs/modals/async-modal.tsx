@@ -8,7 +8,10 @@ interface IAsyncModalProps<T> {
 
 export type AsyncModal<TReturn, TProps = {}> = React.FC<IModalProps & IAsyncModalProps<TReturn> & TProps>;
 
-export const asyncModal = <TProps, TReturn,>(Component: React.FC<TProps & IModalProps & IAsyncModalProps<TReturn>>, props: TProps) => {
+// export type IAsyncModalFullProps<T> = 
+
+// export const asyncModal = <TProps, TReturn,>(Component: React.FC<TProps & IModalProps & IAsyncModalProps<TReturn>>, props: TProps) => {
+export const asyncModal = <TProps, TReturn,>(Component: AsyncModal<TReturn, TProps>, props: TProps) => {
   return new Promise<TReturn | undefined>((resolve, reject) => {
     baseModal(Component, {
       ...props,

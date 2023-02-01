@@ -15,6 +15,7 @@ async function createArtifact(name: string, abi: AbiItem[]): Promise<IArtifact> 
   return artifact;
 }
 
+// TODO:! save default artifacts to local storage once, so user can delete them
 export const useDefaultArtifacts = () => {
   const state = useAsync(async () => {
     const entries = Object.entries(DefaultAbi);

@@ -1,13 +1,12 @@
 import React, { createContext, useState } from 'react'
 
-import { Artifact } from 'helpers/abi/artifact'
 import { useLogger } from 'hooks/use-logger'
 
 export interface ContractCtxState {
-  artifact?: Artifact
+  artifactHash?: string;
   address?: string
   setAddress: (address: string) => void
-  setArtifact: (artifact: Artifact) => void
+  setArtifactHash: (artifact: string) => void
 }
 export const ContractCtx = createContext<ContractCtxState | null>(null)
 
@@ -18,15 +17,16 @@ export const ContractCtxProvider: React.FC<iProps> = ({ children }) => {
   const [logger, { logState }] = useLogger(ContractCtxProvider)
 
   const [address, setAddress] = useState<string>('')
-  const [artifact, setArtifact] = useState<Artifact | undefined>()
+  const [artifactHash, setArtifactHash] = useState<string>()
 
-  logState('artifact', artifact)
+  logState('address', address);
+  logState('artifactHash', artifactHash);
 
   const value = {
     address,
     setAddress,
-    artifact,
-    setArtifact
+    artifactHash,
+    setArtifactHash,
   }
 
   return (

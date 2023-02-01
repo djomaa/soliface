@@ -14,7 +14,6 @@ import { ChainPage } from 'pages/chain'
 import { Page404 } from 'pages/404.page'
 import { Cookies } from 'components/cookies'
 import { QueryCtxProvider } from 'contexts/query'
-import { ModalCtxProvider } from 'contexts/modal'
 import { ArtifactManagerPage } from 'pages/artifact/manager'
 import { StorageCtxProvider } from 'contexts/store'
 import { ChainManagerPage } from 'pages/chain-manager'
@@ -45,9 +44,10 @@ const Layout: React.FC = () => {
   }, [analytics, location]);
 
   return (
-    <StorageCtxProvider>
-      <QueryCtxProvider>
-        <ModalCtxProvider>
+    <>
+      <ModalContainer />
+      <StorageCtxProvider>
+        <QueryCtxProvider>
           <Box>
             <CssBaseline />
             <main>
@@ -56,15 +56,14 @@ const Layout: React.FC = () => {
                 <Outlet />
               </ContractCtxProvider>
             </main>
-            <ToastContainer
-              position="bottom-left"
-              closeButton
-            />
-            <ModalContainer />
           </Box>
-        </ModalCtxProvider>
-      </QueryCtxProvider>
-    </StorageCtxProvider >
+        </QueryCtxProvider>
+      </StorageCtxProvider >
+      <ToastContainer
+        position="bottom-left"
+        closeButton
+      />
+    </>
   )
 }
 

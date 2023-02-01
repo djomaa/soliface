@@ -2,7 +2,7 @@ import { SetStateAction, useCallback, useEffect, useState } from 'react';
 
 import { useLogger } from 'hooks/use-logger';
 
-import { StoreValue } from '../store.ctx';
+import { StoreValue } from '../store.ctx-types';
 import { useStoreCtx } from './use-store-ctx'
 
 let id = 0;
