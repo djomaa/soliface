@@ -2,7 +2,7 @@ import { Chain } from 'types/chain'
 
 export enum Route {
   Home = '/',
-  AbiManager = '/abi',
+  ArtifactManager = '/artifact',
   CreateArtifact = '/artifact/create',
   EditArtifact = '/artifact/:hash/edit',
   ChainManager = '/chains',
@@ -16,7 +16,7 @@ export const createRoute = {
 
 export const RouteLabel: Partial<Record<Route, string>> = {
   [Route.Home]: 'Home',
-  [Route.AbiManager]: 'Abi',
+  [Route.ArtifactManager]: 'Artifacts',
   [Route.ChainManager]: 'Chains',
 }
 

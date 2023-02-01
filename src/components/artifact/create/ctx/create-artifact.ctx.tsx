@@ -6,14 +6,14 @@ import { useLogger } from 'hooks/use-logger';
 import { UseStateObject } from 'types/react';
 import { useArtifactSaveAction } from 'hooks/use-artifact';
 
-export const AddAbiStep = {
+export const CreateArtifactStep = {
   ABI: 0,
   Details: 1,
   Done: 2,
 }
-export const AddAbiStepCount = Object.keys(AddAbiStep).length;
+export const CreateArtifactStepCount = Object.keys(CreateArtifactStep).length;
 
-export interface AddAbiCtxState
+export interface CreateArtifactCtxState
   extends
   UseStateObject<'step', number>,
   UseStateObject<'abi', AbiItem[] | undefined>,
@@ -21,19 +21,19 @@ export interface AddAbiCtxState
   save: (hash: string) => void;
 }
 
-export const AddAbiCtx = createContext<AddAbiCtxState | null>(null);
+export const CreateArtifactCtx = createContext<CreateArtifactCtxState | null>(null);
 
 interface IProps {
   name?: string;
   onClose?: () => void;
 }
-export const AddAbiCtxProvider: React.FC<React.PropsWithChildren<IProps>> = (props) => {
-  const [Logger] = useLogger(AddAbiCtxProvider);
+export const CreateArtifactCtxProvider: React.FC<React.PropsWithChildren<IProps>> = (props) => {
+  const [Logger] = useLogger(CreateArtifactCtxProvider);
   const { saveArtifact } = useArtifactSaveAction();
 
   const [name, setName] = useState<string>(props.name ?? '');
   const [abi, setAbi] = useState<AbiItem[]>();
-  const [step, setStep] = useState(AddAbiStep.ABI);
+  const [step, setStep] = useState(CreateArtifactStep.ABI);
 
   const save = useCallback((hash: string) => {
     const logger = Logger.sub('save');
@@ -52,7 +52,7 @@ export const AddAbiCtxProvider: React.FC<React.PropsWithChildren<IProps>> = (pro
     }
   }, [name, abi])
 
-  const value: AddAbiCtxState = {
+  const value: CreateArtifactCtxState = {
     step,
     setStep,
     abi,
@@ -63,8 +63,8 @@ export const AddAbiCtxProvider: React.FC<React.PropsWithChildren<IProps>> = (pro
   }
 
   return (
-    <AddAbiCtx.Provider value={value}>
+    <CreateArtifactCtx.Provider value={value}>
       {props.children}
-    </AddAbiCtx.Provider>
+    </CreateArtifactCtx.Provider>
   )
 }

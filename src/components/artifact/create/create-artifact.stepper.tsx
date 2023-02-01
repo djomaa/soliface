@@ -11,7 +11,7 @@ import Grid from '@mui/material/Unstable_Grid2/Grid2';
 import useScrollTrigger from '@mui/material/useScrollTrigger';
 import { UseScrollTriggerOptions } from '@mui/material/useScrollTrigger/useScrollTrigger';
 
-import { AddAbiStep, AddAbiStepCount, useAddAbiCtx } from './ctx';
+import { CreateArtifactStep, useCreateAbiCtx } from './ctx';
 
 interface Props {
   children: React.ReactElement;
@@ -50,7 +50,7 @@ interface IProps {
 }
 
 export const Stepper: React.FC<IProps> = ({ containerRef: ref, ...props }) => {
-  const ctx = useAddAbiCtx();
+  const ctx = useCreateAbiCtx();
   const [pos, setPos] = useState<number>();
 
   useEffect(() => {
@@ -88,7 +88,7 @@ export const Stepper: React.FC<IProps> = ({ containerRef: ref, ...props }) => {
               </Step>
             </MuiStepper>
           </Grid>
-          {ctx.step < AddAbiStep.Done && (
+          {ctx.step < CreateArtifactStep.Done && (
             <Grid xs={12} md={2}>
               <Stack direction='row' justifyContent='center'>
                 <ButtonGroup variant="outlined">
@@ -100,8 +100,8 @@ export const Stepper: React.FC<IProps> = ({ containerRef: ref, ...props }) => {
                   </Button>
                   <Button
                     disabled={
-                      ctx.step === AddAbiStepCount - 1
-                      || (ctx.step === AddAbiStep.ABI && !ctx.abi)
+                      ctx.step === CreateArtifactStep.Details
+                      || (ctx.step === CreateArtifactStep.ABI && !ctx.abi)
                     }
                     onClick={() => ctx.setStep(ctx.step + 1)}
                   >

@@ -3,7 +3,7 @@ import React from 'react'
 import Stack from '@mui/system/Stack';
 import Typography from '@mui/material/Typography';
 
-import { AddAbiStep, useAddAbiCtx } from './ctx';
+import { CreateArtifactStep, useCreateAbiCtx } from './ctx';
 
 const DoneStepCore: React.FC = () => {
   return (
@@ -16,8 +16,8 @@ const DoneStepCore: React.FC = () => {
 }
 
 export const DoneStep: React.FC = () => {
-  const ctx = useAddAbiCtx();
-  if (ctx.step !== AddAbiStep.Done) {
+  const ctx = useCreateAbiCtx();
+  if (ctx.step !== CreateArtifactStep.Done) {
     return <></>
   }
   return <DoneStepCore />

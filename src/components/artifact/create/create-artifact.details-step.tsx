@@ -12,10 +12,10 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { sha256 } from 'utils/hash';
 import { useArtifactList } from 'hooks/use-artifact';
 
-import { AddAbiStep, useAddAbiCtx } from './ctx';
+import { CreateArtifactStep, useCreateAbiCtx } from './ctx';
 
 const DetailsStepCore: React.FC = () => {
-  const ctx = useAddAbiCtx();
+  const ctx = useCreateAbiCtx();
 
   const [error, setError] = useState(false);
 
@@ -100,8 +100,8 @@ const DetailsStepCore: React.FC = () => {
 }
 
 export const DetailsStep: React.FC = () => {
-  const ctx = useAddAbiCtx();
-  if (ctx.step !== AddAbiStep.Details) {
+  const ctx = useCreateAbiCtx();
+  if (ctx.step !== CreateArtifactStep.Details) {
     return <></>
   }
   return <DetailsStepCore />

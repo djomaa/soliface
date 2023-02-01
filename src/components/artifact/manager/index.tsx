@@ -1,1 +1,1 @@
-export * from './abi-manager'
+export * from './artifact-manager'

@@ -15,7 +15,7 @@ import { Page404 } from 'pages/404.page'
 import { Cookies } from 'components/cookies'
 import { QueryCtxProvider } from 'contexts/query'
 import { ModalCtxProvider } from 'contexts/modal'
-import { AbiManagerPage } from 'pages/abi-manager'
+import { ArtifactManagerPage } from 'pages/artifact/manager'
 import { StorageCtxProvider } from 'contexts/store'
 import { ChainManagerPage } from 'pages/chain-manager'
 import { ContractCtxProvider } from 'contexts/contract'
@@ -78,8 +78,8 @@ const router = createBrowserRouter([
         element: <MainPage />,
       },
       {
-        path: Route.AbiManager,
-        element: <AbiManagerPage />
+        path: Route.ArtifactManager,
+        element: <ArtifactManagerPage />
       },
       {
         path: Route.ChainManager,

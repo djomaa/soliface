@@ -20,7 +20,7 @@ export const ArtifactContent: React.FC<{ artifact: Exists }> = ({ artifact }) =>
   return <EditArtifact
     artifact={artifact}
     onClose={() => {
-      navigate(Route.AbiManager)
+      navigate(Route.ArtifactManager)
     }}
   />
 }

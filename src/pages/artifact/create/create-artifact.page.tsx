@@ -18,7 +18,7 @@ export const CreateArtifactPage: React.FC = () => {
       <Container>
         <AddAbi onClose={() => {
           console.log('NAVIGATE');
-          navigate(Route.AbiManager)
+          navigate(Route.ArtifactManager)
         }} />
       </Container>
     </>

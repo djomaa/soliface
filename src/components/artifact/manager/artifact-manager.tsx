@@ -3,15 +3,9 @@ import React from 'react'
 import Container from '@mui/system/Container'
 import Typography from '@mui/material/Typography'
 
+import { ArtifactList } from './list/artifact-list'
 
-
-import { useLogger } from 'hooks/use-logger'
-
-import { AbiList } from './list/abi-list'
-
-export const AbiManager: React.FC = () => {
-  const [logger, { logState }] = useLogger(AbiManager)
-
+export const ArtifactManager: React.FC = () => {
   return (
     <Container>
       <Typography
@@ -23,7 +17,7 @@ export const AbiManager: React.FC = () => {
       >
         ABI Manager
       </Typography>
-      <AbiList />
+      <ArtifactList />
     </Container>
   )
 }

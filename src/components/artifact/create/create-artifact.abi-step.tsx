@@ -9,13 +9,13 @@ import { TextArea } from 'components/textarea';
 import { safeAbiFromString } from 'helpers/abi/parse';
 import { createPositionRef } from 'utils/input/position-ref';
 
-import { AddAbiStep, useAddAbiCtx } from './ctx';
+import { CreateArtifactStep, useCreateAbiCtx } from './ctx';
 
 interface ICoreProps {
   strAbi?: string;
 }
 const AbiStepCore: React.FC<ICoreProps> = (props) => {
-  const ctx = useAddAbiCtx();
+  const ctx = useCreateAbiCtx();
 
   const [strAbi, setStrAbi] = useState(props.strAbi ?? '');
   const [abiError, setAbiError] = useState<SafeError>();
@@ -68,8 +68,8 @@ const AbiStepCore: React.FC<ICoreProps> = (props) => {
 }
 
 export const AbiStep: React.FC<ICoreProps> = (props) => {
-  const ctx = useAddAbiCtx()
-  if (ctx.step !== AddAbiStep.ABI) {
+  const ctx = useCreateAbiCtx()
+  if (ctx.step !== CreateArtifactStep.ABI) {
     return <></>
   }
   return <AbiStepCore {...props} />

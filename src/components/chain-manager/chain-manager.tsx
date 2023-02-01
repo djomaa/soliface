@@ -2,20 +2,18 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import Box from '@mui/material/Box'
+import Link from '@mui/material/Link'
 import Stack from '@mui/material/Stack'
 import TextField from '@mui/material/TextField'
 import Grid from '@mui/material/Unstable_Grid2'
 import Typography from '@mui/material/Typography'
 
+import { Chain } from 'types/chain';
 import { useLogger } from 'hooks/use-logger'
+import { useSearch } from 'hooks/use-search'
 import { searchChain, useChainList } from 'hooks/use-chain-list/use-chain-list'
-// import LazilyRender from 'react-lazily-render';
 
 import { ChainCard } from './chain.card'
-import { useSearch } from 'hooks/use-search'
-import Link from '@mui/material/Link'
-import { Chain } from 'types/chain';
-// import Skeleton from '@mui/material/Skeleton'
 
 const PageSize = 6;
 export const ChainManager: React.FC = () => {
@@ -47,7 +45,6 @@ export const ChainManager: React.FC = () => {
     const from = PageSize * page.current;
     const to = Math.min(from + PageSize, searchList.length);
     const newItems = searchList.slice(from, to);
-    // setTimeout(() => { setItems((prev) => [...prev, ...newItems]); }, 3e3);
     setItems((prev) => [...prev, ...newItems]);
     Logger.debug('Handle next', { from, to, newItems })
   }, []);
@@ -68,7 +65,7 @@ export const ChainManager: React.FC = () => {
           align='center'
           variant='body1'
         >
-          Inspired by <Link href='https://chainlist.org' target='_blank'>chainlist.org</Link>.
+          Inspired by <Link href='https://chaind.network' target='_blank'>chaind.network</Link>
         </Typography>
         <Typography
           align='center'

@@ -1,10 +1,11 @@
 import React, { useMemo } from 'react'
 
-import { GridActionsCellItem, GridColumns } from '@mui/x-data-grid'
-import CheckBoxCheckedIcon from '@mui/icons-material/CheckBoxOutlined';
+import { IArtifactInfo } from 'hooks/use-artifact'
+
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/DeleteOutlined'
-import { IArtifactInfo } from 'hooks/use-artifact'
+import { GridActionsCellItem, GridColumns } from '@mui/x-data-grid'
+import CheckBoxCheckedIcon from '@mui/icons-material/CheckBoxOutlined';
 
 export interface IRow {
   id: string
@@ -15,7 +16,7 @@ interface IProps {
   editArtifact: (hash: string) => void;
   removeArtifact: (hash: string) => void;
 }
-export const useAbiListColumns = (props: IProps) => {
+export const useArtifactListColumns = (props: IProps) => {
 
   const columns = useMemo(() => {
     const ColumnsCore: GridColumns<IRow> = [
@@ -60,10 +61,8 @@ export const useAbiListColumns = (props: IProps) => {
           const { hash, isDefault } = params.row.artifact;
           if (isDefault) {
             <GridActionsCellItem
-              //#endregion
               label='Default'
               icon={<EditIcon />}
-            // <Chip label="Chip Filled" />
             />
           }
           return [

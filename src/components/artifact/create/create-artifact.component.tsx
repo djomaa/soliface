@@ -2,7 +2,7 @@ import React, { useRef } from 'react'
 
 import Box from '@mui/system/Box'
 
-import { AddAbiCtxProvider } from './ctx'
+import { CreateArtifactCtxProvider } from './ctx'
 import { Stepper } from './create-artifact.stepper'
 import { AbiStep } from './create-artifact.abi-step'
 import { DoneStep } from './create-artifact.done-step'
@@ -31,8 +31,8 @@ export interface IAddAbiProps extends ICoreProps {
 }
 export const AddAbi: React.FC<IAddAbiProps> = ({ onClose, name, ...props }) => {
   return (
-    <AddAbiCtxProvider onClose={onClose} name={name}>
+    <CreateArtifactCtxProvider onClose={onClose} name={name}>
       <CreateArtifactCore {...props} />
-    </AddAbiCtxProvider>
+    </CreateArtifactCtxProvider>
   )
 }
