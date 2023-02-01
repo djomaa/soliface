@@ -12,7 +12,7 @@ import { useArtifactList } from 'hooks/use-artifact'
 import { IRow, useAbiListColumns } from './abi-list.columns'
 import { AbiListToolBar } from './abi-list.toolbar'
 import { useNavigate } from 'react-router-dom'
-import { Route } from 'constants/route'
+import { createRoute, Route } from 'constants/route'
 
 export const AbiList: React.FC = () => {
   const navigate = useNavigate();
@@ -24,7 +24,12 @@ export const AbiList: React.FC = () => {
   const [isSelection, setSelection] = useState(false)
   const { artifactList, removeArtifact } = useArtifactList();
 
-  const columns = useAbiListColumns()
+  const editArtifact = useCallback((hash: string) => {
+    const route = createRoute[Route.EditArtifact](hash);
+    navigate(route);
+  }, []);
+
+  const columns = useAbiListColumns({ removeArtifact, editArtifact })
 
   const items = useMemo<IRow[]>(() => {
     return artifactList.map((artifact) => {

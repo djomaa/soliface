@@ -2,7 +2,7 @@ import { AbiItem } from 'types/abi'
 import { SafeError } from 'types/common'
 import { safe, safeObj } from 'helpers/safe'
 
-import { generateAbiHash } from './signature-hash'
+import { generateAbiSignatureHash } from './signature-hash'
 
 interface DecodeAndValidateAbiResult {
   abi: AbiItem[]
@@ -25,7 +25,7 @@ export function safeAbiFromString(value: string): [undefined, DecodeAndValidateA
     return [error, undefined]
   }
 
-  const hash = safeObj(() => generateAbiHash(json))
+  const hash = safeObj(() => generateAbiSignatureHash(json))
   if (hash.error != null) {
     const error = { message: 'Invalid ABI', details: hash.error.message }
     return [error, undefined]

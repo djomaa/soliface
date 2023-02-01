@@ -13,11 +13,6 @@ export const AddAbiStep = {
 }
 export const AddAbiStepCount = Object.keys(AddAbiStep).length;
 
-interface IAbi {
-  abi: AbiItem[];
-  hash: string;
-}
-
 export interface AddAbiCtxState
   extends
   UseStateObject<'step', number>,
@@ -29,13 +24,14 @@ export interface AddAbiCtxState
 export const AddAbiCtx = createContext<AddAbiCtxState | null>(null);
 
 interface IProps {
+  name?: string;
   onClose?: () => void;
 }
 export const AddAbiCtxProvider: React.FC<React.PropsWithChildren<IProps>> = (props) => {
   const [Logger] = useLogger(AddAbiCtxProvider);
   const { saveArtifact } = useArtifactSaveAction();
 
-  const [name, setName] = useState<string>('');
+  const [name, setName] = useState<string>(props.name ?? '');
   const [abi, setAbi] = useState<AbiItem[]>();
   const [step, setStep] = useState(AddAbiStep.ABI);
 

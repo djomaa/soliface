@@ -5,17 +5,19 @@ import Paper from '@mui/material/Paper';
 import AlertTitle from '@mui/material/AlertTitle';
 
 import { SafeError } from 'types/common';
+import { TextArea } from 'components/textarea';
 import { safeAbiFromString } from 'helpers/abi/parse';
 import { createPositionRef } from 'utils/input/position-ref';
 
 import { AddAbiStep, useAddAbiCtx } from './ctx';
-import { TextArea } from 'components/textarea';
 
-
-const AbiStepCore: React.FC = () => {
+interface ICoreProps {
+  strAbi?: string;
+}
+const AbiStepCore: React.FC<ICoreProps> = (props) => {
   const ctx = useAddAbiCtx();
 
-  const [strAbi, setStrAbi] = useState('');
+  const [strAbi, setStrAbi] = useState(props.strAbi ?? '');
   const [abiError, setAbiError] = useState<SafeError>();
 
   const deferredStrAbi = useDeferredValue(strAbi);
@@ -65,10 +67,10 @@ const AbiStepCore: React.FC = () => {
   )
 }
 
-export const AbiStep: React.FC = () => {
+export const AbiStep: React.FC<ICoreProps> = (props) => {
   const ctx = useAddAbiCtx()
   if (ctx.step !== AddAbiStep.ABI) {
     return <></>
   }
-  return <AbiStepCore />
+  return <AbiStepCore {...props} />
 }

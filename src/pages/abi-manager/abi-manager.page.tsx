@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { AbiManager } from 'components/abi-manager'
+import { AbiManager } from 'components/artifact/manager'
 
 import { AbiManagerPageAppBar } from './components/app-bar'
 import { useRouteTitle } from 'hooks/use-route-title'

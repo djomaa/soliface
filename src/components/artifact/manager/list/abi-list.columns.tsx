@@ -11,7 +11,11 @@ export interface IRow {
   artifact: IArtifactInfo;
 }
 
-export const useAbiListColumns = () => {
+interface IProps {
+  editArtifact: (hash: string) => void;
+  removeArtifact: (hash: string) => void;
+}
+export const useAbiListColumns = (props: IProps) => {
 
   const columns = useMemo(() => {
     const ColumnsCore: GridColumns<IRow> = [
@@ -52,19 +56,30 @@ export const useAbiListColumns = () => {
         headerName: 'Actions',
         width: 100,
         cellClassName: 'actions',
-        getActions: ({ id }) => {
+        getActions: (params) => {
+          const { hash, isDefault } = params.row.artifact;
+          if (isDefault) {
+            <GridActionsCellItem
+              //#endregion
+              label='Default'
+              icon={<EditIcon />}
+            // <Chip label="Chip Filled" />
+            />
+          }
           return [
             <GridActionsCellItem
-              icon={<EditIcon />}
               label="Edit"
-              className="textPrimary"
-              // onClick={() => { editArtifact(id) }}
               color="inherit"
+              icon={<EditIcon />}
+              disabled={isDefault}
+              className="textPrimary"
+              onClick={() => { props.editArtifact(hash) }}
             />,
             <GridActionsCellItem
-              icon={<DeleteIcon />}
               label="Delete"
-            // onClick={() => { deleteArtifacts([id]) }}
+              disabled={isDefault}
+              icon={<DeleteIcon />}
+              onClick={() => { props.removeArtifact(hash) }}
             />
           ]
         }

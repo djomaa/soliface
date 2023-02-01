@@ -16274,6 +16274,11 @@ use-analytics@^0.0.5:
     mini-create-react-context "^0.4.1"
     tiny-invariant "^1.1.0"
 
+use-async-effect@^2.2.7:
+  version "2.2.7"
+  resolved "https://registry.yarnpkg.com/use-async-effect/-/use-async-effect-2.2.7.tgz#5812f875a8d7996c396fb49798d0377e90575989"
+  integrity sha512-Vq94tKPyo/9Nok4LOapV0GoGgZPhbeDW/bP6bulLPV4+lIoftaBRBBbGjTbM+j5W1Bm2EkUHJgapeu5YnQvKEA==
+
 use-debounce@^9.0.3:
   version "9.0.3"
   resolved "https://registry.yarnpkg.com/use-debounce/-/use-debounce-9.0.3.tgz#bac660c19ab7b38662e08608fee23c7ad303f532"

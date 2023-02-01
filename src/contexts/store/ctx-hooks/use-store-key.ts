@@ -6,4 +6,5 @@ export const useStoreKey = (params: StringifyAble[]) => {
   return useKey(DELEMITER, ...params);
 }
 
+// TODO: rename to createStoreKey
 useStoreKey.Pure = useKey.Pure.bind(undefined, DELEMITER);

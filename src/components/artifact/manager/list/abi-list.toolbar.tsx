@@ -1,7 +1,6 @@
 import React, { SetStateAction, useState } from 'react'
 
 import Box from '@mui/material/Box'
-import Stack from '@mui/material/Stack'
 import Button from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
 import Tooltip from '@mui/material/Tooltip'
@@ -9,6 +8,7 @@ import AddIcon from '@mui/icons-material/Add'
 import DeleteIcon from '@mui/icons-material/Delete'
 import ExportIcon from '@mui/icons-material/FileUpload'
 import ImportIcon from '@mui/icons-material/FileDownload'
+import Grid from '@mui/material/Unstable_Grid2/Grid2'
 
 
 export interface IAbiListToolbarProps {
@@ -42,42 +42,49 @@ export const AbiListToolBar: React.FC<IAbiListToolbarProps> = (props) => {
     )
   }
 
+  const xs = 12;
+  const md = 3;
   return (
     <Box>
-      <Stack
-        direction='row'
-        justifyContent='space-evenly'
-        divider={<Divider orientation="vertical" variant='middle' flexItem />}
-      >
-        <Button
-          startIcon={<AddIcon />}
-          onClick={() => props.add()}
-        >
-          Add
-        </Button>
-        <Button
-          startIcon={<DeleteIcon />}
-          onClick={() => { props.toggleRemoving(true) }}
-        >
-          Remove
-        </Button>
-        <Tooltip title='Not implemented yet'>
+      <Grid container textAlign='center'>
+        <Grid xs={xs} md={md}>
           <Button
-            startIcon={<ImportIcon />}
+            startIcon={<AddIcon />}
+            onClick={() => props.add()}
           >
-            Import
+            Add
           </Button>
-        </Tooltip>
-        <Tooltip title='Not implemented yet'>
+        </Grid>
+        <Grid xs={xs} md={md}>
+
           <Button
-            // disabled
-            startIcon={<ExportIcon />}
+            startIcon={<DeleteIcon />}
+            onClick={() => { toggleRemoving(true) }}
           >
-            Export
+            Remove
           </Button>
-        </Tooltip>
-      </Stack>
+        </Grid>
+        <Grid xs={xs} md={md}>
+          <Tooltip title='Not implemented yet'>
+            <Button
+              startIcon={<ImportIcon />}
+            >
+              Import
+            </Button>
+          </Tooltip>
+        </Grid>
+        <Grid xs={xs} md={md}>
+          <Tooltip title='Not implemented yet'>
+            <Button
+              // disabled
+              startIcon={<ExportIcon />}
+            >
+              Export
+            </Button>
+          </Tooltip>
+        </Grid>
+      </Grid>
       <Divider />
-    </Box>
+    </Box >
   )
 }

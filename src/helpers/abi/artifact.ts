@@ -1,7 +1,7 @@
 import { safe } from 'helpers/safe'
 import { AbiItem } from 'types/abi'
 
-import { generateAbiHash } from './signature-hash'
+import { generateAbiSignatureHash } from './signature-hash'
 
 type AbiGetter = () => AbiItem[]
 /**
@@ -28,7 +28,7 @@ export class Artifact {
     if (this.originalHash) {
       this.originalHash = originalHash
     } else {
-      this.actualHash = generateAbiHash(abi)
+      this.actualHash = generateAbiSignatureHash(abi)
     }
   }
 
@@ -37,7 +37,7 @@ export class Artifact {
       return this.originalHash
     }
     if (!this.actualHash) {
-      this.actualHash = generateAbiHash(this.abi)
+      this.actualHash = generateAbiSignatureHash(this.abi)
     }
     return this.actualHash
   }
@@ -72,7 +72,7 @@ export class Artifact {
     if (typeof json.abi !== 'object') {
       throw new Error('Artifact.fromString: json.abi not object')
     }
-    const [hashError, hash] = safe(() => generateAbiHash(json.abi))
+    const [hashError, hash] = safe(() => generateAbiSignatureHash(json.abi))
     if (hashError != null) {
       throw new Error('Artifact.fromString: invalid abi: ' + hashError.message)
     }

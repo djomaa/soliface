@@ -4,12 +4,14 @@ export enum Route {
   Home = '/',
   AbiManager = '/abi',
   CreateArtifact = '/artifact/create',
+  EditArtifact = '/artifact/:hash/edit',
   ChainManager = '/chains',
   Chain = '/chains/:id'
 }
 
 export const createRoute = {
   [Route.Chain]: (id: Chain['chainId']) => Route.Chain.replace(':id', id.toString()),
+  [Route.EditArtifact]: (hash: string) => Route.EditArtifact.replace(':hash', hash),
 }
 
 export const RouteLabel: Partial<Record<Route, string>> = {

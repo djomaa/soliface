@@ -11,7 +11,7 @@ import CssBaseline from '@mui/material/CssBaseline'
 import { MainPage } from 'pages/main'
 import { Route } from 'constants/route'
 import { ChainPage } from 'pages/chain'
-import { Page404 } from 'pages/page-404'
+import { Page404 } from 'pages/404.page'
 import { Cookies } from 'components/cookies'
 import { QueryCtxProvider } from 'contexts/query'
 import { ModalCtxProvider } from 'contexts/modal'
@@ -27,6 +27,7 @@ import Box from '@mui/material/Box';
 import { ModalContainer } from 'libs/modals/modal-container';
 import { useLogger } from 'hooks/use-logger';
 import { CreateArtifactPage } from 'pages/artifact/create';
+import { EditArtifactPage } from 'pages/artifact/edit';
 
 
 const Layout: React.FC = () => {
@@ -91,6 +92,10 @@ const router = createBrowserRouter([
       {
         path: Route.CreateArtifact,
         element: <CreateArtifactPage />
+      },
+      {
+        path: Route.EditArtifact,
+        element: <EditArtifactPage />
       },
       {
         path: '*',

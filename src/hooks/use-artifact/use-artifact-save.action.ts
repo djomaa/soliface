@@ -12,8 +12,9 @@ export const useArtifactSaveAction = () => {
 
   const save = useCallback((data: IArtifactSaveData) => {
     const key = Key(data.hash);
+    const rawAbi = JSON.stringify(data.abi);
     store.set(key.name, data.name);
-    store.set(key.abi, data.abi);
+    store.set(key.abi, rawAbi);
   }, []);
 
   return { saveArtifact: save };
