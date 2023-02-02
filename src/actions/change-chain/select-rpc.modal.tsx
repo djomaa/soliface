@@ -32,7 +32,6 @@ export const SelectRpcModal: AsyncModal<string, IProps> = ({ chain, ...props }) 
   const [defaultRpc] = useDefaultRpc(chain.chainId);
 
   const handleConnect = () => {
-    console.log('CONNECT FROM RPC MODAL');
     if (!defaultRpc) {
       throw new Error(`${SelectRpcModal.name}: handleConnect: empty defaultRpc`)
     }

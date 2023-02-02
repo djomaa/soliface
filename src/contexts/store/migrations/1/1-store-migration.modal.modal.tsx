@@ -9,7 +9,7 @@ import DialogContentText from '@mui/material/DialogContentText'
 
 import { AsyncModal } from 'libs/modals'
 import { Dialog } from 'modals/base/base.dialog'
-import { FormattedError } from 'utils/error/formatted'
+import { ErrorAlert } from 'utils/error/alert'
 
 interface IProps {
   name: string;
@@ -43,7 +43,7 @@ export const StoreMigration1Modal: AsyncModal<void, IProps> = ({ error, rawAbi, 
             : <Typography variant='body1'>ABI is empty, so it cannot be downloaded</Typography>
           }
           <Typography>Artifact name: {name}</Typography>
-          <FormattedError error={error} />
+          <ErrorAlert error={error} />
         </DialogContentText>
       </DialogContent>
       <DialogActions>

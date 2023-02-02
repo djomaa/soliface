@@ -45,7 +45,6 @@ const Layout: React.FC = () => {
 
   return (
     <>
-      <ModalContainer />
       <StorageCtxProvider>
         <QueryCtxProvider>
           <Box>
@@ -57,6 +56,7 @@ const Layout: React.FC = () => {
               </ContractCtxProvider>
             </main>
           </Box>
+          <ModalContainer />
         </QueryCtxProvider>
       </StorageCtxProvider >
       <ToastContainer

@@ -9,13 +9,17 @@ import AccordionDetails from '@mui/material/AccordionDetails'
 import { Inputs } from './inputs'
 // import { MethodActions } from './actions'
 import { FunctionCtxProvider, useFunctionCtx } from './ctx'
-import { AbiItem } from 'types/abi'
-import assert from 'assert'
 import { FunctionRepresentation } from 'helpers/abi/function'
+import { withCtx } from 'contexts/ctx-factory'
+import { TxConf } from './tx-conf'
+import { Actions } from './actions'
+import Divider from '@mui/material/Divider'
+import Box from '@mui/material/Box'
+import { Child } from './child'
 
 // TODO: use full fn description name(params): outputs(if overloads exists)
 export const FunctionCore: React.FC = (props) => {
-  const { abi } = useFunctionCtx();
+  const { abi, result } = useFunctionCtx();
 
   const [open, setOpen] = React.useState(false);
 
@@ -32,34 +36,45 @@ export const FunctionCore: React.FC = (props) => {
           <FunctionRepresentation abi={abi} />
         </Typography>
       </AccordionSummary>
-      <AccordionDetails>
-        {/* <Divider /> */}
-        {/* <FormContainer formContext={ctx.form}> */}
-        {/* <Stack spacing={1.5}> */}
-        <Inputs />
-        <Inputs />
-
-
-
-        {/* </Stack> */}
-        {/* </FormContainer> */}
+      <AccordionDetails
+        sx={{
+          padding: 0,
+        }}
+      >
+        <Box>
+          <Inputs />
+          <TxConf />
+          <Actions />
+          {result && (
+            <>
+              <Divider />
+              {/* <Grow
+                in={true}
+              > */}
+              <Child x y>
+                {result}
+              </Child>
+              {/* </Grow> */}
+            </>
+          )}
+        </Box>
       </AccordionDetails>
     </Accordion>
   )
 
 }
 
-interface IProps {
-  abi: AbiItem;
-}
-export const Function: React.FC<IProps> = (props) => {
+export const Function = withCtx(FunctionCtxProvider, FunctionCore);
+// export const Function: React.FC<IProps> = (props) => {
 
-  console.log('Function render counter');
-  assert(props.abi.type === 'function');
+//   console.log('Function render counter');
+//   assert(props.abi.type === 'function');
 
-  return (
-    <FunctionCtxProvider abi={props.abi}>
-      <FunctionCore />
-    </FunctionCtxProvider>
-  )
-}
+
+
+//   return (
+//     <FunctionCtxProvider abi={props.abi}>
+//       <FunctionCore />
+//     </FunctionCtxProvider>
+//   )
+// }

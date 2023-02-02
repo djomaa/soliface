@@ -3,18 +3,32 @@ import { useForm } from 'react-hook-form';
 import { AbiItem } from 'types/abi'
 
 import { FunctionCtx, FunctionCtxState } from './function.ctx-state'
-import { InputsForm } from './function.ctx-types';
+import { Arguments, TxConfForm } from './function.ctx-types';
 
 interface IProps {
   abi: AbiItem;
 }
 export const FunctionCtxProvider: React.FC<React.PropsWithChildren<IProps>> = (props) => {
 
-  const inputsForm = useForm<InputsForm>({ defaultValues: [] })
+  const [result, setResult] = React.useState<React.ReactElement>()
+
+  const inputsForm = useForm<Arguments>({
+    defaultValues: [], resolver: (values, ctx, opts) => {
+      console.log('resolver', { values, ctx, opts });
+      return {
+        values,
+        errors: {},
+      }
+    }
+  })
+  const txConfForm = useForm<TxConfForm>({ defaultValues: {} })
 
   const value: FunctionCtxState = {
     abi: props.abi,
     inputsForm,
+    txConfForm,
+    result,
+    setResult,
   }
 
   return (

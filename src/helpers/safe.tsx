@@ -24,12 +24,13 @@ export function safe<
   }
 }
 
+export type SafeObj<T> = { result: T, error: null } | { result: null, error: Error };
 export function safeObj<
   T extends TypedFunction,
 >(
   fn: T,
   ...args: Parameters<T>
-): { result: ReturnType<T>, error: null } | { result: null, error: Error } {
+): SafeObj<ReturnType<T>> {
   try {
     const result = fn(...args)
     return { result, error: null }
@@ -65,7 +66,7 @@ export async function safeObjAsync<
 }
 
 export async function safeAsync<
-  TErr extends object,
+  TErr extends Error,
   TFn extends TypedFunction,
 >(
   fn: TFn,

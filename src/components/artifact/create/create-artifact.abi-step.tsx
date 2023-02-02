@@ -42,7 +42,6 @@ const AbiStepCore: React.FC<ICoreProps> = (props) => {
 
   return (
     <>
-
       <TextArea
         multiline
         autoFocus

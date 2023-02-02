@@ -12,4 +12,5 @@ export interface IArtifactWithAbi {
 }
 
 export type { AbiItem, AbiInput, AbiOutput } from 'web3-utils'
+export type { TransactionConfig } from 'web3-core'
 export type { AbiCoder } from 'web3-eth-abi'

@@ -1,11 +1,11 @@
-import { useStore } from 'contexts/store'
+import { useStoreV1 } from 'contexts/store'
 import { hashAbi } from 'helpers/abi/hash';
 import { generateAbiSignatureHash } from 'helpers/abi/signature-hash';
-import { safeObj } from 'helpers/safe';
+import { safe, safeAsync } from 'helpers/safe';
 import { useLogger } from 'hooks/use-logger';
-import { useMemo } from 'react';
-import { useAsync } from 'react-use';
+import { useEffect, useMemo, useState } from 'react';
 import { AbiItem } from 'types/abi';
+import { useAsyncEffect } from 'use-async-effect';
 import { Key } from './key'
 
 export const useArtifact = (hash: string) => {
@@ -13,150 +13,153 @@ export const useArtifact = (hash: string) => {
 
   const key = useMemo(() => Key(hash), [hash]);
 
-  const [name, setName] = useStore<string>(key.name);
-  const [rawAbi, setRawAbi] = useStore<string>(key.abi);
-  Logger.debug('Use state', hash, key, { name, rawAbi });
+  const nameStore = useStoreV1.Object<string>(key.name);
+  const rawAbiStore = useStoreV1.Object<string>(key.abi);
 
-  const isExist = useMemo(() => {
-    return name !== undefined && rawAbi !== undefined;
-  }, [name, rawAbi]);
+  const [abi, setAbi] = useState<AbiItem[]>();
+  const [error, setError] = useState<Error>();
+  const [loading, setLoading] = useState(true);
+  const [state, setState] = useState<UseArtifactReturn>({ loading: true })
 
-  const abi = useMemo(() => {
-    if (!isExist) {
+  useEffect(() => {
+    const logger = Logger.sub('effect(rawAbi)');
+    setLoading(true);
+    if (nameStore.loading || rawAbiStore.loading) {
+      logger.debug('Loading');
       return;
     }
-    return JSON.parse(rawAbi!) as AbiItem[];
-  }, [rawAbi]);
-
-  const signatureHash = useMemo(() => {
-    if (!isExist) {
+    logger.debug('Checking', { nameStore, rawAbiStore })
+    if (!nameStore.value || !rawAbiStore.value) {
+      logger.debug('Not exists');
+      setLoading(false);
+      setAbi(undefined);
       return;
     }
-    return safeObj(() => generateAbiSignatureHash(abi!));
-  }, [abi])
-
-  const actualHash = useAsync(async () => {
-    if (!isExist) {
+    const [abiError, abi] = safe(() => JSON.parse(rawAbiStore.value!) as AbiItem[]);
+    if (abiError) {
+      logger.warn('Abi decode failed', abiError);
+      setLoading(false);
+      setError(abiError);
       return;
     }
-    // TODO: deep compare before hash
-    console.log('abi', abi);
-    return hashAbi(abi!);
+    const [signatureHashError] = safe(() => generateAbiSignatureHash(abi!));
+    if (signatureHashError) {
+      logger.warn('Signature hashing failed', abiError);
+      setLoading(false);
+      setError(signatureHashError);
+      return;
+    }
+    // TODO:! deep compare
+    setAbi(abi);
+    logger.debug('Checked, abi regenerated');
+  }, [rawAbiStore]);
+
+  useAsyncEffect(async (isMounted) => {
+    const logger = Logger.sub('asyncEffect(abi)');
+    if (!abi) {
+      logger.debug('Empty');
+      return;
+    }
+    logger.debug('Checking', abi)
+    const [actualHashError, actualHash] = await safeAsync(() => hashAbi(abi!));
+    if (!isMounted()) {
+      logger.debug('Not mounted');
+      return;
+    }
+    if (actualHashError) {
+      logger.warn('Actual hashing failed', actualHashError);
+      setError(actualHashError);
+      return;
+    }
+    if (actualHash !== hash) {
+      logger.warn('Hash mismatch', actualHash, hash);
+      setError(new Error('Hash mismatch'));
+      return;
+    }
+    setLoading(false);
+    logger.debug('Checked, hash matched')
   }, [abi]);
 
-  const corruptionReason = useMemo(() => {
-    const logger = Logger.sub('corruption');
-    if (!isExist || actualHash.loading) {
-      return;
-    }
-    if (signatureHash!.error) {
-      return 'cannot generate signature hash';
-    }
-    if (actualHash.error) {
-      return 'failed to generate hash';
-    }
-    if (actualHash.value !== hash) {
-      logger.warn('actual hash is different', { actual: actualHash.value, stored: hash })
-      return 'actual hash is different'
-    }
-  }, [isExist, signatureHash, actualHash, hash]);
+  useEffect(() => {
+    const generateState = () => {
+      if (loading) {
+        return {
+          loading: true,
+        } as Loading;
+      }
 
-  const result = useMemo(() => {
-    if (!isExist) {
+      if (!nameStore.value || !rawAbiStore.value) {
+        return {
+          loading: false,
+          isExist: false,
+        } as LoadedNotExists;
+      };
+
+      if (error) {
+        return {
+          loading: false,
+          isExist: true,
+          name: nameStore.value,
+          rawAbi: rawAbiStore.value,
+          abi: abi,
+          error: error,
+        } as LoadedExistsCorrupted
+      }
+
       return {
         loading: false,
-        name: undefined,
-        abi: undefined,
-        rawAbi: undefined,
-        isExist: false,
-        isCorrupted: undefined,
-        corruptionReason: undefined,
-      } as NotExists;
-    };
-    if (isExist && actualHash.loading) {
-      return {
-        loading: true,
-        name: undefined,
-        abi: undefined,
-        rawAbi: undefined,
         isExist: true,
-        isCorrupted: undefined,
-        corruptionReason: undefined,
-      } as ExistsLoading;
+        isCorrupted: false,
+        name: nameStore.value,
+        rawAbi: rawAbiStore.value,
+        abi,
+      } as LoadedExistsNotCorrupted;
     }
-    if (isExist && !actualHash.loading && corruptionReason) {
-      return {
-        loading: false,
-        name,
-        abi: undefined,
-        rawAbi,
-        isExist: true,
-        isCorrupted: true,
-        corruptionReason,
-      } as ExistsLoadedCorrupted;
-    }
-    return {
-      loading: false,
-      name,
-      abi: abi!,
-      rawAbi,
-      isExist: true,
-      isCorrupted: false,
-      corruptionReason,
-    } as ExistsLoadedNotCorrupted;
-  }, [name, abi, rawAbi, actualHash.loading, corruptionReason]);
+    const newValue = generateState();
+    setState(newValue);
+    Logger.debug('State updated', newValue)
+  }, [loading, nameStore, rawAbiStore, error, abi]);
 
-  return result;
-}
-
-useArtifact.orEmpty = (hash: string | undefined) => {
-
-
-
+  return state;
 }
 
 
-export type ExistsLoaded = ExistsLoadedCorrupted | ExistsLoadedNotCorrupted
-export type Exists = ExistsLoading | ExistsLoaded;
-export type UseArtifactReturn = NotExists | Exists;
 
+export type LoadedExists = LoadedExistsCorrupted | LoadedExistsNotCorrupted
+export type UseArtifactReturn = Loading | LoadedNotExists | LoadedExists;
 
-export interface NotExists {
-  loading: false,
-  name: undefined,
-  abi: undefined,
-  rawAbi: undefined,
-  isExist: false,
-  isCorrupted: undefined,
-  corruptionReason: undefined,
-}
-
-export interface ExistsLoading {
+export interface Loading {
   loading: true,
-  name: undefined,
-  abi: undefined,
-  rawAbi: undefined,
-  isExist: true,
-  isCorrupted: undefined,
-  corruptionReason: undefined,
+  name?: undefined,
+  abi?: undefined,
+  rawAbi?: undefined,
+  isExist?: undefined,
+  error?: undefined,
 }
 
-export interface ExistsLoadedCorrupted {
+export interface LoadedNotExists {
   loading: false,
+  isExist: false,
+  name?: undefined,
+  abi?: undefined,
+  rawAbi?: undefined,
+  error?: undefined,
+}
+
+export interface LoadedExistsCorrupted {
+  loading: false,
+  isExist: true,
+  error: Error,
   name: string,
   abi: undefined,
   rawAbi: string,
-  isExist: true,
-  isCorrupted: true,
-  corruptionReason: string,
 }
 
-export interface ExistsLoadedNotCorrupted {
+export interface LoadedExistsNotCorrupted {
   loading: false,
   name: string,
   abi: AbiItem[],
   rawAbi: string,
   isExist: true,
-  isCorrupted: false,
-  corruptionReason: undefined,
+  error?: undefined,
 }

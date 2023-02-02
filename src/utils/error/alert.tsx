@@ -4,7 +4,7 @@ import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 
 // TODO: implement cause
-export const FormattedError: React.FC<{ error: Error }> = ({ error }) => {
+export const ErrorAlert: React.FC<{ error: Error }> = ({ error }) => {
   const title = `${error.name}: ${error.message}`
   const stack = useMemo(() => {
     if (!error.stack) {
@@ -24,3 +24,5 @@ export const FormattedError: React.FC<{ error: Error }> = ({ error }) => {
     </Alert>
   )
 }
+
+export * from './unknown-alert';

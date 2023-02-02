@@ -6,11 +6,11 @@ import Container from '@mui/material/Container'
 import { Route } from 'constants/route'
 import { AppBar } from 'components/app-bar'
 import { FallbackPage } from 'pages/fallback.page'
-import { Exists, useArtifact } from 'hooks/use-artifact'
+import { LoadedExists, useArtifact } from 'hooks/use-artifact'
 import { CircularProgress } from '@mui/material'
 import { EditArtifact } from 'components/artifact/edit'
 
-export const ArtifactContent: React.FC<{ artifact: Exists }> = ({ artifact }) => {
+export const ArtifactContent: React.FC<{ artifact: LoadedExists }> = ({ artifact }) => {
   const navigate = useNavigate();
 
   if (artifact.loading) {

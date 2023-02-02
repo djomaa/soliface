@@ -4,7 +4,7 @@ import Stack from '@mui/material/Stack'
 import Switch from '@mui/material/Switch'
 import Typography from '@mui/material/Typography'
 
-import { useWeb3 } from 'contexts/chain'
+import { useWeb3Old } from 'contexts/chain'
 import { useLogger } from 'hooks/use-logger'
 import { IAction } from 'hooks/use-async-action'
 
@@ -23,7 +23,7 @@ interface iProps {
 export const CallResult: React.FC<iProps> = ({ action }) => {
   const [logger] = useLogger(CallResult)
   const [mode, setMode] = useState<Mode>(Mode.Decoded)
-  const web3 = useWeb3()
+  const web3 = useWeb3Old()
   const { abi } = useMethodCtx()
 
   const title = (

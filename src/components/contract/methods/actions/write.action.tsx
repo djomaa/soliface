@@ -5,7 +5,7 @@ import LoadingButton from '@mui/lab/LoadingButton'
 
 import { useContractCtx } from 'contexts/contract'
 import { useAsyncAction } from 'hooks/use-async-action'
-import { useChainCtx, useWeb3, useWeb3SafeAbiCoder } from 'contexts/chain'
+import { useChainCtx, useWeb3Old, useWeb3SafeAbiCoder } from 'contexts/chain'
 
 import { useMethodCtx } from '../method.context'
 import { IMethodActionConf } from '../types'
@@ -15,7 +15,7 @@ export const WriteAction: React.FC = () => {
   const { abi, form, setResult } = useMethodCtx()
   const contractCtx = useContractCtx()
   const chainCtx = useChainCtx()
-  const web3 = useWeb3()
+  const web3 = useWeb3Old()
   const safeAbiCoder = useWeb3SafeAbiCoder()
 
   const [action, perform] = useAsyncAction(async (res: IMethodActionConf) => {

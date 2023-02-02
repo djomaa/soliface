@@ -4,6 +4,9 @@ Util to interact with any contract via any ABI
 
 ## TODOs
 
+- add settings
+  - gas estimation risk
+- add get das data to tx conf form fields
 - save default artifacts to localstorage once, so users can delete them ?
 - separate components into complicated and simple
 - ~~use logger.debug instead of log~~

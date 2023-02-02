@@ -1,5 +1,6 @@
 export * from './store.ctx';
 export * from './ctx-hooks/use-store-ctx';
+export * from './ctx-hooks/use-store-v1';
 export * from './ctx-hooks/use-store';
 export * from './ctx-hooks/use-store-with-default';
 export * from './ctx-hooks/use-store-key';
