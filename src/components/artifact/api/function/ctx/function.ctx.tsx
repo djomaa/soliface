@@ -1,12 +1,13 @@
-import { useLogger } from 'hooks/use-logger';
 import React from 'react'
 import { useForm } from 'react-hook-form';
-import { AbiItem } from 'types/abi'
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { FunctionCtx, FunctionCtxState } from './function.ctx-state'
+import { AbiItem } from 'types/abi'
+import { useLogger } from 'hooks/use-logger';
+
+import { createAbiItemSchema } from '../inputs/validation';
 import { ArgumentsObject, TxConfForm } from './function.ctx-types';
-import { createAbiItemSchema } from '../inputs/flat';
+import { FunctionCtx, FunctionCtxState } from './function.ctx-state'
 
 interface IProps {
   abi: AbiItem;

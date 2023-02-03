@@ -1,20 +1,18 @@
 import React from 'react'
 
-
-
-import { Input, InputPath } from '../input.component'
-import { AbiInputWithChildren } from '../types'
 import { Path } from '../components/path'
+import { AbiInputWithChildren } from '../types'
+import { Input, InputPath } from '../input.component'
+import { AbiInputData } from '../components/abi-data'
 
-import { AbiInputData } from '../components/abi-data/abi-data.component'
 
-export interface iInputProps {
+export interface IProps {
   input: AbiInputWithChildren;
   position: Array<string | number>
   path: InputPath[]
 }
 
-export const MethodStructInput: React.FC<iInputProps> = ({ input, position, path }) => {
+export const MethodStructInput: React.FC<IProps> = ({ input, position, path }) => {
   const children = input.components
     .map((input, i) => {
       const fPosition = [...position, i]

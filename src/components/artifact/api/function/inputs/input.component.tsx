@@ -1,12 +1,12 @@
 import React from 'react'
 
 import { AbiInput } from 'types/abi'
+import { useLogger } from 'hooks/use-logger'
 
 import { MethodInput } from './base'
-import { ARRAY_PATTERN, MethodArrayInput } from './array'
+import { MethodArrayInput } from './array'
 import { MethodStructInput } from './struct/struct.input'
-import { hasAbiInputChildren } from './types'
-import { useLogger } from 'hooks/use-logger'
+import { ARRAY_PATTERN, hasAbiInputChildren } from './types'
 
 export type InputPath = string | number;
 export type InputPosition = string | number;

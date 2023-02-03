@@ -1,26 +1,26 @@
+import assert from 'assert'
 import React, { useMemo } from 'react'
-import { useCounter, useToggle } from 'react-use'
+import { useCounter } from 'react-use'
+import { TransitionGroup } from 'react-transition-group'
 
 import Box from '@mui/material/Box'
 import Tooltip from '@mui/material/Tooltip'
 import AddIcon from '@mui/icons-material/Add'
+import Collapse from '@mui/material/Collapse'
 import IconButton from '@mui/material/IconButton'
 import RemoveIcon from '@mui/icons-material/Remove'
 
 import { AbiInput } from 'types/abi'
 
+import { ARRAY_PATTERN } from '../types'
+import { AbiInputData } from '../components/abi-data'
 import { Input, InputPath, InputPosition } from '../input.component'
-import assert from 'assert'
-import { AbiInputData } from '../components/abi-data/abi-data.component'
-import { TransitionGroup } from 'react-transition-group'
-import { Collapse } from '@mui/material'
 
 export interface iInputProps {
   input: AbiInput
   position: InputPosition[]
   path: InputPath[]
 }
-export const ARRAY_PATTERN = /\[(\d*)\]$/
 
 function getArraySize(type: string) {
   const match = type.match(ARRAY_PATTERN);
@@ -37,8 +37,7 @@ function removeArrayLevel(input: AbiInput): AbiInput {
 }
 
 export const MethodArrayInput: React.FC<iInputProps> = ({ input, position, path }) => {
-  // TODO: check input state change
-  const [open, toggleOpen] = useToggle(true);
+  // TODO: check input props change
   const size = getArraySize(input.type);
   const [count, { inc: incCount, dec: decCount }] = useCounter(size ?? 1, size ?? null, size ?? 1)
 
@@ -64,9 +63,7 @@ export const MethodArrayInput: React.FC<iInputProps> = ({ input, position, path 
 
   const children = useMemo(() => {
     const subInput = removeArrayLevel(input);
-    console.log("🚀 ~ file: array.input.tsx:66 ~ children ~ subInput", subInput, count)
     return Array.from({ length: count }, (_, i) => {
-      console.log("🚀 ~ file: array.input.tsx:66 ~ children ~ gen", i)
       return (
         <Collapse in={true}>
           <Box key={i}>

@@ -1,5 +1,6 @@
-import { JsonBox } from 'components/json-box';
 import React from 'react';
+
+import { JsonBox } from 'components/json-box';
 
 interface IProps {
   data: string;

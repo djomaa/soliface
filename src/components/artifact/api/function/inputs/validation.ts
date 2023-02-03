@@ -1,13 +1,12 @@
-import { AbiInput, AbiItem } from 'types/abi'
 import * as yup from 'yup';
 import assert from 'assert';
+
+import { AbiInput, AbiItem } from 'types/abi'
+import { PartialRequired } from 'types/common';
+
+import { ARRAY_PATTERN } from './types';
 import { ArgumentsObject } from '../ctx/function.ctx-types';
 
-// const ARRAY_RE = /\[([^\[\]]*)\]$/
-const ARRAY_RE = /\[(\d*)\]$/;
-
-// type PartialRequired<T, TKeys extends keyof T> = Omit<T, TKeys> & Pick<Required<T>, TKeys>
-type PartialRequired<T, TKeys extends keyof T> = T & Pick<Required<T>, TKeys>
 
 // TODO:- make inputs required in type
 export function createAbiItemSchema(abi: AbiItem) {
@@ -30,11 +29,11 @@ export function createStructSchema(input: PartialRequired<AbiInput, 'components'
 }
 
 export function createArraySchema(input: AbiInput) {
-  const match = input.type.match(ARRAY_RE);
+  const match = input.type.match(ARRAY_PATTERN);
   assert(match);
   const size = match[0] ? Number(match[0]) : undefined;
   // subType can be constructed using substring
-  const subType = input.type.replace(ARRAY_RE, '');
+  const subType = input.type.replace(ARRAY_PATTERN, '');
   const subSchema = createInputSchema({
     ...input,
     type: subType,
@@ -47,17 +46,14 @@ export function createArraySchema(input: AbiInput) {
 }
 
 export function createInputSchema(input: AbiInput): yup.Schema {
-  const isArray = ARRAY_RE.test(input.type);
+  const isArray = ARRAY_PATTERN.test(input.type);
   const hasChildren = abiHasChildren(input);
-
 
   if (!isArray && hasChildren) {
     return createStructSchema(input);
   }
   if (!isArray && !hasChildren) {
-    // Logger.debug('parseInput', 'base')
     return yup.string().required();
-    // return <MethodInput name={ name } type = { type } position = { position } path = { fullPath } />
   }
 
   return createArraySchema(input);
