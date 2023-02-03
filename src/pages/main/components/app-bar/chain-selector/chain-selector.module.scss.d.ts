@@ -1,1 +1,1 @@
-export const ChainSelectorText: string
+export const ChainSelectorText: string;

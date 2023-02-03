@@ -1,14 +1,8 @@
-@import  'styles/common.module.scss';
-
 .MethodInput {
-  @extend .MethodInputMargin;
 
-  &Header {
-    color: white;
-  }
-  
-  Box {
-
+  &Label:hover {
+    text-decoration: underline;
+    cursor: pointer;
   }
 
 }

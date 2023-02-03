@@ -1,2 +1,2 @@
-export const DialogBody: string
-export const DialogContainer: string
+export const DialogBody: string;
+export const DialogContainer: string;
