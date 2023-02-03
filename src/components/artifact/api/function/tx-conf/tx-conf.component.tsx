@@ -54,10 +54,9 @@ export const TxConfCore: React.FC = (props) => {
       return (
         <MethodInput
           key={key}
-          name={key}
           position={[key]}
           path={[key]}
-          type={TxConfTypeByKey[key]}
+          type={TxConfTypeByKey[key] ?? 'hex'}
         // defaultValue={defaultValues[key]}
         />
       )

@@ -3,17 +3,13 @@ import React from 'react'
 import { AbiInput } from 'types/abi'
 
 import { MethodInput } from './base'
-import { MethodArrayInput } from './array'
+import { ARRAY_PATTERN, MethodArrayInput } from './array'
 import { MethodStructInput } from './struct/struct.input'
-
-const ARRAY_RE = /\[([^\[\]]*)\]$/
+import { hasAbiInputChildren } from './types'
+import { useLogger } from 'hooks/use-logger'
 
 export type InputPath = string | number;
 export type InputPosition = string | number;
-
-interface ValidationProps {
-
-}
 
 // TODO: rename path to labels, position to path
 interface IProps {
@@ -28,31 +24,22 @@ interface IProps {
   position: InputPosition[];
 }
 export const Input: React.FC<IProps> = ({ input, path, position }) => {
+  const [Logger] = useLogger(Input);
 
-  const { name, type, components } = input
-  const match = type.match(ARRAY_RE)
-  const isArray = !(match == null)
-  const hasChildren = !!components?.length
+  const isArray = ARRAY_PATTERN.test(input.type);
+  const hasChildren = hasAbiInputChildren(input);
 
-  // Logger.debug('parseInput', input, { hasChildren, isArray, match })
-
-  const fullPath = [...path]
   if (!isArray && hasChildren) {
-    return <MethodStructInput type={input.internalType!} position={position} path={fullPath} components={input.components!} />
+    Logger.debug('Structure', input, { hasChildren, isArray })
+    return <MethodStructInput input={input} position={position} path={path} />
   }
-  if (!isArray && !hasChildren) {
-    // Logger.debug('parseInput', 'base')
-    return <MethodInput name={name} type={type} position={position} path={fullPath} />
+  if (isArray) {
+    Logger.debug('Array', input, { hasChildren, isArray })
+    return <MethodArrayInput input={input} position={position} path={path} />
   }
 
-  const comps = [{
-    ...input,
-    internalType: input.internalType!.replace(ARRAY_RE, ''),
-    type: type.replace(ARRAY_RE, '')
-  }]
-  const size = (match != null) && match[1] ? Number(match[1]) : undefined
-  // Logger.debug('parseInput', 'array', { comps, size })
-  return <MethodArrayInput type={input.internalType!} key={name} position={position} path={fullPath} components={comps} size={size} />
+  Logger.debug('Base', input, { hasChildren, isArray })
+  return <MethodInput type={input.type} position={position} path={path} />
 
 }
 

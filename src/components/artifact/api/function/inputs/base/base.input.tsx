@@ -1,5 +1,5 @@
 import React from 'react'
-import { TextFieldElement, TextFieldElementProps } from 'react-hook-form-mui'
+import { TextFieldElement } from 'react-hook-form-mui'
 
 import Box from '@mui/material/Box'
 import InputAdornment from '@mui/material/InputAdornment'
@@ -10,13 +10,11 @@ import style from './base-input.module.scss'
 import { InputPath, InputPosition } from '../input.component'
 
 interface IProps<T = {}> {
-  name: string
-  type: string | undefined
+  type: string;
   position: InputPosition[]
   path: InputPath[]
-  props?: Omit<TextFieldElementProps<T>, 'name'>;
 }
-export const MethodInput: React.FC<IProps> = ({ name, type, position, path, props }) => {
+export const MethodInput: React.FC<IProps> = ({ type, position, path }) => {
   const fullPosition = position.join('.')
 
   return (
@@ -28,11 +26,10 @@ export const MethodInput: React.FC<IProps> = ({ name, type, position, path, prop
         name={fullPosition}
         fullWidth
         variant='outlined'
-        key={name}
         label={path[path.length - 1]}
         InputProps={{
-          // startAdornment: <InputAdornment position="start" >{position.join(',')}</InputAdornment>,
-          endAdornment: type ? <InputAdornment position="end">{type}</InputAdornment> : undefined,
+          startAdornment: <InputAdornment position="start" >{position.join(',')}</InputAdornment>,
+          endAdornment: <InputAdornment position="end">{type}</InputAdornment>,
         }}
       />
     </Box >

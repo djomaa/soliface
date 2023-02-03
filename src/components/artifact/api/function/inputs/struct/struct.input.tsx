@@ -2,22 +2,20 @@ import React from 'react'
 
 import Box from '@mui/material/Box'
 
-import { AbiInput } from 'types/abi'
 
 import { Input, InputPath } from '../input.component'
 import style from './struct-input.module.scss'
 import { MethodStructInputHeader } from './header'
+import { AbiInputWithChildren } from '../types'
 
 export interface iInputProps {
+  input: AbiInputWithChildren;
   position: Array<string | number>
   path: InputPath[]
-  components: AbiInput[]
-  defaultValue?: string
-  type: string
 }
 
-export const MethodStructInput: React.FC<iInputProps> = ({ type, position, path, components }) => {
-  const children = components
+export const MethodStructInput: React.FC<iInputProps> = ({ input, position, path }) => {
+  const children = input.components
     .map((input, i) => {
       const fPosition = [...position, i]
       const fPath = [...path, input.name]
@@ -31,7 +29,7 @@ export const MethodStructInput: React.FC<iInputProps> = ({ type, position, path,
 
   return (
     <Box className={style.MethodStructInput}>
-      <MethodStructInputHeader type={type} path={path} />
+      <MethodStructInputHeader type={input.type} path={path} />
       <Box className={style.MethodStructInputBody}>
         {children}
       </Box>
