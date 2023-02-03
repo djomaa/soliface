@@ -5,7 +5,7 @@ import React from 'react';
 import { useCallback, useMemo } from 'react';
 import { UnknownErrorAlert } from 'utils/error/alert';
 import { useFunctionCtx } from '../../ctx'
-import { Arguments } from '../../ctx/function.ctx-types';
+import { ArgumentsObject } from '../../ctx/function.ctx-types';
 import { IHandler } from '../handler';
 import { EncodeAbiResult } from './encode-abi.result';
 
@@ -15,12 +15,12 @@ export const useEncodeAbiAction = () => {
   const { web3, status } = useChainCtx();
   const { abi, inputsForm, setResult } = useFunctionCtx();
 
-  const perform = useCallback((args: Arguments) => {
+  const perform = useCallback(({ params }: ArgumentsObject) => {
     const logger = Logger.sub(perform.name);
-    logger.debug('Encoding abi', { abi, web3, args });
+    logger.debug('Encoding abi', { abi, web3, params });
     assert(web3);
     try {
-      const data = web3.eth.abi.encodeFunctionCall(abi, args);
+      const data = web3.eth.abi.encodeFunctionCall(abi, params);
       setResult(<EncodeAbiResult data={data} />)
     } catch (error) {
       setResult(<UnknownErrorAlert error={error} />)

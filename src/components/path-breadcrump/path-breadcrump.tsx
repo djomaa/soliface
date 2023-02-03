@@ -29,11 +29,11 @@ export const PathBreadcrump: React.FC<IPathBreadcrumpProps> = ({ path, typograph
   const items = useMemo(() => {
     if (open) {
       return path.map((item, i) => {
-        return <Typography {...typography}>{item}</Typography>
+        return <Typography key={item} {...typography}>{item}</Typography>
       })
     }
-    const part = <Typography {...typography}>{path[path.length - 1]}</Typography>
-    return path.length === 1 ? [part] : [<div />, part]
+    const part = <Typography key='last' {...typography}>{path[path.length - 1]}</Typography>
+    return path.length === 1 ? [part] : [<div key='first' />, part]
   }, [open])
 
   return (
@@ -49,17 +49,3 @@ export const PathBreadcrump: React.FC<IPathBreadcrumpProps> = ({ path, typograph
   )
 }
 
-function preparePath(path: Array<string | number>) {
-  return path.reduce((acc, item, i) => {
-    const isFirst = i === 0
-    if (typeof item === 'string') {
-      if (!isFirst) {
-        acc += '.'
-      }
-      acc += item
-    } else {
-      acc += `[${item}]`
-    }
-    return acc
-  }, '')
-}

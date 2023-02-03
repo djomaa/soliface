@@ -2,11 +2,12 @@ import React from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { AbiItem } from 'types/abi';
 import { UseStateObject } from 'types/react';
-import { Arguments, TxConfForm } from './function.ctx-types';
+import { ArgumentsObject, TxConfForm } from './function.ctx-types';
 
 export interface FunctionCtxState extends UseStateObject<'result', React.ReactElement | undefined> {
   abi: AbiItem;
-  inputsForm: UseFormReturn<Arguments>;
+  inputsForm: UseFormReturn<ArgumentsObject>;
+  // inputsForm: UseFormReturn<A>;
   txConfForm: UseFormReturn<TxConfForm>;
 }
 

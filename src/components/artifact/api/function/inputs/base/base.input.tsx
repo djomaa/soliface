@@ -30,7 +30,6 @@ export const MethodInput: React.FC<IProps> = ({ name, type, position, path, prop
         variant='outlined'
         key={name}
         label={path[path.length - 1]}
-        helperText
         InputProps={{
           // startAdornment: <InputAdornment position="start" >{position.join(',')}</InputAdornment>,
           endAdornment: type ? <InputAdornment position="end">{type}</InputAdornment> : undefined,

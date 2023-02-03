@@ -1,30 +1,44 @@
+import { useLogger } from 'hooks/use-logger';
 import React from 'react'
 import { useForm } from 'react-hook-form';
 import { AbiItem } from 'types/abi'
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import { FunctionCtx, FunctionCtxState } from './function.ctx-state'
-import { Arguments, TxConfForm } from './function.ctx-types';
+import { ArgumentsObject, TxConfForm } from './function.ctx-types';
+import { createAbiItemSchema } from '../inputs/flat';
 
 interface IProps {
   abi: AbiItem;
 }
-export const FunctionCtxProvider: React.FC<React.PropsWithChildren<IProps>> = (props) => {
-
+type a = [string, ...string[]];
+export const FunctionCtxProvider: React.FC<React.PropsWithChildren<IProps>> = ({ abi, children }) => {
+  const Logger = useLogger(FunctionCtxProvider);
   const [result, setResult] = React.useState<React.ReactElement>()
 
-  const inputsForm = useForm<Arguments>({
-    defaultValues: [], resolver: (values, ctx, opts) => {
-      console.log('resolver', { values, ctx, opts });
-      return {
-        values,
-        errors: {},
-      }
+  const inputsFormResolver = React.useMemo(() => {
+    if (!abi.inputs) {
+      return;
     }
+    const schema = createAbiItemSchema(abi);
+    // return yupResolver(schema);
+
+    // @ts-ignore
+    return (...args: any) => yupResolver(schema)(...args)
+      .then(v => {
+        console.log('Resolved', v);
+        return v
+      });
+  }, [abi])
+
+  const inputsForm = useForm<ArgumentsObject>({
+    resolver: inputsFormResolver,
   })
+  // console.log("🚀 ~ file: function.ctx.tsx:52 ~ values", values)
   const txConfForm = useForm<TxConfForm>({ defaultValues: {} })
 
   const value: FunctionCtxState = {
-    abi: props.abi,
+    abi,
     inputsForm,
     txConfForm,
     result,
@@ -33,7 +47,7 @@ export const FunctionCtxProvider: React.FC<React.PropsWithChildren<IProps>> = (p
 
   return (
     <FunctionCtx.Provider value={value}>
-      {props.children}
+      {children}
     </FunctionCtx.Provider>
   )
 

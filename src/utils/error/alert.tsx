@@ -14,7 +14,7 @@ export const ErrorAlert: React.FC<{ error: Error }> = ({ error }) => {
     return stackOnly
       .split('\n')
       .map((line, i) => {
-        return <div>{line}</div>
+        return <div key={i}>{line}</div>
       });
   }, [error]);
   return (

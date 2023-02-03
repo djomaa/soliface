@@ -11,6 +11,10 @@ const ARRAY_RE = /\[([^\[\]]*)\]$/
 export type InputPath = string | number;
 export type InputPosition = string | number;
 
+interface ValidationProps {
+
+}
+
 // TODO: rename path to labels, position to path
 interface IProps {
   input: AbiInput;

@@ -55,10 +55,15 @@ export const MethodArrayInput: React.FC<iInputProps> = ({ type, position, path, 
         .map((component) => {
           const fPosition = [...position, i]
           const fPath = [...path, i]
-          return <Input input={component} position={fPosition} path={fPath} />
+          return <Input
+            key={component.name}
+            input={component}
+            position={fPosition}
+            path={fPath}
+          />
         })
       return (
-        <Box>
+        <Box key={i}>
           {elements}
         </Box >
       )

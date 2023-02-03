@@ -1,4 +1,5 @@
 import { TransactionConfig } from 'web3-core';
 
-export type Arguments = string[];
+// TODO: nested
+export type ArgumentsObject = { params: any[] }
 export type TxConfForm = TransactionConfig;

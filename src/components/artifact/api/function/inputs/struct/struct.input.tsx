@@ -21,7 +21,12 @@ export const MethodStructInput: React.FC<iInputProps> = ({ type, position, path,
     .map((input, i) => {
       const fPosition = [...position, i]
       const fPath = [...path, input.name]
-      return <Input input={input} position={fPosition} path={fPath} />
+      return <Input
+        key={input.name}
+        input={input}
+        position={fPosition}
+        path={fPath}
+      />
     })
 
   return (
