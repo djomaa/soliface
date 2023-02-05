@@ -8,6 +8,7 @@ import { useLogger } from 'hooks/use-logger';
 import { createAbiItemSchema } from '../inputs/validation';
 import { ArgumentsObject, TxConfForm } from './function.ctx-types';
 import { FunctionCtx, FunctionCtxState } from './function.ctx-state'
+import { useChainCtx } from 'contexts/chain';
 
 interface IProps {
   abi: AbiItem;
@@ -16,6 +17,7 @@ type a = [string, ...string[]];
 export const FunctionCtxProvider: React.FC<React.PropsWithChildren<IProps>> = ({ abi, children }) => {
   const Logger = useLogger(FunctionCtxProvider);
   const [result, setResult] = React.useState<React.ReactElement>()
+  const { account } = useChainCtx();
 
   const inputsFormResolver = React.useMemo(() => {
     if (!abi.inputs) {
@@ -37,7 +39,18 @@ export const FunctionCtxProvider: React.FC<React.PropsWithChildren<IProps>> = ({
     resolver: inputsFormResolver,
   })
   // console.log("🚀 ~ file: function.ctx.tsx:52 ~ values", values)
-  const txConfForm = useForm<TxConfForm>({ defaultValues: {} })
+  const txConfForm = useForm<TxConfForm>({
+    defaultValues: {
+      from: account,
+    }
+  })
+
+  React.useEffect(() => {
+    const value = txConfForm.getValues('from');
+    if (!value) {
+      txConfForm.setValue('from', account);
+    }
+  }, [account, txConfForm]);
 
   const value: FunctionCtxState = {
     abi,

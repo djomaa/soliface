@@ -1,5 +1,4 @@
 
-import LoadingButton from '@mui/lab/LoadingButton'
 import { ButtonGroup } from '@mui/material';
 import Stack from '@mui/system/Stack';
 import React from 'react'
@@ -7,10 +6,12 @@ import { Child } from '../child';
 import { useCallHandler } from './call';
 import { ExtraActions } from './extra-actions';
 import { Handler } from './handler';
+import { useWriteHandler } from './write';
 
 export const Actions: React.FC = (props) => {
 
   const { callHandler } = useCallHandler();
+  const { writeHandler } = useWriteHandler()
 
   return (
     <Child x y>
@@ -27,7 +28,8 @@ export const Actions: React.FC = (props) => {
             Call
           </LoadingButton> */}
           <Handler {...callHandler} />
-          <LoadingButton
+          <Handler {...writeHandler} />
+          {/* <LoadingButton
             variant='outlined'
             sx={{
               borderRadius: '0px',
@@ -35,7 +37,7 @@ export const Actions: React.FC = (props) => {
             {...props}
           >
             Write
-          </LoadingButton>
+          </LoadingButton> */}
         </ButtonGroup>
         <ExtraActions />
       </Stack>

@@ -1,5 +1,5 @@
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
+import Button, { ButtonProps } from '@mui/material/Button';
 
 import ArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import ArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -14,6 +14,7 @@ type ICustomProps<T> = T & UseStateObject<'open', boolean>;
 interface IProps extends Partial<UseStateObject<'open', boolean>> {
   disabled?: boolean;
   text: string;
+  buttonProps?: ButtonProps;
 }
 export const Collapser: React.FC<React.PropsWithChildren<IProps | ICustomProps<IProps>>> = (props) => {
   const [localOpen, localSetOpen] = React.useState(props.open ?? false);
@@ -34,6 +35,7 @@ export const Collapser: React.FC<React.PropsWithChildren<IProps | ICustomProps<I
           borderRadius: '0px',
         }}
         variant='text'
+        {...props.buttonProps}
         startIcon={open ? <ArrowDownIcon /> : <ArrowRightIcon />}
         onClick={() => {
           return setOpen(v => !v)

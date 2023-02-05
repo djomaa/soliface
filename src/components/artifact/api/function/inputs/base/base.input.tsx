@@ -12,8 +12,9 @@ interface IProps {
   type: string;
   position: InputPosition[]
   path: InputPath[]
+  startAdornment?: React.ReactNode;
 }
-export const MethodInput: React.FC<IProps> = ({ type, position, path }) => {
+export const MethodInput: React.FC<IProps> = ({ type, position, path, ...props }) => {
   const label = React.useMemo(() => {
     return (
       <Paper
@@ -26,7 +27,6 @@ export const MethodInput: React.FC<IProps> = ({ type, position, path }) => {
 
   return (
     <Box pt={1}>
-
       <TextFieldElement
         name={position.join('.')}
         fullWidth
@@ -37,6 +37,7 @@ export const MethodInput: React.FC<IProps> = ({ type, position, path }) => {
           shrink: true,
         }}
         InputProps={{
+          startAdornment: props.startAdornment ? <InputAdornment position="start">{props.startAdornment}</InputAdornment> : undefined,
           endAdornment: <InputAdornment position="end">{type}</InputAdornment>,
         }}
       />

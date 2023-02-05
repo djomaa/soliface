@@ -16,7 +16,7 @@ interface iProps {
 export const ContractCtxProvider: React.FC<iProps> = ({ children }) => {
   const [logger, { logState }] = useLogger(ContractCtxProvider)
 
-  const [address, setAddress] = useState<string>('')
+  const [address, setAddress] = useState<string>('0xed24fc36d5ee211ea25a80239fb8c4cfd80f12ee')
   const [artifactHash, setArtifactHash] = useState<string>()
 
   logState('address', address);

@@ -56,7 +56,7 @@ export async function safeObjAsync<
 >(
   fn: T,
   ...args: Parameters<T>
-): Promise<{ result: ReturnType<T>, error: null } | { result: null, error: Error }> {
+): Promise<{ result: Awaited<ReturnType<T>>, error: null } | { result: null, error: Error }> {
   try {
     const result = await fn(...args)
     return { result, error: null }

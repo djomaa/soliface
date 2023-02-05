@@ -18,5 +18,5 @@ export interface TransactionConfig extends oTxConf {
 }
 
 export type { AbiItem, AbiInput, AbiOutput } from 'web3-utils'
-
+export type { TransactionReceipt, PromiEvent } from 'web3-core';
 export type { AbiCoder } from 'web3-eth-abi'
