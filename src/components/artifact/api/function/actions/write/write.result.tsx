@@ -9,7 +9,7 @@ import { useLogger } from 'hooks/use-logger';
 import { usePromiEvent } from 'hooks/use-promi-event';
 import React from 'react';
 import { useAsync } from 'react-use';
-import { AbiItem, TransactionConfig, TransactionReceipt } from 'types/abi';
+import { AbiItem, TransactionConfig } from 'types/abi';
 import { ExceptionAlert } from 'utils/error/alert';
 import { Collapser } from '../../collapser';
 import style from './call-result.module.scss';
@@ -28,9 +28,6 @@ export const WriteResult: React.FC<IProps> = ({ abi, txConf, args }) => {
   const { web3 } = useWeb3();
   const [txState, setTx] = usePromiEvent();
 
-  const [confirmations, setConfirmations] = React.useState(0);
-  const [receipt, setReceipt] = React.useState<TransactionReceipt>();
-
   const state = useAsync(async () => {
     const logger = Logger.sub('async');
     logger.debug('Started', { abi, txConf, args });
@@ -40,7 +37,6 @@ export const WriteResult: React.FC<IProps> = ({ abi, txConf, args }) => {
     if (data.error) {
       logger.warn('Failed to encode function call', data.error);
       throw new Error('Failed to encode function call', { cause: data.error });
-      // throw data.error;
     }
     txConf.data = data.result;
     logger.debug('ABI encoded', data.result);
@@ -63,17 +59,9 @@ export const WriteResult: React.FC<IProps> = ({ abi, txConf, args }) => {
     logger.debug('Gas estimated', gas.result);
 
 
-
-    logger.debug('Fina txConf', txConf)
+    logger.debug('Final txConf', txConf)
     const promiEvent = web3.eth.sendTransaction(txConf);
     setTx(promiEvent);
-    // const promiEvent = await safeObjAsync(() => web3.eth.sendTransaction(txConf));
-    // if (promiEvent.error) {
-    //   logger.warn('Failed to send transaction', promiEvent.error);
-    //   throw new Error('Failed to send transaction', { cause: promiEvent.error });
-    // }
-
-    logger.debug('Result', promiEvent);
   }, [abi, txConf, args]);
 
   logState('txState', txState)
@@ -88,23 +76,9 @@ export const WriteResult: React.FC<IProps> = ({ abi, txConf, args }) => {
   }
   assert(txState);
 
-  // if (state.error || txState.error) {
-  //   return <ExceptionAlert error={state.error} />
-  // }
   if (state.error) {
     return <ExceptionAlert error={state.error} />
   }
-
-  // if (!txState.txHash) {
-  //   return (
-  //     <Alert severity='info' icon={<CircularProgress size={20} />}>
-  //       <AlertTitle>Status: {txState.status}</AlertTitle>
-  //     </Alert>
-  //   )
-  // }
-
-  console.log('txState.error', txState.error)
-  // typecheck can handle two fields criteria? (state.value undefinable)
   return (
     <Alert
       severity='info'
@@ -116,7 +90,6 @@ export const WriteResult: React.FC<IProps> = ({ abi, txConf, args }) => {
     >
       <AlertTitle>{!txState.ready && 'Transaction is in progress'}</AlertTitle>
       <Stack>
-        {/* <Stack direction='row' spacing={1}> */}
         {txState.txHash && <Typography>Transaction Hash: {txState.txHash}</Typography>}
         {txState.confirmations && <Typography>Confirmations: {txState.confirmations}</Typography>}
         {txState.receipt && (
