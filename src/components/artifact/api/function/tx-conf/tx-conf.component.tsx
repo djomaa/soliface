@@ -51,7 +51,6 @@ export const TxConfCore: React.FC = (props) => {
     }
   }, [abi, open]);
 
-
   const inputs = useMemo(() => {
     return fields.map((key) => {
       const CustomInput = TxConfInputMap[key];
