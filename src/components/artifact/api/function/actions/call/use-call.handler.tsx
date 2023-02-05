@@ -1,53 +1,53 @@
+
 import React from 'react';
-import assert from 'assert';
 import { useCallback, useMemo } from 'react';
 
-import { useChainCtx } from 'contexts/chain';
+import { Status, useChainCtx } from 'contexts/chain';
 import { useLogger } from 'hooks/use-logger';
-import { ExceptionAlert } from 'utils/error/alert';
 
 import { IHandler } from '../handler';
 import { useFunctionCtx } from '../../ctx'
-import { EncodeAbiResult } from './encode-abi.result';
 import { ArgumentsObject } from '../../ctx/function.ctx-types';
+import { CallResult } from './call.result';
+import { useContractCtx } from 'contexts/contract';
 
-export const useEncodeAbiAction = () => {
-  const [Logger] = useLogger(useEncodeAbiAction);
+export const useCallHandler = () => {
+  const [Logger] = useLogger(useCallHandler);
 
   const { web3, status } = useChainCtx();
-  const { abi, inputsForm, setResult } = useFunctionCtx();
+  const { address } = useContractCtx();
+  const { abi, inputsForm, txConfForm, setResult } = useFunctionCtx();
 
   const perform = useCallback(({ params }: ArgumentsObject) => {
     const logger = Logger.sub(perform.name);
-    logger.debug('Encoding abi', { abi, web3, params });
-    assert(web3);
-    try {
-      const data = web3.eth.abi.encodeFunctionCall(abi, params);
-      setResult(<EncodeAbiResult data={data} />)
-    } catch (error) {
-      setResult(<ExceptionAlert error={error} />)
-    }
-  }, [abi]);
+    const txConf = txConfForm.getValues()
+    txConf.to = address;
+    logger.debug('Encoding abi', { abi, web3, params, txConf });
+    setResult(<CallResult abi={abi} args={params} txConf={txConf} />);
+  }, [abi, address]);
 
   const onSubmit = useMemo(() => {
     return inputsForm.handleSubmit(perform);
   }, [perform]);
 
   const disableReason = useMemo(() => {
-    if (!status) {
+    if (status !== Status.Connected) {
       return 'Not connected to network'
+    }
+    if (!address) {
+      return 'No contract selected';
     }
   }, [web3]);
 
   const handler: IHandler = useMemo(() => {
     return {
-      name: 'Encode ABI',
+      name: 'Call',
       tooltip: disableReason,
       disabled: !!disableReason,
       onSubmit: onSubmit,
     };
   }, [disableReason, onSubmit]);
 
-  return { encodeAbiHandler: handler };
+  return { callHandler: handler };
 
 }

@@ -33,6 +33,7 @@ export const FunctionCtxProvider: React.FC<React.PropsWithChildren<IProps>> = ({
   }, [abi])
 
   const inputsForm = useForm<ArgumentsObject>({
+    defaultValues: { params: [] },
     resolver: inputsFormResolver,
   })
   // console.log("🚀 ~ file: function.ctx.tsx:52 ~ values", values)

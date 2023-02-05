@@ -9,7 +9,7 @@ import DialogContentText from '@mui/material/DialogContentText'
 
 import { AsyncModal } from 'libs/modals'
 import { Dialog } from 'modals/base/base.dialog'
-import { ErrorAlert } from 'utils/error/alert'
+import { ErrorAlert } from 'utils/error/error-alert'
 
 interface IProps {
   name: string;

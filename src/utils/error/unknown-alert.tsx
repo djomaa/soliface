@@ -1,26 +1,29 @@
 import React, { useEffect } from 'react';
 
 import Alert from '@mui/material/Alert';
-import { ErrorAlert } from './alert';
 import { useLogger } from 'hooks/use-logger';
+import AlertTitle from '@mui/material/AlertTitle';
 
-export const ErrorInConsoleAlert: React.FC<{ error: unknown }> = (error) => {
-  const [Logger] = useLogger(ErrorInConsoleAlert);
+
+export const UnknownErrorAlert: React.FC<{ error: unknown }> = ({ error }) => {
+  const [Logger] = useLogger(UnknownErrorAlert);
 
   useEffect(() => {
-    Logger.debug('Unexpected error', error);
+    Logger.warn('Unexpected error |', { error });
   }, [error]);
+
+  if (error && typeof error === 'object') {
+    return (
+      <Alert severity='error'>
+        <AlertTitle>Failure</AlertTitle>
+        {JSON.stringify(error, null, 2)}
+      </Alert>
+    )
+  }
 
   return (
     <Alert severity='error'>
       Something went wrong. Details are available in the console.
     </Alert>
   )
-}
-
-// TODO: implement cause
-export const UnknownErrorAlert: React.FC<{ error: unknown }> = ({ error }) => {
-
-  return error instanceof Error ? <ErrorAlert error={error} /> : <ErrorInConsoleAlert error={error} />;
-
 }

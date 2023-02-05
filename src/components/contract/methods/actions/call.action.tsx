@@ -10,7 +10,7 @@ import { useWeb3Old, useWeb3SafeAbiCoder } from 'contexts/chain'
 
 import { useMethodCtx } from '../method.context'
 import { IMethodActionConf } from '../types'
-import { CallResult } from '../result/call/call.result'
+// import { CallResult } from '../result/call/call.result'
 
 export const CallAction: React.FC = () => {
   const { abi, form, setResult } = useMethodCtx()
@@ -40,7 +40,7 @@ export const CallAction: React.FC = () => {
     if (action == null) {
       return
     }
-    setResult(<CallResult action={action} />)
+    // setResult(<CallResult action={action} />)
   }, [action])
 
   const disabledReason = useMemo(() => {

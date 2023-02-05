@@ -37,6 +37,10 @@ export class aIterator<T> {
     return Array.from(iterator);
   }
 
+  intoArray(): T[] {
+    return Array.from(this.o());
+  }
+
   reduce<U>(cb: (previousValue: U, currentValue: T, currentIndex: number) => U, initialValue: U): U {
     let i = 0;
     for (const value of this.o()) {
