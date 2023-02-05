@@ -1,17 +1,18 @@
-import { CircularProgress } from '@mui/material';
+import React from 'react';
+import assert from 'assert';
+import { useAsync } from 'react-use';
+
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
-import assert from 'assert';
-import { useWeb3 } from 'contexts/chain'
+import CircularProgress from '@mui/material/CircularProgress';
+
 import { safeObj } from 'helpers/safe';
-import React from 'react';
-import { useAsync } from 'react-use';
-import { AbiItem, TransactionConfig } from 'types/abi';
+import { useWeb3 } from 'contexts/chain'
 import { ExceptionAlert } from 'utils/error/alert';
-import { SucceedCallContentResult } from './succeed-call';
+import { AbiItem, TransactionConfig } from 'types/abi';
+
 import style from './call-result.module.scss';
-// import { TransactionConfig } from 'web3-core';
-// import { AbiItem } from 'web3-utils';
+import { SucceedCallContentResult } from './succeed-call';
 
 
 interface IProps {
@@ -26,15 +27,12 @@ export const CallResult: React.FC<IProps> = (props) => {
     const data = safeObj(() => web3.eth.abi.encodeFunctionCall(props.abi, props.args));
     if (data.error) {
       throw new Error('Failed to encode function call', { cause: data.error });
-      // throw data.error;
     }
     const finalTxConf = {
       ...props.txConf,
       data: data.result,
     }
-    console.log("🚀 ~ file: call.result.tsx:31 ~ state ~ finalTxConf", finalTxConf)
     const result = await web3.eth.call(finalTxConf);
-    console.log("🚀 ~ file: call.result.tsx:34 ~ state ~ result", result)
     return result;
   }, [props]);
 

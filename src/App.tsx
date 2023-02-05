@@ -22,7 +22,6 @@ import { AnalyticsCtxProvider, useAnalytics } from 'contexts/analytics'
 // import 'material-react-toastify/dist/ReactToastify.css';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
-import Box from '@mui/material/Box';
 import { ModalContainer } from 'libs/modals/modal-container';
 import { useLogger } from 'hooks/use-logger';
 import { CreateArtifactPage } from 'pages/artifact/create';
@@ -45,17 +44,15 @@ const Layout: React.FC = () => {
 
   return (
     <>
+      <CssBaseline />
       <StorageCtxProvider>
         <QueryCtxProvider>
-          <Box>
-            <CssBaseline />
-            <main>
-              <Cookies />
-              <ContractCtxProvider>
-                <Outlet />
-              </ContractCtxProvider>
-            </main>
-          </Box>
+          <main>
+            <Cookies />
+            <ContractCtxProvider>
+              <Outlet />
+            </ContractCtxProvider>
+          </main>
           <ModalContainer />
         </QueryCtxProvider>
       </StorageCtxProvider >

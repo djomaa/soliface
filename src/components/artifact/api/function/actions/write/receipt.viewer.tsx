@@ -1,14 +1,15 @@
-import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown'
-import { Collapse, IconButton } from '@mui/material'
-import { JsonBox } from 'components/json-box'
 import React from 'react'
 import { useToggle } from 'react-use'
-import { TransactionReceipt } from 'web3-core'
+
+import Collapse from '@mui/material/Collapse'
+import IconButton from '@mui/material/IconButton'
+import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown'
+
+import { JsonBox } from 'components/json-box'
+import { TransactionReceipt } from 'types/abi'
 
 export const ReceiptViewer: React.FC<{ receipt: TransactionReceipt }> = ({ receipt }) => {
   const [open, toggleOpen] = useToggle(false);
-
-  console.log(receipt)
 
   return (
     <>

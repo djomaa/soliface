@@ -2,19 +2,19 @@
 import React from 'react';
 import { useCallback, useMemo } from 'react';
 
-import { Status, useChainCtx } from 'contexts/chain';
 import { useLogger } from 'hooks/use-logger';
+import { useContractCtx } from 'contexts/contract';
+import { Status, useChainCtx } from 'contexts/chain';
 
 import { IHandler } from '../handler';
 import { useFunctionCtx } from '../../ctx'
-import { ArgumentsObject } from '../../ctx/function.ctx-types';
 import { CallResult } from './call.result';
-import { useContractCtx } from 'contexts/contract';
+import { ArgumentsObject } from '../../ctx/function.ctx-types';
 
 export const useCallHandler = () => {
   const [Logger] = useLogger(useCallHandler);
 
-  const { web3, status } = useChainCtx();
+  const { status } = useChainCtx();
   const { address } = useContractCtx();
   const { abi, inputsForm, txConfForm, setResult } = useFunctionCtx();
 
@@ -22,13 +22,13 @@ export const useCallHandler = () => {
     const logger = Logger.sub(perform.name);
     const txConf = txConfForm.getValues()
     txConf.to = address;
-    logger.debug('Encoding abi', { abi, web3, params, txConf });
+    logger.debug('Calling', { abi, params, txConf });
     setResult(<CallResult abi={abi} args={params} txConf={txConf} />);
-  }, [abi, address]);
+  }, [abi, address,]);
 
   const onSubmit = useMemo(() => {
     return inputsForm.handleSubmit(perform);
-  }, [perform]);
+  }, [perform, inputsForm]);
 
   const disableReason = useMemo(() => {
     if (status !== Status.Connected) {
@@ -37,7 +37,7 @@ export const useCallHandler = () => {
     if (!address) {
       return 'No contract selected';
     }
-  }, [web3]);
+  }, [status, address]);
 
   const handler: IHandler = useMemo(() => {
     return {

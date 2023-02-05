@@ -1,6 +1,7 @@
-import { Typography } from '@mui/material'
-import Box from '@mui/system/Box'
 import React from 'react'
+
+import Box from '@mui/system/Box'
+import Typography from '@mui/material/Typography'
 
 export const RawResultContent: React.FC<{ result: string }> = ({ result }) => {
   return (

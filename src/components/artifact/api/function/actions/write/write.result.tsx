@@ -1,20 +1,24 @@
-import { CircularProgress, Stack, TextField, Typography } from '@mui/material';
-import Alert from '@mui/material/Alert';
-import AlertTitle from '@mui/material/AlertTitle';
-import assert from 'assert';
-import { JsonBox } from 'components/json-box';
-import { useWeb3 } from 'contexts/chain'
-import { safeObj, safeObjAsync } from 'helpers/safe';
-import { useLogger } from 'hooks/use-logger';
-import { usePromiEvent } from 'hooks/use-promi-event';
 import React from 'react';
+import assert from 'assert';
 import { useAsync } from 'react-use';
-import { AbiItem, TransactionConfig } from 'types/abi';
+
+import Stack from '@mui/material/Stack';
+import Alert from '@mui/material/Alert';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import AlertTitle from '@mui/material/AlertTitle';
+import CircularProgress from '@mui/material/CircularProgress';
+
+import { useWeb3 } from 'contexts/chain'
+import { useLogger } from 'hooks/use-logger';
+import { JsonBox } from 'components/json-box';
 import { ExceptionAlert } from 'utils/error/alert';
+import { safeObj, safeObjAsync } from 'helpers/safe';
+import { usePromiEvent } from 'hooks/use-promi-event';
+import { AbiItem, TransactionConfig } from 'types/abi';
+import { FullWidthAlert } from 'components/full-width-alert';
+
 import { Collapser } from '../../collapser';
-import style from './call-result.module.scss';
-// import { TransactionConfig } from 'web3-core';
-// import { AbiItem } from 'web3-utils';
 
 
 interface IProps {
@@ -80,13 +84,10 @@ export const WriteResult: React.FC<IProps> = ({ abi, txConf, args }) => {
     return <ExceptionAlert error={state.error} />
   }
   return (
-    <Alert
+    <FullWidthAlert
       severity='info'
       variant='outlined'
       icon={txState.ready ? false : <CircularProgress size={20} />}
-      classes={{
-        message: style.Message,
-      }}
     >
       <AlertTitle>{!txState.ready && 'Transaction is in progress'}</AlertTitle>
       <Stack>
@@ -113,6 +114,6 @@ export const WriteResult: React.FC<IProps> = ({ abi, txConf, args }) => {
           </Collapser>
         )}
       </Stack>
-    </Alert >
+    </FullWidthAlert>
   )
 }

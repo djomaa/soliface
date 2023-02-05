@@ -2,37 +2,33 @@
 import React from 'react';
 import { useCallback, useMemo } from 'react';
 
-import { Status, useChainCtx } from 'contexts/chain';
 import { useLogger } from 'hooks/use-logger';
+import { useContractCtx } from 'contexts/contract';
+import { Status, useChainCtx } from 'contexts/chain';
 
 import { IHandler } from '../handler';
 import { useFunctionCtx } from '../../ctx'
-import { ArgumentsObject } from '../../ctx/function.ctx-types';
 import { WriteResult } from './write.result';
-import { useContractCtx } from 'contexts/contract';
+import { ArgumentsObject } from '../../ctx/function.ctx-types';
 
 export const useWriteHandler = () => {
   const [Logger] = useLogger(useWriteHandler);
 
-  const { web3, status, wallet, account } = useChainCtx();
   const { address } = useContractCtx();
+  const { status, wallet, account } = useChainCtx();
   const { abi, inputsForm, txConfForm, setResult } = useFunctionCtx();
-  // const f = useWatch(())
-  const from = txConfForm.watch('from');
 
   const perform = useCallback(({ params }: ArgumentsObject) => {
     const logger = Logger.sub(perform.name);
-    const txConf = txConfForm.getValues()
-    txConf.from = from;
+    const txConf = txConfForm.getValues();
     txConf.to = address;
-    console.log("🚀 ~ file: use-write.handler.tsx:31 ~ useWriteHandler ~ account", account)
-    logger.debug('Encoding abi', { abi, web3, params, txConf });
+    logger.debug('Encoding abi', { abi, params, txConf });
     setResult(<WriteResult abi={abi} args={params} txConf={txConf} />);
-  }, [abi, address, account, from]);
+  }, [abi, address, account, txConfForm]);
 
   const onSubmit = useMemo(() => {
     return inputsForm.handleSubmit(perform);
-  }, [perform]);
+  }, [perform, inputsForm]);
 
   const disableReason = useMemo(() => {
     if (status !== Status.Connected) {
@@ -44,7 +40,7 @@ export const useWriteHandler = () => {
     if (!wallet) {
       return 'Wallet not connected';
     }
-  }, [web3, from, address]);
+  }, [status, address, wallet]);
 
   const handler: IHandler = useMemo(() => {
     return {

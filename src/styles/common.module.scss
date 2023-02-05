@@ -16,29 +16,24 @@ body { height: 100%; }
 //   padding-top: 1vh;
 // }
 
-.MethodInputLevel {
-  padding-left: 0.5vw;
-}
+// .MethodInputLevel {
+//   padding-left: 0.5vw;
+// }
 
-.test_test_test_test_test_test_test_test_test_test_test_test {
-  height: 80vh;
-  backgro
+// .MuiTextField-root input {
+//   /* 14.5px = 18.5px - 4px (note: 18.5px is the input's default padding top and bottom) */
+//   padding-top: 14.5px;
+//   padding-bottom: 14.5px; 
+// }
 
-  div textarea:nth-child(1) {
-    height: 80vh;
-  }
-}
+// .MuiTextField-root label {
+//   top: -4px;
+// }
 
-.MuiTextField-root input {
-  /* 14.5px = 18.5px - 4px (note: 18.5px is the input's default padding top and bottom) */
-  padding-top: 14.5px;
-  padding-bottom: 14.5px; 
-}
+// .MuiTextField-root label[data-shrink='true'] {
+//   top: 0;
+// }
 
-.MuiTextField-root label {
-  top: -4px;
-}
-
-.MuiTextField-root label[data-shrink='true'] {
-  top: 0;
+.Message {
+  width: 100%;
 }
