@@ -17,6 +17,6 @@ export interface TransactionConfig extends oTxConf {
   gasPrice: string | number;
 }
 
-export type { AbiItem, AbiInput, AbiOutput } from 'web3-utils'
+export type { AbiItem, AbiInput, AbiOutput, StateMutabilityType, AbiType } from 'web3-utils'
 export type { TransactionReceipt, PromiEvent } from 'web3-core';
 export type { AbiCoder } from 'web3-eth-abi'

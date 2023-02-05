@@ -1,14 +1,15 @@
 import Box from '@mui/material/Box';
 import React from 'react';
-import { AbiInput, AbiItem } from 'types/abi';
+import { AbiInput, AbiItem, AbiOutput } from 'types/abi';
 
-export function buildFunctionParameters(inputs?: AbiInput[]) {
-  if (!inputs || inputs.length === 0) {
+export function buildFunctionParameters(item?: (AbiInput | AbiOutput)[]) {
+  if (!item || item.length === 0) {
     return '';
   }
-  const str = inputs
+  const str = item
     .map((input) => {
-      return `${input.type} ${input.name}`;
+      const type = input.internalType;
+      return input.name ? `${type} ${input.name}` : type;
     })
     .join(', ');
   return `(${str})`
@@ -28,7 +29,18 @@ export const FunctionRepresentation: React.FC<{ abi: AbiItem }> = ({ abi }) => {
         <i>
           {buildFunctionParameters(abi.inputs)}
         </i>
+        &nbsp;
+        {abi.stateMutability}
+        &nbsp;
+        <b>
+          returns
+        </b>
+        &nbsp;
+        <i>
+          {buildFunctionParameters(abi.outputs)}
+        </i>
       </small>
+
     </Box>
   )
 };
