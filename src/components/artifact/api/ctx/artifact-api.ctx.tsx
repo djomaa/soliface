@@ -1,6 +1,6 @@
 import React from 'react';
 import { AbiItem } from 'types/abi';
-import { ArtifactCtx, ArtifactCtxState } from './artifact-api.ctx-state';
+import { ArtifactApiCtx, ArtifactApiCtxState } from './artifact-api.ctx-state';
 
 export interface IArtifactCtxProps {
   address: string | undefined;
@@ -8,15 +8,15 @@ export interface IArtifactCtxProps {
 }
 export const ArtifactCtxProvider: React.FC<React.PropsWithChildren<IArtifactCtxProps>> = (props) => {
 
-  const value: ArtifactCtxState = {
+  const value: ArtifactApiCtxState = {
     address: props.address,
     abi: props.abi,
   };
 
   return (
-    <ArtifactCtx.Provider value={value}>
+    <ArtifactApiCtx.Provider value={value}>
       {props.children}
-    </ArtifactCtx.Provider>
+    </ArtifactApiCtx.Provider>
   )
 
 }

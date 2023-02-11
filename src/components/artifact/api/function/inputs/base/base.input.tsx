@@ -8,13 +8,13 @@ import InputAdornment from '@mui/material/InputAdornment'
 import { Path } from '../components/path'
 import { InputPath, InputPosition } from '../input.component'
 
-interface IProps {
+export interface IBaseProps {
   type: string;
   position: InputPosition[]
   path: InputPath[]
   startAdornment?: React.ReactNode;
 }
-export const MethodInput: React.FC<IProps> = ({ type, position, path, ...props }) => {
+export const MethodInput: React.FC<IBaseProps> = ({ type, position, path, ...props }) => {
   const label = React.useMemo(() => {
     return (
       <Paper
