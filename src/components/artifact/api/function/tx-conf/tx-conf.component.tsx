@@ -14,11 +14,11 @@ import { useLogger } from 'hooks/use-logger'
 import { Child } from '../child'
 import { useFunctionCtx } from '../ctx'
 import { Collapser } from '../collapser'
-import { BaseInput } from '../inputs/base'
 
 
 import { TxConfKey, TxConfTypeByKey } from './types'
 import { TxConfInputMap } from './tx-conf.inputs'
+import { BaseInput } from '../inputs/base/base-input'
 
 export const TxConfCore: React.FC = (props) => {
   const [Logger] = useLogger(TxConfCore);

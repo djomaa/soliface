@@ -29,7 +29,7 @@ const InputsCore: React.FC<IProps> = () => {
   return (
     <Child x>
       <FormContainer formContext={inputsForm}>
-        <Stack spacing={1}>
+        <Stack spacing={2}>
           {elements}
         </Stack>
       </FormContainer>

@@ -13,7 +13,7 @@ import { useLogger } from 'hooks/use-logger';
 import { useIsMounted } from 'hooks/use-is-mounted';
 
 import { useFunctionCtx } from '../../ctx';
-import { BaseInput } from '../../inputs/base'
+import { BaseInput } from '../../inputs/base/base-input';
 
 export const GasPriceInput: React.FC = () => {
   const [Logger] = useLogger(GasPriceInput);
@@ -45,7 +45,7 @@ export const GasPriceInput: React.FC = () => {
     const chip = (
       <Chip
         key='fetch-gas-price-chip'
-        label="Fetch"
+        label="fetch"
         icon={loading ? <CircularProgress size={20} /> : undefined}
         disabled={!web3}
         onClick={() => fetch()}

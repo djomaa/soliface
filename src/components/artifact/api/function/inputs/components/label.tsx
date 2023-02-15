@@ -1,12 +1,13 @@
 import Paper from '@mui/material/Paper';
 import React from 'react';
-import { Path } from '../../components/path';
+import { Path } from './path';
 
-import { IDefaultProps } from '../use-input';
+import { IDefaultProps } from '../base/base-input';
 
-export const useLabel = (
+interface IProps {
   path: IDefaultProps['path'],
-) => {
+}
+export const Label: React.FC<IProps> = ({ path }) => {
   return (
     <Paper
       elevation={0}

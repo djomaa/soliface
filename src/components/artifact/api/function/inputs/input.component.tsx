@@ -3,10 +3,10 @@ import React from 'react'
 import { AbiInput } from 'types/abi'
 import { useLogger } from 'hooks/use-logger'
 
-import { BaseInput } from './base'
 import { MethodArrayInput } from './array'
 import { MethodStructInput } from './struct/struct.input'
 import { ARRAY_PATTERN, hasAbiInputChildren } from './types'
+import { BaseInput } from './base/base-input'
 
 export type InputPath = string | number;
 export type InputPosition = string | number;

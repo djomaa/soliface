@@ -3,15 +3,25 @@ import React from 'react';
 import Chip from '@mui/material/Chip';
 import { TextFieldProps } from '@mui/material/TextField';
 
-import { IBaseProps } from './base.input';
-import { DefaultInput } from './by-type/default.input';
-import { UintInput, UintInputRE } from './by-type/uint'
+import { ReactKeyedElement } from 'types/react';
+
+import { HexInput } from '../hex/hex.input';
+import { UintInput, UintInputRE } from '../uint'
+import { InputPath, InputPosition } from '../input.component';
+
+export interface IBaseProps {
+  type: string;
+  position: InputPosition[]
+  path: InputPath[]
+  startAdornments?: ReactKeyedElement[];
+  endAdornments?: ReactKeyedElement[];
+}
 
 export interface IDefaultProps extends IBaseProps {
   fieldProps: TextFieldProps;
 }
 
-export const useInput = (props: IBaseProps) => {
+export const BaseInput: React.FC<IBaseProps> = (props) => {
 
   const defaults: IDefaultProps = {
     type: props.type,
@@ -24,7 +34,7 @@ export const useInput = (props: IBaseProps) => {
     ],
     fieldProps: {
       fullWidth: true,
-      margin: 'dense',
+      // margin: 'dense',
       variant: 'outlined',
       InputLabelProps: {
         shrink: true,
@@ -38,6 +48,6 @@ export const useInput = (props: IBaseProps) => {
     return <UintInput size={size} {...defaults} />
   }
 
-  return <DefaultInput {...defaults} />
+  return <HexInput {...defaults} />
 
 }

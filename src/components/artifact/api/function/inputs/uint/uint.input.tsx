@@ -1,12 +1,15 @@
-import { TextField } from '@mui/material';
-import { useLogger } from 'hooks/use-logger';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Controller, ControllerProps, FieldValues } from 'react-hook-form';
+
+import TextField from '@mui/material/TextField';
+
+import { useLogger } from 'hooks/use-logger';
 import { applyDecimals, removeDecimals } from 'utils/decimals';
-import { IDefaultProps } from '../../use-input';
-import { useAdornments } from '../use-adornments';
-import { useLabel } from '../use-label';
+
+import { Label } from '../components/label';
 import { DecimalsChip } from './decimals-chip';
+import { IDefaultProps } from '../base/base-input';
+import { useAdornments } from '../components/use-adornments';
 
 interface ICoreProps<T extends FieldValues = FieldValues> extends IDefaultProps {
   form: Parameters<ControllerProps<T>['render']>[0];
@@ -18,7 +21,7 @@ const UintInputCore: React.FC<ICoreProps> = (props) => {
   const [decimals, setDecimals] = React.useState<number>();
   const [value, setValue] = React.useState<string>(props.form.field.value);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const logger = Logger.sub('useEffect(form.value');
     const receivedValue = props.form.field.value;
     const newValue = decimals === undefined ? receivedValue : removeDecimals(receivedValue, decimals).toString();
@@ -29,7 +32,7 @@ const UintInputCore: React.FC<ICoreProps> = (props) => {
     }
   }, [props.form.field]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const logger = Logger.sub('useEffect(decimals, value)');
     const newValue = decimals === undefined ? value : applyDecimals(value, decimals).toString();
     logger.debug('onChange', { value, decimals, newValue })
@@ -41,7 +44,7 @@ const UintInputCore: React.FC<ICoreProps> = (props) => {
   return (
     <TextField
       {...props.fieldProps}
-      label={useLabel(props.path)}
+      label={<Label path={props.path} />}
       name={props.position.join('.')}
       value={value}
       onChange={(e) => setValue(e.target.value)}
