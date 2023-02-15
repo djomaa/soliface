@@ -1,12 +1,14 @@
-
-import { ButtonGroup } from '@mui/material';
-import Stack from '@mui/system/Stack';
 import React from 'react'
-import { Child } from '../child';
-import { useCallHandler } from './call';
-import { ExtraActions } from './extra-actions';
+
+import Stack from '@mui/system/Stack';
+import ButtonGroup from '@mui/material/ButtonGroup';
+
+import { Child } from 'components/child';
+
 import { Handler } from './handler';
+import { useCallHandler } from './call';
 import { useWriteHandler } from './write';
+import { ExtraActions } from './extra-actions';
 
 export const Actions: React.FC = (props) => {
 
@@ -17,27 +19,8 @@ export const Actions: React.FC = (props) => {
     <Child x y>
       <Stack direction='row'>
         <ButtonGroup variant='outlined'>
-          {/* <LoadingButton
-            variant='outlined'
-            sx={{
-              xs: { width: '100%' },
-              borderRadius: '0px',
-            }}
-            {...props}
-          >
-            Call
-          </LoadingButton> */}
           <Handler {...callHandler} />
           <Handler {...writeHandler} />
-          {/* <LoadingButton
-            variant='outlined'
-            sx={{
-              borderRadius: '0px',
-            }}
-            {...props}
-          >
-            Write
-          </LoadingButton> */}
         </ButtonGroup>
         <ExtraActions />
       </Stack>

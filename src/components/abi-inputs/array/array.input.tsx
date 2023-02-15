@@ -12,14 +12,12 @@ import RemoveIcon from '@mui/icons-material/Remove'
 
 import { AbiInput } from 'types/abi'
 
-import { ARRAY_PATTERN } from '../types'
 import { AbiInputData } from '../components/abi-data'
-import { Input, InputPath, InputPosition } from '../input.component'
+import { AbiInputComponent } from '../abi-input.component'
+import { ARRAY_PATTERN, PathAndLabelProps } from '../types'
 
-export interface iInputProps {
+export interface IInputProps extends PathAndLabelProps {
   input: AbiInput
-  position: InputPosition[]
-  path: InputPath[]
 }
 
 function getArraySize(type: string) {
@@ -36,7 +34,7 @@ function removeArrayLevel(input: AbiInput): AbiInput {
   }
 }
 
-export const MethodArrayInput: React.FC<iInputProps> = ({ input, position, path }) => {
+export const MethodArrayInput: React.FC<IInputProps> = ({ input, labels, path }) => {
   // TODO: check input props change
   const size = getArraySize(input.type);
   const [count, { inc: incCount, dec: decCount }] = useCounter(size ?? 1, size ?? null, size ?? 1)
@@ -67,9 +65,9 @@ export const MethodArrayInput: React.FC<iInputProps> = ({ input, position, path 
       return (
         <Collapse in={true}>
           <Box key={i}>
-            <Input
+            <AbiInputComponent
               input={subInput}
-              position={[...position, i]}
+              labels={[...labels, i]}
               path={[...path, i]}
             />
           </Box >

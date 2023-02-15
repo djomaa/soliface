@@ -1,13 +1,14 @@
-import Box from '@mui/material/Box';
-import Button, { ButtonProps } from '@mui/material/Button';
-
-import ArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-import ArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import React from 'react';
-import Collapse from '@mui/material/Collapse';
-import { UseStateObject } from 'types/react';
+
+import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
-import { Child } from './child';
+import Collapse from '@mui/material/Collapse';
+import Button, { ButtonProps } from '@mui/material/Button';
+import ArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import ArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+
+import { Child } from 'components/child';
+import { UseStateObject } from 'types/react';
 
 type ICustomProps<T> = T & UseStateObject<'open', boolean>;
 

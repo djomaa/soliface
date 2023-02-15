@@ -1,21 +1,21 @@
 import React from 'react'
 
+import Box from '@mui/material/Box'
+import Divider from '@mui/material/Divider'
 import Accordion from '@mui/material/Accordion'
 import Typography from '@mui/material/Typography'
 import ExpandMore from '@mui/icons-material/ExpandMore'
 import AccordionSummary from '@mui/material/AccordionSummary'
 import AccordionDetails from '@mui/material/AccordionDetails'
 
-import { Inputs } from './inputs'
-// import { MethodActions } from './actions'
-import { FunctionCtxProvider, useFunctionCtx } from './ctx'
-import { FunctionRepresentation } from 'helpers/abi/function'
+import { Child } from 'components/child'
 import { withCtx } from 'contexts/ctx-factory'
+import { FunctionRepresentation } from 'helpers/abi/function'
+
+import { Inputs } from './inputs'
 import { TxConf } from './tx-conf'
 import { Actions } from './actions'
-import Divider from '@mui/material/Divider'
-import Box from '@mui/material/Box'
-import { Child } from './child'
+import { FunctionCtxProvider, useFunctionCtx } from './ctx'
 
 // TODO: use full fn description name(params): outputs(if overloads exists)
 export const FunctionCore: React.FC = (props) => {

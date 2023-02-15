@@ -3,27 +3,28 @@ import { useToggle } from 'react-use'
 import { FormContainer } from 'react-hook-form-mui'
 import { TransitionGroup } from 'react-transition-group'
 
-
-import Box from '@mui/system/Box'
+import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 import Button from '@mui/material/Button'
 import Collapse from '@mui/material/Collapse'
 
+import { Child } from 'components/child'
 import { useLogger } from 'hooks/use-logger'
+import { PrimitiveInput } from 'components/abi-inputs/primitive'
+import style from 'components/abi-inputs/abi-inputs.module.scss'
 
-import { Child } from '../child'
 import { useFunctionCtx } from '../ctx'
 import { Collapser } from '../collapser'
 
 
-import { TxConfKey, TxConfTypeByKey } from './types'
 import { TxConfInputMap } from './tx-conf.inputs'
-import { BaseInput } from '../inputs/base/base-input'
+import { TxConfKey, TxConfTypeByKey } from './types'
+
 
 export const TxConfCore: React.FC = (props) => {
   const [Logger] = useLogger(TxConfCore);
 
-  const { abi } = useFunctionCtx();
+  const { abi, txConfForm } = useFunctionCtx();
   const [open, toggleOpen] = useToggle(false)
 
   const fields = React.useMemo<TxConfKey[]>(() => {
@@ -42,8 +43,8 @@ export const TxConfCore: React.FC = (props) => {
       }
       return (
         <Collapse key={key} in={true}>
-          <BaseInput
-            position={[key]}
+          <PrimitiveInput
+            labels={[key]}
             path={[key]}
             type={TxConfTypeByKey[key] ?? 'hex'}
           />
@@ -67,16 +68,18 @@ export const TxConfCore: React.FC = (props) => {
         )}
       </Stack>
       <Stack>
-        <TransitionGroup>
-          {inputs}
-        </TransitionGroup>
+        <FormContainer formContext={txConfForm}>
+          <TransitionGroup className={style.Container}>
+            {inputs}
+          </TransitionGroup>
+        </FormContainer>
       </Stack>
     </Box>
   )
 }
 
 export const TxConf: React.FC = () => {
-  const { txConfForm, abi } = useFunctionCtx();
+  const { abi } = useFunctionCtx();
   const [open, setOpen] = React.useState(!!abi.payable);
 
   return (
@@ -85,11 +88,9 @@ export const TxConf: React.FC = () => {
       setOpen={setOpen}
       text='Transaction Configuration'
     >
-      <Child x>
-        <FormContainer formContext={txConfForm}>
-          <TxConfCore />
-        </FormContainer>
+      <Child x y>
+        <TxConfCore />
       </Child>
-    </Collapser>
+    </Collapser >
   )
 }

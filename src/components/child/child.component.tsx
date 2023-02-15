@@ -6,7 +6,9 @@ import React from 'react';
 type IPropsX = { x: boolean } | { left?: boolean; right?: boolean };
 type IPropsY = { y: boolean } | { top?: boolean; bottom?: boolean };
 
-type IProps = IPropsX & IPropsY;
+type IProps = IPropsX & IPropsY & {
+  className?: string;
+}
 
 export const Child: React.FC<React.PropsWithChildren<IProps>> = (props) => {
   const boxProps: BoxProps = {};
@@ -39,6 +41,7 @@ export const Child: React.FC<React.PropsWithChildren<IProps>> = (props) => {
   return (
     <Box
       {...boxProps}
+      className={props.className}
     >
       {props.children}
     </Box>

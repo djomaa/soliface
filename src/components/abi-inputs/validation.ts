@@ -5,7 +5,7 @@ import { AbiInput, AbiItem } from 'types/abi'
 import { PartialRequired } from 'types/common';
 
 import { ARRAY_PATTERN } from './types';
-import { ArgumentsObject } from '../ctx/function.ctx-types';
+import { ArgumentsObject } from '../artifact/api/function/ctx/function.ctx-types';
 
 
 // TODO:- make inputs required in type

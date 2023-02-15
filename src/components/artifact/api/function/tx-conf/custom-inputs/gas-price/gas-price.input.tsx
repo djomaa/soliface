@@ -12,8 +12,8 @@ import { safeAsync } from 'helpers/safe';
 import { useLogger } from 'hooks/use-logger';
 import { useIsMounted } from 'hooks/use-is-mounted';
 
-import { useFunctionCtx } from '../../ctx';
-import { BaseInput } from '../../inputs/base/base-input';
+import { useFunctionCtx } from '../../../ctx';
+import { PrimitiveInput } from 'components/abi-inputs/primitive';
 
 export const GasPriceInput: React.FC = () => {
   const [Logger] = useLogger(GasPriceInput);
@@ -67,8 +67,8 @@ export const GasPriceInput: React.FC = () => {
   }, [web3, loading]);
 
   return (
-    <BaseInput
-      position={['gasPrice']}
+    <PrimitiveInput
+      labels={['gasPrice']}
       path={['gasPrice']}
       type='uint256'
       startAdornments={[chip]}

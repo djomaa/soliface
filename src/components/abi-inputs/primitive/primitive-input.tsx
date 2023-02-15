@@ -1,40 +1,37 @@
 import React from 'react';
 
-import Chip from '@mui/material/Chip';
 import { TextFieldProps } from '@mui/material/TextField';
 
 import { ReactKeyedElement } from 'types/react';
 
-import { HexInput } from '../hex/hex.input';
-import { UintInput, UintInputRE } from '../uint'
-import { InputPath, InputPosition } from '../input.component';
+import { HexInput } from './hex/hex.input';
+import { PathAndLabelProps } from '../types';
+import { UintInput, UintInputRE } from './uint'
+import { Label } from '../components/label';
+import { PartialRequired } from 'types/common';
 
-export interface IBaseProps {
+export interface IBaseProps extends PathAndLabelProps {
   type: string;
-  position: InputPosition[]
-  path: InputPath[]
   startAdornments?: ReactKeyedElement[];
   endAdornments?: ReactKeyedElement[];
 }
 
 export interface IDefaultProps extends IBaseProps {
-  fieldProps: TextFieldProps;
+  fieldProps: TextFieldProps & PartialRequired<TextFieldProps, 'name' | 'label'>;
 }
 
-export const BaseInput: React.FC<IBaseProps> = (props) => {
+export const PrimitiveInput: React.FC<IBaseProps> = (props) => {
 
   const defaults: IDefaultProps = {
     type: props.type,
-    position: props.position,
+    labels: props.labels,
     path: props.path,
     startAdornments: props.startAdornments,
-    endAdornments: [
-      ...props.endAdornments ?? [],
-      <Chip key='type' label={props.type} />
-    ],
+    endAdornments: props.endAdornments,
     fieldProps: {
+      label: <Label path={props.path} type={props.type} />,
+      name: props.labels.join('.'),
       fullWidth: true,
-      // margin: 'dense',
       variant: 'outlined',
       InputLabelProps: {
         shrink: true,

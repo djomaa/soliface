@@ -5,7 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { AbiItem } from 'types/abi'
 import { useLogger } from 'hooks/use-logger';
 
-import { createAbiItemSchema } from '../inputs/validation';
+import { createAbiItemSchema } from '../../../../abi-inputs/validation';
 import { ArgumentsObject, TxConfForm } from './function.ctx-types';
 import { FunctionCtx, FunctionCtxState } from './function.ctx-state'
 import { useChainCtx } from 'contexts/chain';

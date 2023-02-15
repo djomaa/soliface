@@ -34,6 +34,7 @@ export const Path: React.FC<IProps> = ({ path }) => {
         onClick={(e) => {
           setOpen(p => !p)
           e.preventDefault();
+          e.stopPropagation();
         }}
       >
         {text}

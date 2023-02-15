@@ -1,39 +1,30 @@
 import React from 'react';
 import { FormContainer } from 'react-hook-form-mui';
 
-import Stack from '@mui/material/Stack';
 
-import { Child } from '../child';
+
+import { Child } from 'components/child';
+import { AbiInputsContainer, useAbiInputs } from 'components/abi-inputs';
+
 import { useFunctionCtx } from '../ctx';
 import { Collapser } from '../collapser';
-import { ArgumentsObject } from '../ctx/function.ctx-types';
-import { Input, InputPath, InputPosition } from './input.component';
+
 
 interface IProps {
-  // inputs: AbiInput[];
-  path?: InputPath[];
-  position?: InputPosition[];
 }
 
 const InputsCore: React.FC<IProps> = () => {
-  const [open, setOpen] = React.useState(false);
   const { abi, inputsForm } = useFunctionCtx();
-
-  const elements = React.useMemo(() => {
-    const posPrefix: keyof ArgumentsObject = 'params'
-    return abi.inputs?.map((input, i) => {
-      return <Input key={input.name} input={input} position={[posPrefix, i]} path={[input.name]} />
-    })
-  }, [abi]);
+  const inputs = useAbiInputs({ inputs: abi.inputs!, prefix: 'params' });
 
   return (
-    <Child x>
-      <FormContainer formContext={inputsForm}>
-        <Stack spacing={2}>
-          {elements}
-        </Stack>
-      </FormContainer>
-    </Child>
+    <FormContainer formContext={inputsForm}>
+      <Child x y>
+        <AbiInputsContainer>
+          {inputs}
+        </AbiInputsContainer>
+      </Child>
+    </FormContainer>
   );
 }
 

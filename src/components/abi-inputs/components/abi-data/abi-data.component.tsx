@@ -12,6 +12,7 @@ import ArrowUp from '@mui/icons-material/KeyboardDoubleArrowUp';
 import Grid from '@mui/material/Unstable_Grid2/Grid2'
 
 import style from './abi-data.module.scss'
+import { Child } from 'components/child';
 
 export interface IProps {
   headerTitle: React.ReactNode;
@@ -34,7 +35,6 @@ export const AbiInputData: React.FC<IProps> = (props) => {
         className={style.Header}
       >
         <Grid container
-          // direction='row'
           justifyContent='space-between'
           alignItems='center'
         >
@@ -70,9 +70,11 @@ export const AbiInputData: React.FC<IProps> = (props) => {
         </Grid>
       </Box>
       <Collapse in={open}>
-        <Box pl={1} pb={1}>
-          {props.children}
-        </Box>
+        <Child y>
+          <Box pl={1} pb={1}>
+            {props.children}
+          </Box>
+        </Child>
       </Collapse>
     </Box >
   )

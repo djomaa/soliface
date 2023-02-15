@@ -6,10 +6,9 @@ import TextField from '@mui/material/TextField';
 import { useLogger } from 'hooks/use-logger';
 import { applyDecimals, removeDecimals } from 'utils/decimals';
 
-import { Label } from '../components/label';
 import { DecimalsChip } from './decimals-chip';
-import { IDefaultProps } from '../base/base-input';
-import { useAdornments } from '../components/use-adornments';
+import { IDefaultProps } from '../primitive-input';
+import { useAdornments } from '../../components/use-adornments';
 
 interface ICoreProps<T extends FieldValues = FieldValues> extends IDefaultProps {
   form: Parameters<ControllerProps<T>['render']>[0];
@@ -44,8 +43,6 @@ const UintInputCore: React.FC<ICoreProps> = (props) => {
   return (
     <TextField
       {...props.fieldProps}
-      label={<Label path={props.path} />}
-      name={props.position.join('.')}
       value={value}
       onChange={(e) => setValue(e.target.value)}
       InputProps={{
@@ -65,7 +62,7 @@ interface IProps extends IDefaultProps {
 export const UintInput: React.FC<IProps> = (props) => {
   return (
     <Controller
-      name={props.position.join('.')}
+      name={props.labels.join('.')}
       render={(formProps) => <UintInputCore form={formProps} {...props} />}
     />
 

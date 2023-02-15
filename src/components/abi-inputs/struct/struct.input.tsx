@@ -1,27 +1,26 @@
 import React from 'react'
 
 import { Path } from '../components/path'
-import { AbiInputWithChildren } from '../types'
-import { Input, InputPath } from '../input.component'
+import { AbiInputComponent } from '../abi-input.component'
 import { AbiInputData } from '../components/abi-data'
+import { AbiInputWithChildren, PathAndLabelProps } from '../types'
+import { AbiInputsContainer } from '../abi-inputs.container'
 
 
-export interface IProps {
+export interface IProps extends PathAndLabelProps {
   input: AbiInputWithChildren;
-  position: Array<string | number>
-  path: InputPath[]
 }
 
-export const MethodStructInput: React.FC<IProps> = ({ input, position, path }) => {
+export const MethodStructInput: React.FC<IProps> = ({ input, labels: position, path }) => {
   const children = input.components
     .map((input, i) => {
-      const fPosition = [...position, i]
+      const fLabels = [...position, i]
       const fPath = [...path, input.name]
-      return <Input
+      return <AbiInputComponent
         key={input.name}
         input={input}
-        position={fPosition}
         path={fPath}
+        labels={fLabels}
       />
     })
 
@@ -33,7 +32,9 @@ export const MethodStructInput: React.FC<IProps> = ({ input, position, path }) =
         borderLeftStyle: 'solid',
       }}
     >
-      {children}
+      <AbiInputsContainer>
+        {children}
+      </AbiInputsContainer>
     </AbiInputData>
   )
 }
