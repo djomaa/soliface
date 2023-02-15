@@ -1,49 +1,32 @@
-import React, { useMemo, useState } from 'react'
-
-import Stack from '@mui/material/Stack'
-
-
-import { MethodInput } from '../inputs/base/base.input'
-import { FormContainer } from 'react-hook-form-mui'
-import { useFunctionCtx } from '../ctx'
-
-
-import { Collapser } from '../collapser'
-import { Child } from '../child'
-import Button from '@mui/material/Button'
-import { Collapse } from '@mui/material'
+import React from 'react'
 import { useToggle } from 'react-use'
+import { FormContainer } from 'react-hook-form-mui'
 import { TransitionGroup } from 'react-transition-group'
+
+
 import Box from '@mui/system/Box'
-import { useWeb3 } from 'contexts/chain'
-import assert from 'assert'
-import { useIsMounted } from 'hooks/use-is-mounted'
+import Stack from '@mui/material/Stack'
+import Button from '@mui/material/Button'
+import Collapse from '@mui/material/Collapse'
+
 import { useLogger } from 'hooks/use-logger'
+
+import { Child } from '../child'
+import { useFunctionCtx } from '../ctx'
+import { Collapser } from '../collapser'
+import { BaseInput } from '../inputs/base'
+
+
 import { TxConfKey, TxConfTypeByKey } from './types'
 import { TxConfInputMap } from './tx-conf.inputs'
 
 export const TxConfCore: React.FC = (props) => {
   const [Logger] = useLogger(TxConfCore);
 
-  const { abi, txConfForm } = useFunctionCtx();
-  const { web3 } = useWeb3();
+  const { abi } = useFunctionCtx();
   const [open, toggleOpen] = useToggle(false)
-  const { isMounted } = useIsMounted();
 
-  const fetchGasPrice = React.useCallback(async () => {
-    try {
-      assert(web3);
-      const gasPrice = await web3.eth.getGasPrice();
-      if (!isMounted()) {
-        return;
-      }
-      txConfForm.setValue('gasPrice', gasPrice);
-    } catch (error) {
-      Logger.sub('getGasPrice').error('Failed', error);
-    }
-  }, [web3])
-
-  const fields = useMemo<TxConfKey[]>(() => {
+  const fields = React.useMemo<TxConfKey[]>(() => {
     if (!open && abi.payable) {
       return ['value'];
     } else {
@@ -51,15 +34,15 @@ export const TxConfCore: React.FC = (props) => {
     }
   }, [abi, open]);
 
-  const inputs = useMemo(() => {
+  const inputs = React.useMemo(() => {
     return fields.map((key) => {
       const CustomInput = TxConfInputMap[key];
       if (CustomInput) {
-        return <CustomInput />
+        return <CustomInput key={key} />
       }
       return (
-        <Collapse in={true} key={key}>
-          <MethodInput
+        <Collapse key={key} in={true}>
+          <BaseInput
             position={[key]}
             path={[key]}
             type={TxConfTypeByKey[key] ?? 'hex'}
@@ -94,7 +77,7 @@ export const TxConfCore: React.FC = (props) => {
 
 export const TxConf: React.FC = () => {
   const { txConfForm, abi } = useFunctionCtx();
-  const [open, setOpen] = useState(!!abi.payable);
+  const [open, setOpen] = React.useState(!!abi.payable);
 
   return (
     <Collapser

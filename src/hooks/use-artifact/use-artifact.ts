@@ -3,6 +3,7 @@ import { hashAbi } from 'helpers/abi/hash';
 import { generateAbiSignatureHash } from 'helpers/abi/signature-hash';
 import { safe, safeAsync } from 'helpers/safe';
 import { useLogger } from 'hooks/use-logger';
+import React from 'react';
 import { useEffect, useMemo, useState } from 'react';
 import { AbiItem } from 'types/abi';
 import { useAsyncEffect } from 'use-async-effect';
@@ -10,6 +11,7 @@ import { Key } from './key'
 
 export const useArtifact = (hash: string) => {
   const [Logger] = useLogger(useArtifact, hash);
+  const hashRef = React.useRef<string | undefined>(hash);
 
   const key = useMemo(() => Key(hash), [hash]);
 
@@ -20,6 +22,13 @@ export const useArtifact = (hash: string) => {
   const [error, setError] = useState<Error>();
   const [loading, setLoading] = useState(true);
   const [state, setState] = useState<UseArtifactReturn>({ loading: true })
+
+  useEffect(() => {
+    hashRef.current = hash;
+    return () => {
+      hashRef.current = undefined;
+    }
+  }, [hash]);
 
   useEffect(() => {
     const logger = Logger.sub('effect(rawAbi)');
@@ -64,6 +73,10 @@ export const useArtifact = (hash: string) => {
     const [actualHashError, actualHash] = await safeAsync(() => hashAbi(abi!));
     if (!isMounted()) {
       logger.debug('Not mounted');
+      return;
+    }
+    if (hashRef.current !== hash) {
+      logger.debug('Hash changed');
       return;
     }
     if (actualHashError) {

@@ -3,7 +3,7 @@ import React from 'react'
 import { AbiInput } from 'types/abi'
 import { useLogger } from 'hooks/use-logger'
 
-import { MethodInput } from './base'
+import { BaseInput } from './base'
 import { MethodArrayInput } from './array'
 import { MethodStructInput } from './struct/struct.input'
 import { ARRAY_PATTERN, hasAbiInputChildren } from './types'
@@ -39,7 +39,7 @@ export const Input: React.FC<IProps> = ({ input, path, position }) => {
   }
 
   Logger.debug('Base', input, { hasChildren, isArray })
-  return <MethodInput type={input.type} position={position} path={path} />
+  return <BaseInput type={input.type} position={position} path={path} />
 
 }
 

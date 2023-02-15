@@ -17,7 +17,7 @@ export function buildFunctionParameters(item?: (AbiInput | AbiOutput)[]) {
 
 export function buildFunction(abi: AbiItem) {
   const params = buildFunctionParameters(abi.inputs);
-  return `function ${abi.name}(${params})`
+  return `${abi.type} ${abi.name}(${params})`
 }
 
 export const FunctionRepresentation: React.FC<{ abi: AbiItem }> = ({ abi }) => {

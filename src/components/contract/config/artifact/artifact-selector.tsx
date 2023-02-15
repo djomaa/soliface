@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useMemo } from 'react'
 
 import Stack from '@mui/material/Stack'
 import MenuItem from '@mui/material/MenuItem'
@@ -13,13 +13,6 @@ export const ArtifactSelector: React.FC = () => {
 
   const contractCtx = useContractCtx()
   const { artifactList } = useArtifactList();
-
-  // TODO:! remove, only for developing
-  useEffect(() => {
-    if (artifactList[1]) {
-      contractCtx.setArtifactHash(artifactList[1].hash);
-    }
-  }, [artifactList])
 
   const artifactOptions = useMemo(() => {
     return artifactList.map((abi) => {

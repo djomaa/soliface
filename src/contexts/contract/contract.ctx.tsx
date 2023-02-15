@@ -1,6 +1,7 @@
-import React, { createContext, useState } from 'react'
+import React, { createContext } from 'react'
 
 import { useLogger } from 'hooks/use-logger'
+import { useStore, useStoreKey } from 'contexts/store';
 
 export interface ContractCtxState {
   artifactHash?: string;
@@ -13,16 +14,22 @@ export const ContractCtx = createContext<ContractCtxState | null>(null)
 interface iProps {
   children: React.ReactNode | React.ReactNode[]
 }
+
+const prefix = 'contract';
+const Key = {
+  Address: useStoreKey.Pure(prefix, 'address'),
+  ArtifactHash: useStoreKey.Pure(prefix, 'artifactHash')
+}
 export const ContractCtxProvider: React.FC<iProps> = ({ children }) => {
   const [logger, { logState }] = useLogger(ContractCtxProvider)
 
-  const [address, setAddress] = useState<string>('0xed24fc36d5ee211ea25a80239fb8c4cfd80f12ee')
-  const [artifactHash, setArtifactHash] = useState<string>()
+  const [address, setAddress] = useStore<string>(Key.Address)
+  const [artifactHash, setArtifactHash] = useStore<string>(Key.ArtifactHash)
 
   logState('address', address);
   logState('artifactHash', artifactHash);
 
-  const value = {
+  const value: ContractCtxState = {
     address,
     setAddress,
     artifactHash,

@@ -1,5 +1,6 @@
 import { Typography } from '@mui/material';
 import Box from '@mui/material/Box';
+import { buildFunction } from 'helpers/abi/function';
 import React from 'react'
 import { AbiItem } from 'types/abi'
 import { ArtifactCtxProvider, IArtifactCtxProps } from './ctx'
@@ -13,7 +14,8 @@ const ArtifactApiCore: React.FC<IProps> = (props) => {
   const [functions, setFunctions] = React.useState(props.abi);
 
   const elements = React.useMemo(() => {
-    return functions.map((abi) => <Function abi={abi} />);
+    // TODO: use full abi item key
+    return functions.map((abi) => <Function key={buildFunction(abi)} abi={abi} />);
   }, [functions]);
 
   return (
@@ -22,7 +24,11 @@ const ArtifactApiCore: React.FC<IProps> = (props) => {
         <Search abi={props.abi} setFunctions={setFunctions} />
       </Box>
       {elements.length ? elements : (
-        <Box display='flex' flexDirection='row' justifyContent='center'>
+        <Box
+          display='flex'
+          flexDirection='row'
+          justifyContent='center'
+        >
           <Typography>
             No items found
           </Typography>

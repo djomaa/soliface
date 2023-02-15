@@ -10,3 +10,7 @@ export type UseStateObject<TKey extends string, TType> = {
 } & {
     [key in `set${Capitalize<TKey>}`]: React.Dispatch<React.SetStateAction<TType>>;
   }
+
+export type PropsWithKey<P = unknown> = P & { key: React.Key };
+
+export type ReactKeyedElement = React.ReactElement<PropsWithKey>;

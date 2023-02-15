@@ -22,7 +22,7 @@ const ContractCore: React.FC<ICoreProps> = ({ artifactHash, address }) => {
   if (artifact.loading) {
     return <EmptyContract />
   }
-
+  console.log('artifact', artifact);
   assert(artifact.isExist && !artifact.error,);
   return <ArtifactApi abi={artifact.abi} address={address} />
 }
