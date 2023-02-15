@@ -1,4 +1,5 @@
 import type { AbiItem } from 'web3-utils'
+import type { TransactionConfig as oTxConf } from 'web3-core'
 
 export interface IArtifact {
   hash: string
@@ -11,5 +12,11 @@ export interface IArtifactWithAbi {
   abi: AbiItem[]
 }
 
-export type { AbiItem, AbiInput, AbiOutput } from 'web3-utils'
+export interface TransactionConfig extends oTxConf {
+  value: string | number;
+  gasPrice: string | number;
+}
+
+export type { AbiItem, AbiInput, AbiOutput, StateMutabilityType, AbiType } from 'web3-utils'
+export type { TransactionReceipt, PromiEvent } from 'web3-core';
 export type { AbiCoder } from 'web3-eth-abi'

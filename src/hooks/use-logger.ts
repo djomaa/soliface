@@ -22,5 +22,5 @@ export const useLogger = (keyOrFn: string | Function, ...subs: Stringifiable[]) 
     const utils = { logState }
 
     return [logger, utils] as const
-  }, [])
+  }, [keyOrFn, subs])
 }

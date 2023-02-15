@@ -11,11 +11,10 @@ import CssBaseline from '@mui/material/CssBaseline'
 import { MainPage } from 'pages/main'
 import { Route } from 'constants/route'
 import { ChainPage } from 'pages/chain'
-import { Page404 } from 'pages/page-404'
+import { Page404 } from 'pages/404.page'
 import { Cookies } from 'components/cookies'
 import { QueryCtxProvider } from 'contexts/query'
-import { ModalCtxProvider } from 'contexts/modal'
-import { AbiManagerPage } from 'pages/abi-manager'
+import { ArtifactManagerPage } from 'pages/artifact/manager'
 import { StorageCtxProvider } from 'contexts/store'
 import { ChainManagerPage } from 'pages/chain-manager'
 import { ContractCtxProvider } from 'contexts/contract'
@@ -23,9 +22,10 @@ import { AnalyticsCtxProvider, useAnalytics } from 'contexts/analytics'
 // import 'material-react-toastify/dist/ReactToastify.css';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
-import Box from '@mui/material/Box';
 import { ModalContainer } from 'libs/modals/modal-container';
 import { useLogger } from 'hooks/use-logger';
+import { CreateArtifactPage } from 'pages/artifact/create';
+import { EditArtifactPage } from 'pages/artifact/edit';
 
 
 const Layout: React.FC = () => {
@@ -43,26 +43,24 @@ const Layout: React.FC = () => {
   }, [analytics, location]);
 
   return (
-    <StorageCtxProvider>
-      <QueryCtxProvider>
-        <ModalCtxProvider>
-          <Box>
-            <CssBaseline />
-            <main>
-              <Cookies />
-              <ContractCtxProvider>
-                <Outlet />
-              </ContractCtxProvider>
-            </main>
-            <ToastContainer
-              position="bottom-left"
-              closeButton
-            />
-            <ModalContainer />
-          </Box>
-        </ModalCtxProvider>
-      </QueryCtxProvider>
-    </StorageCtxProvider >
+    <>
+      <CssBaseline />
+      <StorageCtxProvider>
+        <QueryCtxProvider>
+          <main>
+            <Cookies />
+            <ContractCtxProvider>
+              <Outlet />
+            </ContractCtxProvider>
+          </main>
+          <ModalContainer />
+        </QueryCtxProvider>
+      </StorageCtxProvider >
+      <ToastContainer
+        position="bottom-left"
+        closeButton
+      />
+    </>
   )
 }
 
@@ -76,8 +74,8 @@ const router = createBrowserRouter([
         element: <MainPage />,
       },
       {
-        path: Route.AbiManager,
-        element: <AbiManagerPage />
+        path: Route.ArtifactManager,
+        element: <ArtifactManagerPage />
       },
       {
         path: Route.ChainManager,
@@ -86,6 +84,14 @@ const router = createBrowserRouter([
       {
         path: Route.Chain,
         element: <ChainPage />
+      },
+      {
+        path: Route.CreateArtifact,
+        element: <CreateArtifactPage />
+      },
+      {
+        path: Route.EditArtifact,
+        element: <EditArtifactPage />
       },
       {
         path: '*',

@@ -14,7 +14,7 @@ import DialogContent from '@mui/material/DialogContent'
 import { Chain } from 'types/chain'
 
 import { RpcList } from 'components/rpc-list'
-import { Dialog } from 'modals/base-dialog/base.dialog'
+import { Dialog } from 'modals/base/base.dialog'
 import { AsyncModal } from 'libs/modals'
 import { useDefaultRpc } from 'hooks/use-default-rpc'
 
@@ -32,7 +32,6 @@ export const SelectRpcModal: AsyncModal<string, IProps> = ({ chain, ...props }) 
   const [defaultRpc] = useDefaultRpc(chain.chainId);
 
   const handleConnect = () => {
-    console.log('CONNECT FROM RPC MODAL');
     if (!defaultRpc) {
       throw new Error(`${SelectRpcModal.name}: handleConnect: empty defaultRpc`)
     }

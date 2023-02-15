@@ -16,5 +16,13 @@ export class LocalStorage {
   static remove(key: string) {
     localStorage.removeItem(key);
   }
+
+  static update<T>(key: string, value: T) {
+    if (value === undefined) {
+      LocalStorage.remove(key);
+    } else {
+      LocalStorage.put(key, value);
+    }
+  }
 }
 

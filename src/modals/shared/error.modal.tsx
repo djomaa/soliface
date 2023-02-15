@@ -9,10 +9,10 @@ import DialogTitle from '@mui/material/DialogTitle'
 import DialogContent from '@mui/material/DialogContent'
 
 import { Modal } from 'libs/modals'
-import { parseError } from 'utils/error'
+import { parseError } from 'utils/error/parse'
 import style from 'styles/common.module.scss';
 
-import { Dialog } from '../base-dialog/base.dialog'
+import { Dialog } from '../base/base.dialog'
 
 interface IProps {
   title: string;

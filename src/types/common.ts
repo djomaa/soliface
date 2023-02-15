@@ -5,4 +5,6 @@ export interface SafeError {
   details?: string
 }
 
-export type StringifyAble = { toString(): string }; 
+export type StringifyAble = { toString(): string };
+
+export type PartialRequired<T, K extends keyof T> = T & Required<Pick<T, K>>;
