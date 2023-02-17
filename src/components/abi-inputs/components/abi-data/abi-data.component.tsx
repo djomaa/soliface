@@ -31,7 +31,7 @@ export const AbiInputData: React.FC<IProps> = (props) => {
       className={style.Container}
     >
       <Box
-        pl={1} pr={1}
+        // pl={1} pr={1}
         className={style.Header}
       >
         <Grid container
@@ -71,7 +71,9 @@ export const AbiInputData: React.FC<IProps> = (props) => {
       </Box>
       <Collapse in={open}>
         <Child y>
-          <Box pl={1} pb={1}>
+          <Box
+          // pl={1} pb={1}
+          >
             {props.children}
           </Box>
         </Child>

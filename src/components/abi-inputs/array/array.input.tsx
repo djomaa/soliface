@@ -7,14 +7,14 @@ import Box from '@mui/material/Box'
 import Tooltip from '@mui/material/Tooltip'
 import AddIcon from '@mui/icons-material/Add'
 import Collapse from '@mui/material/Collapse'
-import IconButton from '@mui/material/IconButton'
 import RemoveIcon from '@mui/icons-material/Remove'
 
 import { AbiInput } from 'types/abi'
 
-import { AbiInputData } from '../components/abi-data'
 import { AbiInputComponent } from '../abi-input.component'
 import { ARRAY_PATTERN, PathAndLabelProps } from '../types'
+import { ButtonGroup, IconButton } from '@mui/material'
+import { Label } from '../components/label'
 
 export interface IInputProps extends PathAndLabelProps {
   input: AbiInput
@@ -42,12 +42,29 @@ export const MethodArrayInput: React.FC<IInputProps> = ({ input, labels, path })
   const disabled = !!size
   let addRemove = (
     <>
-      <IconButton onClick={() => { incCount() }} disabled={disabled} size='small'>
-        <AddIcon fontSize='small' />
-      </IconButton>
-      <IconButton onClick={() => { decCount() }} disabled={disabled} size='small'>
-        <RemoveIcon fontSize='small' />
-      </IconButton>
+      <ButtonGroup
+        size='small'
+        color='inherit'
+        variant='text'
+        sx={{
+          ':hover': {
+
+          }
+        }}
+      >
+        <IconButton
+          size='small'
+          onClick={() => incCount()}
+        >
+          <AddIcon fontSize='inherit' />
+        </IconButton>
+        <IconButton
+          size='small'
+          onClick={() => decCount()}
+        >
+          <RemoveIcon fontSize='inherit' />
+        </IconButton>
+      </ButtonGroup>
     </>
   )
 
@@ -77,17 +94,12 @@ export const MethodArrayInput: React.FC<IInputProps> = ({ input, labels, path })
   }, [count])
 
   return (
-    <AbiInputData
-      headerTitle={input.name}
-      headerSubtitle={input.internalType}
-      headerActions={addRemove}
-      sx={{
-        borderLeftStyle: 'dotted',
-      }}
-    >
+    <>
+      <Label input={input} action={addRemove} labels={labels} />
       <TransitionGroup>
         {children}
       </TransitionGroup>
-    </AbiInputData>
+    </>
   )
 }
+

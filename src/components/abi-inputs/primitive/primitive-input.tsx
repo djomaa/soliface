@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import { TextFieldProps } from '@mui/material/TextField';
 
@@ -7,8 +7,11 @@ import { ReactKeyedElement } from 'types/react';
 import { HexInput } from './hex/hex.input';
 import { PathAndLabelProps } from '../types';
 import { UintInput, UintInputRE } from './uint'
-import { Label } from '../components/label';
 import { PartialRequired } from 'types/common';
+import { useAbiInputsCtx } from '../abi-inputs.ctx';
+import Box from '@mui/material/Box';
+import { Typography } from '@mui/material';
+import { Path } from '../components/path';
 
 export interface IBaseProps extends PathAndLabelProps {
   type: string;
@@ -17,10 +20,12 @@ export interface IBaseProps extends PathAndLabelProps {
 }
 
 export interface IDefaultProps extends IBaseProps {
-  fieldProps: TextFieldProps & PartialRequired<TextFieldProps, 'name' | 'label'>;
+  fieldProps: TextFieldProps & PartialRequired<TextFieldProps, 'name'>;
 }
 
-export const PrimitiveInput: React.FC<IBaseProps> = (props) => {
+export const PrimitiveInputCore: React.FC<IBaseProps> = (props) => {
+  const { register } = useAbiInputsCtx();
+  const ref = useRef(null);
 
   const defaults: IDefaultProps = {
     type: props.type,
@@ -29,7 +34,8 @@ export const PrimitiveInput: React.FC<IBaseProps> = (props) => {
     startAdornments: props.startAdornments,
     endAdornments: props.endAdornments,
     fieldProps: {
-      label: <Label path={props.path} type={props.type} />,
+      inputRef: ref,
+      // label: <Label path={props.path} type={props.type} />,
       name: props.labels.join('.'),
       fullWidth: true,
       variant: 'outlined',
@@ -39,6 +45,10 @@ export const PrimitiveInput: React.FC<IBaseProps> = (props) => {
     }
   }
 
+  useEffect(() => {
+    register(props.labels, ref);
+  }, [])
+
   if (UintInputRE.test(props.type)) {
     const match = UintInputRE.exec(props.type);
     const size = match![1] ? Number(match![1]) : undefined;
@@ -47,4 +57,26 @@ export const PrimitiveInput: React.FC<IBaseProps> = (props) => {
 
   return <HexInput {...defaults} />
 
+}
+
+export const PrimitiveInput: React.FC<IBaseProps> = (props) => {
+  return (
+    <Box
+      sx={{
+        padding: '0.5rem',
+        ':hover': {
+          backgroundColor: '#fafafa',
+          // paddingTop: '0.5rem',
+        }
+      }}
+    >
+      <Typography variant='subtitle2'>
+        <Path parts={props.labels} />
+      </Typography>
+      <Typography variant='overline' style={{ textTransform: 'unset' }}>
+        {props.type}
+      </Typography>
+      <PrimitiveInputCore {...props} />
+    </Box>
+  )
 }
