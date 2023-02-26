@@ -1,0 +1,5 @@
+SoliFace is a application that allows users to interact with VM (virtual machine) contracts on any Ethereum VM (EVM) -compitable blockchain. With SoliFace, users can easily select a network from the provided list or connect their blockchain wallet and use wallet's network, select or upload ABI, and specify a contract that they want to use.
+
+Once the contract has been selected, SoliFace provides a list of cards, each of which represents a function defined in the ABI. Each function has inputs for function parameters specified in the corresponding ABI item, as well as tx parameters like 'from', 'to' (the specified contract address), and 'value' and others. The user can perform the following actions on each card: make a call, write, encode ABI (function parameters), or estimate gas.
+
+The call result can be decoded according to the ABI item, making it easy for users to interact with smart contracts on any Ethereum virtual machine blockchain. SoliFace makes it easy for developers to write and test smart contracts, and for users to interact with them without needing to know how to code.
