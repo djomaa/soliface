@@ -8,7 +8,7 @@ import { HexInput } from './hex/hex.input';
 import { PathAndLabelProps } from '../types';
 import { UintInput, UintInputRE } from './uint'
 import { PartialRequired } from 'types/common';
-import { useAbiInputsCtx } from '../abi-inputs.ctx';
+import { useAbiInputsCtx } from 'components/abi-inputs';
 import Box from '@mui/material/Box';
 import { Typography } from '@mui/material';
 import { Path } from '../components/path';

@@ -4,7 +4,7 @@ import { FormContainer } from 'react-hook-form-mui';
 
 
 import { Child } from 'components/child';
-import { AbiInputsComponent, useAbiInputs } from 'components/abi-inputs';
+import { AbiInputsComponent, useAbiInputs } from 'components/abi-input';
 
 import { useFunctionCtx } from '../ctx';
 import { Collapser } from '../collapser';

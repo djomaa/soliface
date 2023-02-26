@@ -2,7 +2,7 @@ import React from 'react'
 
 import { AbiInputComponent } from '../abi-input.component'
 import { AbiInputWithChildren, PathAndLabelProps } from '../types'
-import { AbiInputsContainer } from '../abi-inputs.container'
+import { AbiInputsContainer } from 'components/abi-inputs'
 import { Label } from '../components/label'
 
 

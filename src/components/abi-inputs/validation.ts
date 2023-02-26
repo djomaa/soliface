@@ -4,7 +4,7 @@ import assert from 'assert';
 import { AbiInput, AbiItem } from 'types/abi'
 import { PartialRequired } from 'types/common';
 
-import { ARRAY_PATTERN } from './types';
+import { ARRAY_PATTERN } from '../abi-input/types';
 import { ArgumentsObject } from '../artifact/api/function/ctx/function.ctx-types';
 
 

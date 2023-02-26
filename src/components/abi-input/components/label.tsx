@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { AbiInput } from 'types/abi';
 import { InputLabel } from '../types';
-import { useAbiInputsCtx } from '../abi-inputs.ctx';
+import { useAbiInputsCtx } from 'components/abi-inputs';
 
 interface IProps {
   input: AbiInput;
