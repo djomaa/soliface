@@ -23,9 +23,12 @@ export interface IDefaultProps extends IBaseProps {
   fieldProps: TextFieldProps & PartialRequired<TextFieldProps, 'name'>;
 }
 
-export const PrimitiveInputCore: React.FC<IBaseProps> = (props) => {
-  const { register } = useAbiInputsCtx();
-  const ref = useRef(null);
+interface ICoreProps extends IBaseProps {
+  ref: React.RefObject<HTMLElement>
+}
+
+export const PrimitiveInputCore: React.FC<ICoreProps> = (props) => {
+
 
   const defaults: IDefaultProps = {
     type: props.type,
@@ -34,7 +37,7 @@ export const PrimitiveInputCore: React.FC<IBaseProps> = (props) => {
     startAdornments: props.startAdornments,
     endAdornments: props.endAdornments,
     fieldProps: {
-      inputRef: ref,
+      inputRef: props.ref,
       // label: <Label path={props.path} type={props.type} />,
       name: props.labels.join('.'),
       fullWidth: true,
@@ -44,10 +47,6 @@ export const PrimitiveInputCore: React.FC<IBaseProps> = (props) => {
       }
     }
   }
-
-  useEffect(() => {
-    register(props.labels, ref);
-  }, [])
 
   if (UintInputRE.test(props.type)) {
     const match = UintInputRE.exec(props.type);
@@ -60,8 +59,16 @@ export const PrimitiveInputCore: React.FC<IBaseProps> = (props) => {
 }
 
 export const PrimitiveInput: React.FC<IBaseProps> = (props) => {
+  const { register } = useAbiInputsCtx();
+  const labelRef = useRef(null);
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    register(props.labels, labelRef, inputRef)
+  }, [])
   return (
     <Box
+      ref={labelRef}
       sx={{
         padding: '0.5rem',
         ':hover': {
@@ -76,7 +83,7 @@ export const PrimitiveInput: React.FC<IBaseProps> = (props) => {
       <Typography variant='overline' style={{ textTransform: 'unset' }}>
         {props.type}
       </Typography>
-      <PrimitiveInputCore {...props} />
+      <PrimitiveInputCore {...props} ref={inputRef} />
     </Box>
   )
 }

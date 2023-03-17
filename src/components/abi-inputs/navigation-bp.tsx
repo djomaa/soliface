@@ -3,7 +3,7 @@ import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import { useLogger } from 'hooks/use-logger';
 import React, { useEffect, useRef } from 'react'
-import { useAbiInputsCtx } from './ctx'
+import { MapItem, useAbiInputsCtx } from './ctx'
 import ArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import ArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import { useToggle } from 'react-use';
@@ -15,8 +15,8 @@ class RefClass {
 
 }
 
-type Root = React.RefObject<HTMLElement>;
-type Item = { root: Root, id: string, childrenMap?: ItemMap };
+type Root = MapItem;
+type Item = { ref: Root, id: string, childrenMap?: ItemMap };
 type ItemMap = { [k: string]: Item }
 
 function Nav(obj: ItemMap, padding: number = 0.5) {
@@ -29,11 +29,11 @@ function Nav(obj: ItemMap, padding: number = 0.5) {
 
 interface INavListProps extends Item {
   title: string;
-  // root: Root;
   childrenMap: ItemMap;
   padding: number;
 }
-const NavList: React.FC<INavListProps> = ({ title, root, id, childrenMap, padding }) => {
+const NavList: React.FC<INavListProps> = ({ title, ref, id, childrenMap, padding }) => {
+  console.log("🚀 ~ file: navigation.tsx:37 ~ ref:", ref)
   const [open, toggleOpen] = useToggle(true);
 
   const Icon = open ? ArrowDownIcon : ArrowRightIcon;
@@ -45,7 +45,7 @@ const NavList: React.FC<INavListProps> = ({ title, root, id, childrenMap, paddin
       subheader={(
         <NavPrimitve
           title={title}
-          root={root}
+          ref={ref}
           id={id}
           padding={`calc(${padding}rem)`}
         >
@@ -86,13 +86,12 @@ const NavList: React.FC<INavListProps> = ({ title, root, id, childrenMap, paddin
   )
 }
 
-function NavItem(key: string, { root, id, childrenMap }: Item, padding: number = 0) {
-  console.log("🚀 ~ file: navigation.tsx:92 ~ NavItem ~ childrenMap:", id, childrenMap)
+function NavItem(key: string, { ref, id, childrenMap }: Item, padding: number = 0) {
   if (!childrenMap) {
     return (
       <NavPrimitve
         title={key}
-        root={root}
+        ref={ref}
         id={id}
         padding={`calc(${padding}rem + 0.5em)`}
       >
@@ -116,49 +115,49 @@ function NavItem(key: string, { root, id, childrenMap }: Item, padding: number =
     )
   }
   return (
-    <NavList title={key} id={id} root={root} childrenMap={childrenMap} padding={padding} />
+    <NavList title={key} id={id} ref={ref} childrenMap={childrenMap} padding={padding} />
 
   )
 }
 
 interface INavPrimitiveProps extends React.PropsWithChildren {
   title: string;
-  root: Root;
+  ref: Root;
   id: string;
   padding: string;
 }
-const NavPrimitve: React.FC<INavPrimitiveProps> = ({ title, id, root, padding, children }) => {
-  const { active, navContainer } = useAbiInputsCtx();
+const NavPrimitve: React.FC<INavPrimitiveProps> = ({ title, id, ref, padding, children }) => {
+  const { setActive, active, navContainer } = useAbiInputsCtx();
 
-  const ref = useRef<HTMLDivElement>(null);
+  const itemRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (active === id) {
-      // ref.current!.scrollIntoView({ block: 'nearest' });
-      ref.current!.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'auto' });
-      // ref.current!.scroll
-      const to = ref.current!.offsetTop
-      console.log('&', to)
-      // navContainer?.scrollBy({ top: to })
+      itemRef.current!.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'auto' });
     }
   }, [active])
 
-  console.log("🚀 ~ file: navigation.tsx:113 ~ active:", active, title)
-
   return (
     <ListItemButton
-      ref={ref}
+      selected={active === id}
+      ref={itemRef}
       key={title}
       // dense
       style={{
         padding: 0,
         paddingLeft: padding,
-        border: active === id ? '1px solid red' : undefined,
+        // border: active === id ? '1px solid red' : undefined,
       }}
       onClick={() => {
-        console.log('click', root)
-        root.current!.scrollIntoView({ block: 'nearest' });
-        root.current!.focus();
+        console.log('click', ref)
+        if (ref.input?.current) {
+          ref.input.current.onfocus = () => {
+            console.log('set active');
+            setActive(id);
+          }
+        }
+        ref.label.current?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+        ref.input?.current?.focus();
       }}
     >
       {children}
@@ -188,7 +187,7 @@ export const Navigation: React.FC = (props) => {
         const isLast = i === parts.length - 1;
         if (isLast) {
           sLogger.debug("Set to", acc[part])
-          acc[part] = { id: key, root: value };
+          acc[part] = { id: key, ref: value };
           // acc[part] = { root: 123 };
           return acc;
         }
