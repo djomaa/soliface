@@ -37,7 +37,7 @@ function removeArrayLevel(input: AbiInput): AbiInput {
 export const MethodArrayInput: React.FC<IInputProps> = ({ input, labels, path }) => {
   // TODO: check input props change
   const size = getArraySize(input.type);
-  const [count, { inc: incCount, dec: decCount }] = useCounter(size ?? 1, size ?? null, size ?? 1)
+  const [count, { inc: incCount, dec: decCount }] = useCounter(size ?? 1, size ?? null, size ?? 0)
 
   const disabled = !!size
   let addRemove = (

@@ -1,17 +1,17 @@
 import React, { useEffect, useRef } from 'react';
 
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 import { TextFieldProps } from '@mui/material/TextField';
 
+import { PartialRequired } from 'types/common';
 import { ReactKeyedElement } from 'types/react';
+import { useAbiInputsCtx } from 'components/abi-inputs';
 
+import { Path } from '../components/path';
 import { HexInput } from './hex/hex.input';
 import { PathAndLabelProps } from '../types';
 import { UintInput, UintInputRE } from './uint'
-import { PartialRequired } from 'types/common';
-import { useAbiInputsCtx } from 'components/abi-inputs';
-import Box from '@mui/material/Box';
-import { Typography } from '@mui/material';
-import { Path } from '../components/path';
 
 export interface IBaseProps extends PathAndLabelProps {
   type: string;
@@ -21,10 +21,6 @@ export interface IBaseProps extends PathAndLabelProps {
 
 export interface IDefaultProps extends IBaseProps {
   fieldProps: TextFieldProps & PartialRequired<TextFieldProps, 'name'>;
-}
-
-interface ICoreProps extends IBaseProps {
-  ref: React.RefObject<HTMLElement>
 }
 
 export const PrimitiveInputCore = React.forwardRef<HTMLElement, IBaseProps>((props, ref) => {
@@ -58,17 +54,18 @@ export const PrimitiveInputCore = React.forwardRef<HTMLElement, IBaseProps>((pro
 });
 
 export const PrimitiveInput: React.FC<IBaseProps> = (props) => {
-  const { register } = useAbiInputsCtx();
+  const { register, unregister } = useAbiInputsCtx();
   const labelRef = useRef(null);
   const inputRef = useRef(null);
 
   useEffect(() => {
-    register(props.labels, labelRef, inputRef)
+    register(props.labels, labelRef, inputRef);
+    return () => {
+      unregister(props.labels);
+    }
   }, [])
 
-  useEffect(() => {
-    console.log('inputRef', inputRef)
-  }, [inputRef]);
+
   return (
     <Box
       ref={labelRef}
