@@ -139,7 +139,6 @@ export const StoreMigrationCore: React.FC<ICoreProps> = (props) => {
 export const StoreMigration = () => {
   const [done, setDone] = useState(false);
 
-  console.log("DONE");
   if (done) {
     return <></>;
   }

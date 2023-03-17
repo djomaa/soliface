@@ -2,7 +2,7 @@ import { AbiInput } from 'types/abi';
 import { PartialRequired, StringifyAble } from 'types/common';
 
 export type AbiInputWithChildren = PartialRequired<AbiInput, 'components'>;
-export type InputPosition = StringifyAble;
+export type InputLabel = StringifyAble;
 export type InputPath = StringifyAble;
 export type PathAndLabelProps = {
   /**
@@ -12,7 +12,7 @@ export type PathAndLabelProps = {
   /**
    * Path of input, displayed as label
    */
-  labels: InputPosition[];
+  labels: InputLabel[];
 }
 
 export function hasAbiInputChildren(abi: AbiInput): abi is AbiInputWithChildren {

@@ -4,7 +4,7 @@ import { FormContainer } from 'react-hook-form-mui';
 
 
 import { Child } from 'components/child';
-import { AbiInputsContainer, useAbiInputs } from 'components/abi-inputs';
+import { AbiInputsComponent, useAbiInputs } from 'components/abi-input';
 
 import { useFunctionCtx } from '../ctx';
 import { Collapser } from '../collapser';
@@ -15,14 +15,13 @@ interface IProps {
 
 const InputsCore: React.FC<IProps> = () => {
   const { abi, inputsForm } = useFunctionCtx();
+  console.log("🚀 ~ file: inputs.component.tsx:18 ~ inputsForm", inputsForm)
   const inputs = useAbiInputs({ inputs: abi.inputs!, prefix: 'params' });
 
   return (
     <FormContainer formContext={inputsForm}>
       <Child x y>
-        <AbiInputsContainer>
-          {inputs}
-        </AbiInputsContainer>
+        <AbiInputsComponent prefix='params' inputs={abi.inputs!} />
       </Child>
     </FormContainer>
   );

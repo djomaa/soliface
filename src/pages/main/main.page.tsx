@@ -25,7 +25,7 @@ export const MainPage: React.FC = () => {
             <span style={{
               borderBottom: '3px solid',
               fontWeight: '450',
-              borderImage: 'linear-gradient(to right, black , white) 1',
+              borderImage: 'linear-gradient(to right, black, white) 1',
             }}>
               Soli
             </span>

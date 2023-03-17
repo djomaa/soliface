@@ -13,7 +13,7 @@ import { useLogger } from 'hooks/use-logger';
 import { useIsMounted } from 'hooks/use-is-mounted';
 
 import { useFunctionCtx } from '../../../ctx';
-import { PrimitiveInput } from 'components/abi-inputs/primitive';
+import { PrimitiveInput } from 'components/abi-input/primitive';
 
 export const GasPriceInput: React.FC = () => {
   const [Logger] = useLogger(GasPriceInput);

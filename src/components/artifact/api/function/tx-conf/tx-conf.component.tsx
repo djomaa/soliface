@@ -10,7 +10,7 @@ import Collapse from '@mui/material/Collapse'
 
 import { Child } from 'components/child'
 import { useLogger } from 'hooks/use-logger'
-import { PrimitiveInput } from 'components/abi-inputs/primitive'
+import { PrimitiveInput } from 'components/abi-input/primitive'
 import style from 'components/abi-inputs/abi-inputs.module.scss'
 
 import { useFunctionCtx } from '../ctx'

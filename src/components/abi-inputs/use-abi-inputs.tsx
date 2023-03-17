@@ -3,7 +3,7 @@ import React from 'react';
 
 import { AbiInput } from 'types/abi';
 
-import { AbiInputComponent } from './abi-input.component';
+import { AbiInputComponent } from '../abi-input/abi-input.component';
 
 interface IProps {
   inputs: AbiInput[];
