@@ -1,8 +1,9 @@
-import ListItemText from '@mui/material/ListItemText';
 import React from 'react';
-import { NavPrimitiveItem } from './list-primitive-item';
-import { NavSubList } from './sub-list';
+import ListItemText from '@mui/material/ListItemText';
+
 import { NavMapItem } from './types';
+import { NavSubList } from './sub-list';
+import { NavPrimitiveItem } from './list-primitive-item';
 
 interface IProps {
   field: string;

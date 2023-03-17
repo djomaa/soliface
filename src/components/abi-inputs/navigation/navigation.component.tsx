@@ -1,9 +1,12 @@
-import List from '@mui/material/List';
-import { useLogger } from 'hooks/use-logger';
 import React from 'react';
-import { useAbiInputsCtx } from '../ctx';
-import { NavListItems } from './list-items';
+
+import List from '@mui/material/List';
+
+import { useLogger } from 'hooks/use-logger';
+
 import { NavMap } from './types';
+import { NavListItems } from './list-items';
+import { useAbiInputsCtx } from '../ctx';
 
 export const Navigation: React.FC = (props) => {
   const [Logger] = useLogger(Navigation);

@@ -1,15 +1,15 @@
 import { useToggle } from 'react-use';
 
+import List from '@mui/material/List';
+import Collapse from '@mui/material/Collapse';
+import ListItemText from '@mui/material/ListItemText';
 import ArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import ArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 
-import { NavMapParentItem } from './types';
-import List from '@mui/material/List';
-import { NavPrimitiveItem } from './list-primitive-item';
 import React from 'react';
-import ListItemText from '@mui/material/ListItemText';
-import Collapse from '@mui/material/Collapse';
+import { NavMapParentItem } from './types';
 import { NavListItems } from './list-items';
+import { NavPrimitiveItem } from './list-primitive-item';
 
 interface IProps {
   field: string;
