@@ -27,8 +27,7 @@ interface ICoreProps extends IBaseProps {
   ref: React.RefObject<HTMLElement>
 }
 
-export const PrimitiveInputCore: React.FC<ICoreProps> = (props) => {
-
+export const PrimitiveInputCore = React.forwardRef<HTMLElement, IBaseProps>((props, ref) => {
 
   const defaults: IDefaultProps = {
     type: props.type,
@@ -37,8 +36,8 @@ export const PrimitiveInputCore: React.FC<ICoreProps> = (props) => {
     startAdornments: props.startAdornments,
     endAdornments: props.endAdornments,
     fieldProps: {
-      inputRef: props.ref,
-      // label: <Label path={props.path} type={props.type} />,
+      // inputRef: (...a: any[]) => console.log('set ref', a),
+      inputRef: ref,
       name: props.labels.join('.'),
       fullWidth: true,
       variant: 'outlined',
@@ -56,7 +55,7 @@ export const PrimitiveInputCore: React.FC<ICoreProps> = (props) => {
 
   return <HexInput {...defaults} />
 
-}
+});
 
 export const PrimitiveInput: React.FC<IBaseProps> = (props) => {
   const { register } = useAbiInputsCtx();
@@ -66,6 +65,10 @@ export const PrimitiveInput: React.FC<IBaseProps> = (props) => {
   useEffect(() => {
     register(props.labels, labelRef, inputRef)
   }, [])
+
+  useEffect(() => {
+    console.log('inputRef', inputRef)
+  }, [inputRef]);
   return (
     <Box
       ref={labelRef}

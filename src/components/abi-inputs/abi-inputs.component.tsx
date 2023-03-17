@@ -59,57 +59,6 @@ export const AbiInputsComponentCore: React.FC<IProps> = ({ inputs, prefix }) => 
               borderLeft: '1px solid',
               overflowY: 'scroll',
             }}
-            onScroll={e => {
-              const parent = e.currentTarget
-              const parentRect = parent.getBoundingClientRect();
-              const maxScrollTop = parent.scrollHeight - parent.clientTop;
-              console.log("🚀 ~ file: abi-inputs.container.tsx:28 ~ y:", parent)
-              const center = parentRect.top + parentRect.height / 2;
-              let minDiff: number | undefined = 0;
-              let el;
-              for (const [key, ref] of ctx.map.entries()) {
-                if (!ref.label) {
-                  continue;
-                }
-                const child = ref.label.current!;
-                const childRect = child.getBoundingClientRect();
-                const childCenter = childRect.top + childRect.height / 2;
-                if (parent.scrollTop === 0) {
-                  const diff = Math.abs(childRect.top - parentRect.top);
-                  if (!minDiff || diff < minDiff) {
-                    minDiff = diff;
-                    el = key;
-
-                  }
-                } else if (Math.ceil(parent.scrollHeight - parent.scrollTop) === parent.clientHeight) {
-                  const diff = Math.abs(childRect.bottom - parentRect.bottom);
-                  if (!minDiff || diff < minDiff) {
-                    minDiff = diff;
-                    el = key;
-                  }
-                } else {
-                  const diff = Math.abs(childCenter - center);
-                  console.log('^', { childCenter, center, diff, minDiff, childRect, parentRect, parentScrollTop: parent.scrollTop }, child)
-
-                  if (!minDiff) {
-                    minDiff = diff;
-                    el = key;
-                  } else {
-                    if (diff < minDiff) {
-                      minDiff = diff;
-                      el = key;
-                    } else {
-                      // el = child;
-                      console.log('^ break');
-
-                      break;
-                    }
-                  }
-                }
-              }
-              ctx.setActive(el);
-              // console.log('!!!DONE', el)
-            }}
           >
             <AbiInputsContainer>
               {elements}
