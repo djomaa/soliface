@@ -65,16 +65,3 @@ export const FunctionCore: React.FC = (props) => {
 }
 
 export const Function = withCtx(FunctionCtxProvider, FunctionCore);
-// export const Function: React.FC<IProps> = (props) => {
-
-//   console.log('Function render counter');
-//   assert(props.abi.type === 'function');
-
-
-
-//   return (
-//     <FunctionCtxProvider abi={props.abi}>
-//       <FunctionCore />
-//     </FunctionCtxProvider>
-//   )
-// }

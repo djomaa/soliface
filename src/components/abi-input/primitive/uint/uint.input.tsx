@@ -43,7 +43,7 @@ const UintInputCore: React.FC<ICoreProps> = (props) => {
   return (
     <TextField
       {...props.fieldProps}
-      value={value}
+      value={value ?? ''}
       onChange={(e) => setValue(e.target.value)}
       InputProps={{
         startAdornment: useAdornments('start', ...props.startAdornments ?? []),
@@ -62,7 +62,7 @@ interface IProps extends IDefaultProps {
 export const UintInput: React.FC<IProps> = (props) => {
   return (
     <Controller
-      name={props.labels.join('.')}
+      name={props.fieldProps.name}
       render={(formProps) => <UintInputCore form={formProps} {...props} />}
     />
 

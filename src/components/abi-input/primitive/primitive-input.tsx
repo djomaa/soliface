@@ -34,7 +34,7 @@ export const PrimitiveInputCore = React.forwardRef<HTMLElement, IBaseProps>((pro
     fieldProps: {
       // inputRef: (...a: any[]) => console.log('set ref', a),
       inputRef: ref,
-      name: props.labels.join('.'),
+      name: props.path.join('.'),
       fullWidth: true,
       variant: 'outlined',
       InputLabelProps: {
@@ -54,14 +54,17 @@ export const PrimitiveInputCore = React.forwardRef<HTMLElement, IBaseProps>((pro
 });
 
 export const PrimitiveInput: React.FC<IBaseProps> = (props) => {
-  const { register, unregister } = useAbiInputsCtx();
+  const ctx = useAbiInputsCtx.orEmpty();
   const labelRef = useRef(null);
   const inputRef = useRef(null);
 
   useEffect(() => {
-    register(props.labels, labelRef, inputRef);
+    if (!ctx) {
+      return;
+    }
+    ctx.register(props.labels, labelRef, inputRef);
     return () => {
-      unregister(props.labels);
+      ctx.unregister(props.labels);
     }
   }, [])
 

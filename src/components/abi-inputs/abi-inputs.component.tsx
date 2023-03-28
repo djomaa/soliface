@@ -25,8 +25,6 @@ export const AbiInputsComponentCore: React.FC<IProps> = ({ inputs, prefix }) => 
     Logger.sub('useEffect(ctx.elements)').debug(ctx.map);
   }, [ctx])
 
-
-
   const elements = React.useMemo(() => {
     return inputs.map<React.ReactElement<{ labels: any[] }>>((input, i) => {
       return <AbiInputComponent key={input.name} input={input} labels={[input.name]} path={[prefix, i]} />

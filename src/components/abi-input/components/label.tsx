@@ -13,12 +13,15 @@ interface IProps {
   action?: React.ReactElement;
 }
 export const Label: React.FC<IProps> = ({ input, labels, action }) => {
-  const { register } = useAbiInputsCtx();
+  const ctx = useAbiInputsCtx.orEmpty();
 
   const ref = React.useRef(null);
 
   useEffect(() => {
-    register(labels, ref);
+    if (!ctx) {
+      return;
+    }
+    ctx.register(labels, ref);
   }, [labels, ref])
 
   return (

@@ -38,7 +38,6 @@ const Layout: React.FC = () => {
   // }, [location])
 
   useEffect(() => {
-    console.log('process.env.VERSION', process.env);
     Logger.debug('Page changed', location);
     analytics.page({})
   }, [analytics, location]);

@@ -1,5 +1,5 @@
 import React from 'react'
-import { useForm } from 'react-hook-form';
+import { Resolver, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { AbiItem } from 'types/abi'
@@ -13,26 +13,27 @@ import { useChainCtx } from 'contexts/chain';
 interface IProps {
   abi: AbiItem;
 }
-type a = [string, ...string[]];
+
 export const FunctionCtxProvider: React.FC<React.PropsWithChildren<IProps>> = ({ abi, children }) => {
-  const Logger = useLogger(FunctionCtxProvider);
+  const [Logger] = useLogger(FunctionCtxProvider);
   const [result, setResult] = React.useState<React.ReactElement>()
   const { account } = useChainCtx();
 
   const inputsFormResolver = React.useMemo(() => {
+    const logger = Logger.sub('inputs-form');
     if (!abi.inputs) {
       return;
     }
     const schema = createAbiItemSchema(abi);
     // return yupResolver(schema);
-
-    // @ts-ignore
-    return (...args: any) => yupResolver(schema)(...args)
-      .then(v => {
-        console.log('Resolved', v);
-        return v
-      });
-  }, [abi])
+    const resolver: Resolver<ArgumentsObject> = async (values, context, options) => {
+      logger.debug('Resolving..', values);
+      const result = await yupResolver(schema)(values, context, options);
+      logger.debug('Resolved', result);
+      return result;
+    };
+    return resolver;
+  }, [abi]);
 
   const inputsForm = useForm<ArgumentsObject>({
     defaultValues: { params: [] },

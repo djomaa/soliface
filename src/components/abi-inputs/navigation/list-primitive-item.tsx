@@ -23,7 +23,6 @@ export const NavPrimitiveItem: React.FC<IProps> = ({
         paddingLeft: padding,
       }}
       onClick={() => {
-        console.log('click', ref);
         ref.label.current?.scrollIntoView({ block: 'nearest', behavior: 'auto' });
         if (ref.input) {
           ref.input.current!.focus();
