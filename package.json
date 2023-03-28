@@ -4,7 +4,7 @@
     "name": "Demid Mosko",
     "email": "demid.mosko@gmail.com"
   },
-  "version": "0.2.0",
+  "version": "0.3.0",
   "dependencies": {
     "@analytics/google-analytics": "^1.0.5",
     "@emotion/react": "latest",
