@@ -7,6 +7,7 @@ import { ChainCtxProvider } from 'contexts/chain'
 import { MainPageAppBar } from './components/app-bar'
 import { PageContainer } from 'components/page-container'
 import Typography from '@mui/material/Typography'
+import { Footer } from 'components/footer'
 
 export const MainPage: React.FC = () => {
   useAppTitle();
@@ -45,6 +46,7 @@ export const MainPage: React.FC = () => {
         </Typography>
         <Contract />
       </PageContainer>
+      <Footer />
 
     </ChainCtxProvider >
   )
