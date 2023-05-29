@@ -1,7 +1,8 @@
 import assert from 'assert';
+import { useMemo } from 'react';
 import { useStoreKeyValue } from 'contexts/store'
 import { useLogger } from 'hooks/use-logger';
-import { useCallback, useMemo } from 'react';
+
 import { Key } from './key';
 import { IArtifactInfo } from './types';
 import { useDefaultArtifacts } from './use-default-artifacts';
@@ -13,7 +14,7 @@ const pattern = new RegExp(Key(hashRegExp.source).name);
 export const useArtifactList = () => {
   const [Logger] = useLogger(useArtifactList);
 
-  const [oData, oSet] = useStoreKeyValue<string>(pattern);
+  const [oData] = useStoreKeyValue<string>(pattern);
 
   const defaultItems = useDefaultArtifacts();
 
@@ -22,7 +23,7 @@ export const useArtifactList = () => {
     const result = [...oData.entries()].map<IArtifactInfo>(([key, value]) => {
       const match = key.match(pattern);
       Logger.debug('Parsing key', { key });
-      assert(match, `should be matched, bc the pattern already tested in ${useStoreKeyValue.name}`);
+      assert(match, `should match, bc the pattern already tested in ${useStoreKeyValue.name}`);
       return {
         name: value,
         hash: match[1]
@@ -49,16 +50,6 @@ export const useArtifactList = () => {
     return result;
   }, [storedItems, defaultItems]);
 
-  // const add = (hash: string) => {
-
-  // }
-
-  const remove = useCallback((hash: string) => {
-    const key = Key(hash);
-    oSet(key.name, undefined);
-    oSet(key.abi, undefined);
-  }, []);
-
-  return { artifactList: list, removeArtifact: remove };
+  return { artifactList: list };
 
 }

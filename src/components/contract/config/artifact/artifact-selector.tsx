@@ -10,13 +10,13 @@ import { useArtifactList } from 'hooks/use-artifact'
 import { toast } from 'react-toastify'
 
 export const ArtifactSelector: React.FC = () => {
-  const [Logger, { logState }] = useLogger(ArtifactSelector.name)
+  const [Logger] = useLogger(ArtifactSelector)
 
   const contractCtx = useContractCtx()
   const { artifactList } = useArtifactList();
 
   useEffect(() => {
-    const logger = Logger.sub(ArtifactSelector, 'useEffect([contractCtx.artifactHash, artifactList])');
+    const logger = Logger.sub('useEffect([contractCtx.artifactHash, artifactList])');
     if (!contractCtx.artifactHash) {
       return;
     }
