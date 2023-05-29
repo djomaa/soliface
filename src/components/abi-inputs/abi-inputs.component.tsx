@@ -43,7 +43,6 @@ export const AbiInputsComponentCore: React.FC<IProps> = ({ inputs, prefix }) => 
         <Box
           ref={(node) => ctx.setInputsContainer(node as any as HTMLElement)}
           style={{
-            // minWidth: '70%',
             width: '100%',
             maxHeight: '100%',
             borderImage: 'linear-gradient(to right, white, black, white) 10%',
