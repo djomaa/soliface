@@ -1,5 +1,4 @@
 import Box from '@mui/material/Box';
-import Grid from '@mui/material/Unstable_Grid2/Grid2';
 import { useLogger } from 'hooks/use-logger';
 import React, { useEffect } from 'react';
 
@@ -34,36 +33,30 @@ export const AbiInputsComponentCore: React.FC<IProps> = ({ inputs, prefix }) => 
   return (
     <Box
     >
-      <Grid container>
-        <Grid xs={4}>
-          <Box
-            ref={(node) => ctx.setNavContainer(node as any as HTMLElement)}
-            style={{
-              maxHeight: '50vh',
-              overflowY: 'scroll',
-            }}
-          >
-            <Navigation />
-          </Box>
-        </Grid>
-        <Grid xs>
-          <Box
-            ref={(node) => ctx.setInputsContainer(node as any as HTMLElement)}
-            style={{
-              maxHeight: '50vh',
-              borderImage: 'linear-gradient(to right, white, black, white) 10%',
-              borderTop: '1px solid',
-              borderBottom: '1px solid',
-              borderLeft: '1px solid',
-              overflowY: 'scroll',
-            }}
-          >
-            <AbiInputsContainer>
-              {elements}
-            </AbiInputsContainer>
-          </Box>
-        </Grid>
-      </Grid>
+      <Box
+        sx={{
+          flexDirection: 'row',
+          display: 'flex',
+        }}
+      >
+        <Navigation />
+        <Box
+          ref={(node) => ctx.setInputsContainer(node as any as HTMLElement)}
+          style={{
+            width: '100%',
+            maxHeight: '100%',
+            borderImage: 'linear-gradient(to right, white, black, white) 10%',
+            borderTop: '1px solid',
+            borderBottom: '1px solid',
+            borderLeft: '1px solid',
+            overflowY: 'scroll',
+          }}
+        >
+          <AbiInputsContainer>
+            {elements}
+          </AbiInputsContainer>
+        </Box>
+      </Box>
     </Box >
   )
 }

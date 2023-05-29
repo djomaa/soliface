@@ -1,19 +1,23 @@
+import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
 import React, { useEffect, useMemo } from 'react'
 
 import Stack from '@mui/material/Stack'
 import MenuItem from '@mui/material/MenuItem'
 import TextField from '@mui/material/TextField'
 
+import { Route } from 'constants/route'
 import { useLogger } from 'hooks/use-logger'
 import { useContractCtx } from 'contexts/contract'
 import { useArtifactList } from 'hooks/use-artifact'
-import { toast } from 'react-toastify'
 
 export const ArtifactSelector: React.FC = () => {
   const [Logger] = useLogger(ArtifactSelector)
 
   const contractCtx = useContractCtx()
   const { artifactList } = useArtifactList();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const logger = Logger.sub('useEffect([contractCtx.artifactHash, artifactList])');
@@ -29,6 +33,18 @@ export const ArtifactSelector: React.FC = () => {
   }, [contractCtx.artifactHash, artifactList]);
 
   const artifactOptions = useMemo(() => {
+    if (!artifactList.length) {
+      return [(
+        <MenuItem
+          key='empty'
+          onClick={() => {
+            navigate(Route.ArtifactManager);
+          }}
+        >
+          You don't have any artifacts added. Press here to navigate to artifact manager.
+        </MenuItem>
+      )];
+    }
     return artifactList.map((abi) => {
       return (
         <MenuItem
