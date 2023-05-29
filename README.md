@@ -1,13 +1,10 @@
 # Soliface
-
-Util to interact with any contract via any ABI
+Utility to interact with EVM any smartcontracts on any blockchain using any ABI.
 
 ## TODOs
-
-- use gap for spacing, not margit C:
 - add settings
   - gas estimation risk
-- add get das data to tx conf form fields
+- add "get gas data" to tx conf form fields
 - save default artifacts to localstorage once, so users can delete them ?
 - separate components into complicated and simple
 - ~~use logger.debug instead of log~~

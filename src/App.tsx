@@ -99,6 +99,7 @@ const router = createBrowserRouter([
 ])
 
 export const App: React.FC = () => {
+  console.log(process.env);
   return (
     <AnalyticsCtxProvider>
       <RouterProvider router={router} />

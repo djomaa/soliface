@@ -1,5 +1,9 @@
 {
   "name": "soliface",
+  "license": "Apache-2.0",
+  "repository": {
+    "url": "https://github.com/djomaa/soliface.git"
+  },
   "author": {
     "name": "Demid Mosko",
     "email": "demid.mosko@gmail.com"
