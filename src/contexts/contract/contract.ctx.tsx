@@ -1,33 +1,21 @@
-import React, { createContext } from 'react'
+import React from 'react'
 
 import { useLogger } from 'hooks/use-logger'
-import { useStore, useStoreKey } from 'contexts/store';
+import { useArtifact } from 'hooks/use-artifact';
+import { useStoredAddress, useStoredArtifactHash } from './contract.ctx-hooks';
+import { ContractCtx, ContractCtxState } from './contract.ctx-state';
 
-export interface ContractCtxState {
-  artifactHash?: string;
-  address?: string
-  setAddress: (address: string) => void
-  setArtifactHash: (artifact: string) => void
-}
-export const ContractCtx = createContext<ContractCtxState | null>(null)
 
-interface iProps {
-  children: React.ReactNode | React.ReactNode[]
-}
+export const ContractCtxProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
+  const [Logger, { logState }] = useLogger(ContractCtxProvider)
 
-const prefix = 'contract';
-const Key = {
-  Address: useStoreKey.Pure(prefix, 'address'),
-  ArtifactHash: useStoreKey.Pure(prefix, 'artifactHash')
-}
-export const ContractCtxProvider: React.FC<iProps> = ({ children }) => {
-  const [logger, { logState }] = useLogger(ContractCtxProvider)
-
-  const [address, setAddress] = useStore<string>(Key.Address)
-  const [artifactHash, setArtifactHash] = useStore<string>(Key.ArtifactHash)
+  const [address, setAddress] = useStoredAddress();
+  const [artifactHash, setArtifactHash] = useStoredArtifactHash();
+  const artifact = useArtifact(artifactHash || '');
 
   logState('address', address);
   logState('artifactHash', artifactHash);
+  logState('artifact', artifact);
 
   const value: ContractCtxState = {
     address,
