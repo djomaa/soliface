@@ -2,16 +2,16 @@ import React, { useState } from 'react';
 
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
+import Stack from '@mui/material/Stack';
 import MenuIcon from '@mui/icons-material/Menu';
+import IconButton from '@mui/material/IconButton';
 
+import { UseStateObject } from 'types/react';
 import { useLogger } from 'hooks/use-logger';
 
 import { NavMap } from './types';
 import { NavListItems } from './list-items';
 import { useAbiInputsCtx } from '../ctx';
-import { UseStateObject } from 'types/react';
-import Stack from '@mui/material/Stack';
-import IconButton from '@mui/material/IconButton';
 
 
 export const OpenNavigation: React.FC = (props) => {
@@ -30,7 +30,6 @@ export const OpenNavigation: React.FC = (props) => {
         if (isLast) {
           sLogger.debug("Set to", item[part])
           item[part] = { id: key, ref: value } as any;
-          // acc[part] = { root: 123 };
           return item;
         }
         if (!item[part]) {
@@ -53,7 +52,6 @@ export const OpenNavigation: React.FC = (props) => {
       }}
     >
       <List
-        // dense
         disablePadding
       >
         <NavListItems map={map} />
@@ -62,39 +60,16 @@ export const OpenNavigation: React.FC = (props) => {
   )
 }
 
-interface ClosedNavigationProps extends UseStateObject<'open', boolean> {
+interface NavigationMenuProps extends UseStateObject<'open', boolean> {
 
 }
-export const ClosedNavigation: React.FC<ClosedNavigationProps> = (props) => {
-  return (
-    <Box></Box>
-    // <List
-    // >
-    //   <ListItem key='open' disablePadding>
-    //     <ListItemButton
-    //       onClick={(prev) => props.setOpen(!!prev)}
-    //     >
-    //       <ListItemIcon>
-    //         <MenuIcon />
-    //       </ListItemIcon>
-    //     </ListItemButton>
-    //   </ListItem>
-    // </List>
-  )
-}
-
-export const NavigationMenu: React.FC<ClosedNavigationProps> = (props) => {
+export const NavigationMenu: React.FC<NavigationMenuProps> = (props) => {
   return (
     <Stack
       direction='row'
     >
       <IconButton
-        onClick={() => {
-          return props.setOpen((prev) => {
-            console.log('ooopen', { prev })
-            return !prev;
-          });
-        }}
+        onClick={() => props.setOpen((prev) => !prev)}
       >
         <MenuIcon />
       </IconButton>
@@ -112,7 +87,6 @@ export const Navigation: React.FC = (props) => {
       style={{
         width: open ? '30%' : '5%',
         transition: 'all .1s linear',
-        // height: '100%',
         display: 'flex',
         flexDirection: 'column',
         flexGrow: 1,
