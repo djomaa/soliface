@@ -1,15 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 
+import Box from '@mui/material/Box';
 import List from '@mui/material/List';
+import MenuIcon from '@mui/icons-material/Menu';
 
 import { useLogger } from 'hooks/use-logger';
 
 import { NavMap } from './types';
 import { NavListItems } from './list-items';
 import { useAbiInputsCtx } from '../ctx';
+import { UseStateObject } from 'types/react';
+import Stack from '@mui/material/Stack';
+import IconButton from '@mui/material/IconButton';
 
-export const Navigation: React.FC = (props) => {
-  const [Logger] = useLogger(Navigation);
+
+export const OpenNavigation: React.FC = (props) => {
+  const [Logger] = useLogger(OpenNavigation);
   const ctx = useAbiInputsCtx();
 
   const map = React.useMemo(() => {
@@ -40,11 +46,80 @@ export const Navigation: React.FC = (props) => {
   }, [ctx.map]);
 
   return (
-    <List
-      // dense
-      disablePadding
+    <Box
+      sx={{
+        overflowY: 'scroll',
+        flexGrow: 1,
+      }}
     >
-      <NavListItems map={map} />
-    </List>
+      <List
+        // dense
+        disablePadding
+      >
+        <NavListItems map={map} />
+      </List>
+    </Box>
+  )
+}
+
+interface ClosedNavigationProps extends UseStateObject<'open', boolean> {
+
+}
+export const ClosedNavigation: React.FC<ClosedNavigationProps> = (props) => {
+  return (
+    <Box></Box>
+    // <List
+    // >
+    //   <ListItem key='open' disablePadding>
+    //     <ListItemButton
+    //       onClick={(prev) => props.setOpen(!!prev)}
+    //     >
+    //       <ListItemIcon>
+    //         <MenuIcon />
+    //       </ListItemIcon>
+    //     </ListItemButton>
+    //   </ListItem>
+    // </List>
+  )
+}
+
+export const NavigationMenu: React.FC<ClosedNavigationProps> = (props) => {
+  return (
+    <Stack
+      direction='row'
+    >
+      <IconButton
+        onClick={() => {
+          return props.setOpen((prev) => {
+            console.log('ooopen', { prev })
+            return !prev;
+          });
+        }}
+      >
+        <MenuIcon />
+      </IconButton>
+    </Stack>
+  )
+}
+
+export const Navigation: React.FC = (props) => {
+  const ctx = useAbiInputsCtx();
+  const [open, setOpen] = useState(false);
+
+  return (
+    <Box
+      ref={(node) => ctx.setNavContainer(node as any as HTMLElement)}
+      style={{
+        width: open ? '30%' : '5%',
+        transition: 'all .1s linear',
+        // height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        flexGrow: 1,
+      }}
+    >
+      <NavigationMenu open={open} setOpen={setOpen} />
+      {open && <OpenNavigation />}
+    </Box>
   )
 }

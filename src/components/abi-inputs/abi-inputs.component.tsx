@@ -8,8 +8,6 @@ import { AbiInputComponent } from '../abi-input/abi-input.component';
 import { AbiInputsContainer } from './abi-inputs.container';
 import { AbiInputsCtxProvider, useAbiInputsCtx } from './ctx/abi-inputs.ctx';
 import { Navigation } from './navigation';
-import { useToggle } from 'react-use';
-import Button from '@mui/material/Button';
 
 interface IProps {
   inputs: AbiInput[];
@@ -20,7 +18,6 @@ interface IProps {
 }
 export const AbiInputsComponentCore: React.FC<IProps> = ({ inputs, prefix }) => {
   const [Logger] = useLogger(AbiInputsComponentCore)
-  const [navOpen, toggleNavOpen] = useToggle(true);
 
   const ctx = useAbiInputsCtx();
   useEffect(() => {
@@ -36,34 +33,19 @@ export const AbiInputsComponentCore: React.FC<IProps> = ({ inputs, prefix }) => 
   return (
     <Box
     >
-      <Box>
-        header
-        <Button onClick={toggleNavOpen}>nav</Button>
-      </Box>
       <Box
         sx={{
           flexDirection: 'row',
           display: 'flex',
-          transition: 'all 0.2s ease-in-out',
         }}
       >
-        <Box
-          ref={(node) => ctx.setNavContainer(node as any as HTMLElement)}
-          style={{
-            maxHeight: '50vh',
-            overflowY: 'scroll',
-            width: navOpen ? '30%' : '0%',
-            transition: 'all .1s linear',
-          }}
-        >
-          <Navigation />
-        </Box>
+        <Navigation />
         <Box
           ref={(node) => ctx.setInputsContainer(node as any as HTMLElement)}
           style={{
             // minWidth: '70%',
             width: '100%',
-            maxHeight: '50vh',
+            maxHeight: '100%',
             borderImage: 'linear-gradient(to right, white, black, white) 10%',
             borderTop: '1px solid',
             borderBottom: '1px solid',
