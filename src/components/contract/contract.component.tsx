@@ -1,7 +1,7 @@
 import React from 'react'
 import Box from '@mui/material/Box'
 
-import { useContractCtx } from 'contexts/contract'
+import { ContractCtxProvider, useContractCtx } from 'contexts/contract'
 
 import { ContractConfig } from './config'
 import { useArtifact } from 'hooks/use-artifact'
@@ -9,6 +9,7 @@ import { EmptyContract } from './empty-contract'
 import assert from 'assert'
 import { ArtifactApi } from 'components/artifact/api'
 import { useStateWithHistory } from 'react-use'
+import { withCtx } from 'contexts/ctx-factory'
 
 interface ICoreProps {
   address: string | undefined;
@@ -23,11 +24,11 @@ const ContractCore: React.FC<ICoreProps> = ({ artifactHash, address }) => {
     return <EmptyContract />
   }
   console.log('artifact', artifact);
-  assert(artifact.isExist && !artifact.error,);
+  assert(artifact.isExist && !artifact.error, 'not exist or error');
   return <ArtifactApi abi={artifact.abi} address={address} />
 }
 
-export const Contract: React.FC = () => {
+export const Contract = withCtx(ContractCtxProvider, () => {
   const ctx = useContractCtx()
 
   return (
@@ -44,4 +45,4 @@ export const Contract: React.FC = () => {
       )}
     </>
   )
-}
+});

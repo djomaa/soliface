@@ -12,12 +12,14 @@ import { createRoute, Route } from 'constants/route'
 import { useArtifactList } from 'hooks/use-artifact'
 import { ArtifactListToolBar } from './artifact-list.toolbar'
 import { IRow, useArtifactListColumns } from './artifact-list.columns'
+import { useArtifactRemoveAction } from 'hooks/use-artifact/use-artifact-remove.action'
 
 export const ArtifactList: React.FC = () => {
   const [isSelection, setSelection] = useState(false)
 
   const navigate = useNavigate();
-  const { artifactList, removeArtifact } = useArtifactList();
+  const { artifactList } = useArtifactList();
+  const { removeArtifact } = useArtifactRemoveAction();
 
   const editArtifact = useCallback((hash: string) => {
     const route = createRoute[Route.EditArtifact](hash);
