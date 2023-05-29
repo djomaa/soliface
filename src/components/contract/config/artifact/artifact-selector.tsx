@@ -12,7 +12,7 @@ import { useContractCtx } from 'contexts/contract'
 import { useArtifactList } from 'hooks/use-artifact'
 
 export const ArtifactSelector: React.FC = () => {
-  const [Logger, { logState }] = useLogger(ArtifactSelector)
+  const [Logger] = useLogger(ArtifactSelector)
 
   const contractCtx = useContractCtx()
   const { artifactList } = useArtifactList();
@@ -58,6 +58,8 @@ export const ArtifactSelector: React.FC = () => {
   }, [artifactList])
 
   const handleChange = (value: string) => {
+    const logger = Logger.sub('handleChange');
+    logger.debug('Chaning to', { value });
     const newArtifact = artifactList.find((abi) => abi.hash === value)
     if (newArtifact == null) {
       throw new Error('Unexpected error: cannot find artifact by hash')

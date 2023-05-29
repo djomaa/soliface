@@ -186,6 +186,28 @@ export const StorageCtxProvider: React.FC<{ children: React.ReactElement | React
     set,
   }
 
+  React.useEffect(() => {
+    // @ts-ignore
+    window.StorageCtx = {
+      api: value,
+      state: {
+        store,
+        listeners,
+        watchers,
+        watcherByKey,
+        watcherId,
+      }
+    };
+  }, [
+    getState,
+    addListener,
+    removeListener,
+    addWatcher,
+    removeWatcher,
+    set,
+  ]);
+
+
   return (
     <StorageCtx.Provider value={value}>
       <StoreMigration />

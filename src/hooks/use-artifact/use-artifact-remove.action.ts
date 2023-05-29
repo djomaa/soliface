@@ -1,21 +1,22 @@
 import { useStoreCtx } from 'contexts/store';
 import { useCallback } from 'react';
-import { AbiItem } from 'types/abi';
 import { Key } from './key';
 import { IArtifact } from './types';
+import { useStoredArtifactHash } from 'contexts/contract';
 
-interface IArtifactSaveData extends Pick<IArtifact, 'hash' | 'name'> {
-  abi: AbiItem[];
-}
 export const useArtifactRemoveAction = () => {
   const store = useStoreCtx();
+  const [storedArtifactHash, setStoredArtifactHash] = useStoredArtifactHash();
+  // const
 
-  const remove = useCallback((data: IArtifactSaveData) => {
-    const key = Key(data.hash);
-    const rawAbi = JSON.stringify(data.abi);
+  const remove = useCallback((hash: IArtifact['hash']) => {
+    const key = Key(hash);
     store.set(key.name, undefined);
     store.set(key.abi, undefined);
-  }, []);
+    if (storedArtifactHash === hash) {
+      setStoredArtifactHash(undefined);
+    }
+  }, [storedArtifactHash]);
 
   return { removeArtifact: remove };
 }

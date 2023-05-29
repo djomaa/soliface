@@ -1,2 +1,2 @@
 export * from './contract.ctx'
-export * from './contract.ctx-hooks';
+export * from './contract.ctx-hooks'

@@ -17,7 +17,6 @@ import { QueryCtxProvider } from 'contexts/query'
 import { ArtifactManagerPage } from 'pages/artifact/manager'
 import { StorageCtxProvider } from 'contexts/store'
 import { ChainManagerPage } from 'pages/chain-manager'
-import { ContractCtxProvider } from 'contexts/contract'
 import { AnalyticsCtxProvider, useAnalytics } from 'contexts/analytics'
 // import 'material-react-toastify/dist/ReactToastify.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -49,9 +48,7 @@ const Layout: React.FC = () => {
         <QueryCtxProvider>
           <main>
             <Cookies />
-            <ContractCtxProvider>
-              <Outlet />
-            </ContractCtxProvider>
+            <Outlet />
           </main>
           <ModalContainer />
         </QueryCtxProvider>

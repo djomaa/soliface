@@ -16,9 +16,9 @@ export const Gridded: React.FC<{ children: React.ReactNode[] }> = ({ children })
   const md = 12 / children.length;
   return (
     <Grid container textAlign='center'>
-      {children.map((node) => {
+      {children.map((node, i) => {
         return (
-          <Grid xs={xs} md={md}>
+          <Grid xs={xs} md={md} key={i}>
             {node}
           </Grid>
         );
