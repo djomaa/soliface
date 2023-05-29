@@ -1,20 +1,50 @@
-import React, { useMemo } from 'react'
+import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
+import React, { useEffect, useMemo } from 'react'
 
 import Stack from '@mui/material/Stack'
 import MenuItem from '@mui/material/MenuItem'
 import TextField from '@mui/material/TextField'
 
+import { Route } from 'constants/route'
 import { useLogger } from 'hooks/use-logger'
 import { useContractCtx } from 'contexts/contract'
 import { useArtifactList } from 'hooks/use-artifact'
 
 export const ArtifactSelector: React.FC = () => {
-  const [, { logState }] = useLogger(ArtifactSelector)
+  const [Logger, { logState }] = useLogger(ArtifactSelector)
 
   const contractCtx = useContractCtx()
   const { artifactList } = useArtifactList();
 
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const logger = Logger.sub('useEffect([contractCtx.artifactHash, artifactList])');
+    if (!contractCtx.artifactHash) {
+      return;
+    }
+    const doesExist = artifactList.some((artifact) => artifact.hash === contractCtx.artifactHash);
+    if (!doesExist) {
+      logger.debug('Artifact hash not found, clearing');
+      toast.error('Artifact matching stored artifact hash not found');
+      contractCtx.setArtifactHash(undefined);
+    }
+  }, [contractCtx.artifactHash, artifactList]);
+
   const artifactOptions = useMemo(() => {
+    if (!artifactList.length) {
+      return [(
+        <MenuItem
+          key='empty'
+          onClick={() => {
+            navigate(Route.ArtifactManager);
+          }}
+        >
+          You don't have any artifacts added. Press here to navigate to artifact manager.
+        </MenuItem>
+      )];
+    }
     return artifactList.map((abi) => {
       return (
         <MenuItem
