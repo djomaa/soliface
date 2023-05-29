@@ -1,5 +1,4 @@
 import Box from '@mui/material/Box';
-import Grid from '@mui/material/Unstable_Grid2/Grid2';
 import { useLogger } from 'hooks/use-logger';
 import React, { useEffect } from 'react';
 
@@ -9,6 +8,8 @@ import { AbiInputComponent } from '../abi-input/abi-input.component';
 import { AbiInputsContainer } from './abi-inputs.container';
 import { AbiInputsCtxProvider, useAbiInputsCtx } from './ctx/abi-inputs.ctx';
 import { Navigation } from './navigation';
+import { useToggle } from 'react-use';
+import Button from '@mui/material/Button';
 
 interface IProps {
   inputs: AbiInput[];
@@ -19,6 +20,7 @@ interface IProps {
 }
 export const AbiInputsComponentCore: React.FC<IProps> = ({ inputs, prefix }) => {
   const [Logger] = useLogger(AbiInputsComponentCore)
+  const [navOpen, toggleNavOpen] = useToggle(true);
 
   const ctx = useAbiInputsCtx();
   useEffect(() => {
@@ -34,36 +36,46 @@ export const AbiInputsComponentCore: React.FC<IProps> = ({ inputs, prefix }) => 
   return (
     <Box
     >
-      <Grid container>
-        <Grid xs={4}>
-          <Box
-            ref={(node) => ctx.setNavContainer(node as any as HTMLElement)}
-            style={{
-              maxHeight: '50vh',
-              overflowY: 'scroll',
-            }}
-          >
-            <Navigation />
-          </Box>
-        </Grid>
-        <Grid xs>
-          <Box
-            ref={(node) => ctx.setInputsContainer(node as any as HTMLElement)}
-            style={{
-              maxHeight: '50vh',
-              borderImage: 'linear-gradient(to right, white, black, white) 10%',
-              borderTop: '1px solid',
-              borderBottom: '1px solid',
-              borderLeft: '1px solid',
-              overflowY: 'scroll',
-            }}
-          >
-            <AbiInputsContainer>
-              {elements}
-            </AbiInputsContainer>
-          </Box>
-        </Grid>
-      </Grid>
+      <Box>
+        header
+        <Button onClick={toggleNavOpen}>nav</Button>
+      </Box>
+      <Box
+        sx={{
+          flexDirection: 'row',
+          display: 'flex',
+          transition: 'all 0.2s ease-in-out',
+        }}
+      >
+        <Box
+          ref={(node) => ctx.setNavContainer(node as any as HTMLElement)}
+          style={{
+            maxHeight: '50vh',
+            overflowY: 'scroll',
+            width: navOpen ? '30%' : '0%',
+            transition: 'all .1s linear',
+          }}
+        >
+          <Navigation />
+        </Box>
+        <Box
+          ref={(node) => ctx.setInputsContainer(node as any as HTMLElement)}
+          style={{
+            // minWidth: '70%',
+            width: '100%',
+            maxHeight: '50vh',
+            borderImage: 'linear-gradient(to right, white, black, white) 10%',
+            borderTop: '1px solid',
+            borderBottom: '1px solid',
+            borderLeft: '1px solid',
+            overflowY: 'scroll',
+          }}
+        >
+          <AbiInputsContainer>
+            {elements}
+          </AbiInputsContainer>
+        </Box>
+      </Box>
     </Box >
   )
 }
