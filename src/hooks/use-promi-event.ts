@@ -42,12 +42,13 @@ export const usePromiEvent = () => {
   }, []);
 
   useEffect(() => {
+    const logger = Logger.sub(id++);
+    logger.debug('Updated', pe);
     if (!pe) {
       clear(undefined);
       return;
     }
     clear('pending');
-    const logger = Logger.sub(id++);
     pe.once('error', (error) => {
       logger.log('error', error);
       setError(error);

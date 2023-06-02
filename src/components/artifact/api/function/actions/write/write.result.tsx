@@ -52,7 +52,7 @@ export const WriteResult: React.FC<IProps> = ({ abi, txConf, args }) => {
       }
     });
     if (gas.error) {
-      logger.warn('Failed to encode function call', data.error);
+      logger.warn('Failed to estimate gas (or gas price)', data.error);
       throw new Error(
         'Failed to estimate gas (or gas price)',
         { cause: gas.error }
@@ -70,7 +70,6 @@ export const WriteResult: React.FC<IProps> = ({ abi, txConf, args }) => {
 
   logState('txState', txState)
 
-
   if (state.loading === true) {
     return (
       <Alert severity='info' icon={<CircularProgress size={20} />}>
@@ -78,6 +77,11 @@ export const WriteResult: React.FC<IProps> = ({ abi, txConf, args }) => {
       </Alert>
     )
   }
+
+  if (state.error) {
+    return <ExceptionAlert error={state.error} />
+  }
+
   if (!txState) {
     return (
       <Alert severity='info' icon={<CircularProgress size={20} />}>
@@ -86,9 +90,6 @@ export const WriteResult: React.FC<IProps> = ({ abi, txConf, args }) => {
     )
   }
 
-  if (state.error) {
-    return <ExceptionAlert error={state.error} />
-  }
   return (
     <FullWidthAlert
       severity='info'
