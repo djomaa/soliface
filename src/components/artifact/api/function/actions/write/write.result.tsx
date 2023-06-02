@@ -78,7 +78,13 @@ export const WriteResult: React.FC<IProps> = ({ abi, txConf, args }) => {
       </Alert>
     )
   }
-  assert(txState);
+  if (!txState) {
+    return (
+      <Alert severity='info' icon={<CircularProgress size={20} />}>
+        <AlertTitle>Waiting for PromiEvent..</AlertTitle>
+      </Alert>
+    )
+  }
 
   if (state.error) {
     return <ExceptionAlert error={state.error} />
