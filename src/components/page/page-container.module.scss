@@ -1,0 +1,37 @@
+$header_height: 63px;
+$border: 1px solid rgba(0, 0, 0, 0.2);
+
+.pageContainerHeader {
+  top: 0;
+  left: 0;
+  position: fixed;
+  z-index: 1200;
+
+  height: $header_height;
+  width: 100vw;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding-left: 1rem;
+
+  background-color: white;
+  border-bottom: $border;
+}
+
+.pageContainerSideNav {
+  position: fixed;
+  top: $header_height;
+  left: 0;
+  height: calc(100% - $header_height);
+  z-index: 1200;
+  background-color: white;
+  border-right: $border;
+}
+
+.pageContainerContent {
+  margin-top: $header_height;
+  padding: 2rem;
+  height: calc(100% - $header_height);
+}
