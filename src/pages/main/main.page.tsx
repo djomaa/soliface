@@ -4,18 +4,22 @@ import React from 'react'
 import { Contract } from 'components/contract'
 import { useAppTitle } from 'hooks/use-app-title'
 import { ChainCtxProvider } from 'contexts/chain'
-import { MainPageAppBar } from './components/app-bar'
+// import { MainPageAppBar } from './components/app-bar'
+// import { PageContainer } from 'components/page-container'
+// import Typography from '@mui/material/Typography'
+// import { Footer } from 'components/footer'
+// import Drawer from '@mui/material/Drawer'
+// import Box from '@mui/material/Box'
+// import { SiteNavigation } from 'components/site-navigation'
 import { PageContainer } from 'components/page-container'
-import Typography from '@mui/material/Typography'
-import { Footer } from 'components/footer'
 
 export const MainPage: React.FC = () => {
   useAppTitle();
   return (
     <ChainCtxProvider>
-      <MainPageAppBar />
-      <PageContainer>
-        <Typography
+      {/* <MainPageAppBar /> */}
+      {/* <PageContainer> */}
+      {/* <Typography
           component="h1"
           variant="h2"
           align="center"
@@ -43,10 +47,33 @@ export const MainPage: React.FC = () => {
               face
             </span>
           </sub>
-        </Typography>
+        </Typography> */}
+      {/* <Drawer
+          open
+          variant='permanent'
+        > */}
+      <PageContainer>
         <Contract />
       </PageContainer>
-      <Footer />
+      {/* <Box
+        // mt={ }
+        display='flex'
+        flexDirection='row'
+        flexGrow={1}
+      >
+        <SiteNavigation />
+        <Box
+          flexGrow={1}
+          ml={4}
+          mr={4}
+          mt={5}
+          mb={5}
+        >
+          <Contract />
+          <Footer />
+        </Box>
+      </Box> */}
+      {/* </PageContainer> */}
 
     </ChainCtxProvider >
   )

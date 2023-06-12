@@ -31,7 +31,7 @@ export const WalletSelector: React.FC = () => {
 
   const disconnect = () => {
     setAnchor(undefined)
-    chainCtx.disconnect()
+    chainCtx.disconnectWallet()
   }
 
   const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
