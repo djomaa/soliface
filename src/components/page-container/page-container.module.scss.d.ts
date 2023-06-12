@@ -1,4 +1,3 @@
-export const container: string;
-export const header: string;
-export const pageContainer: string;
-export const sideNav: string;
+export const pageContainerContent: string;
+export const pageContainerHeader: string;
+export const pageContainerSideNav: string;
