@@ -1,1 +1,2 @@
 export * from './main.page'
+export { MainPage as default } from './main.page'

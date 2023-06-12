@@ -14,14 +14,16 @@ import { useSearch } from 'hooks/use-search'
 import { searchChain, useChainList } from 'hooks/use-chain-list/use-chain-list'
 
 import { ChainCard } from './chain.card'
+import { withCtx } from 'contexts/ctx-factory';
+import { QueryCtxProvider } from 'contexts/query';
 
 const PageSize = 6;
-export const ChainManager: React.FC = () => {
-  const [Logger] = useLogger(ChainManager.name)
+const ChainManagerCore: React.FC = () => {
+  const [Logger] = useLogger(ChainManagerCore.name)
   const { chainList } = useChainList()
   const [search, setSearch, searchList] = useSearch(chainList, searchChain)
-
   const page = useRef(0);
+
   const [items, setItems] = useState<Chain[]>([])
 
   useEffect(() => {
@@ -95,3 +97,5 @@ export const ChainManager: React.FC = () => {
     </Box >
   )
 }
+
+export const ChainManager = withCtx(QueryCtxProvider, ChainManagerCore);

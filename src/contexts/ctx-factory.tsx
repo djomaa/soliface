@@ -32,6 +32,7 @@ export const createUseCtx = <T,>(Ctx: Context<T | null>, ctxName: string) => {
 //   return CompWithCtx;
 // }
 
+
 export const withCtx = <TCompProps extends JSX.IntrinsicAttributes, TCtxProps>(CtxProvider: React.FC<React.PropsWithChildren<TCtxProps>>, Component: React.FC<TCompProps>) => {
   const CompWithCtx: React.FC<TCtxProps & TCompProps> = (props) => {
     return (

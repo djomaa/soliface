@@ -6,6 +6,8 @@ import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete'
 
 import { Chain } from 'types/chain'
 import { useChainCtx } from 'contexts/chain'
+import { withCtx } from 'contexts/ctx-factory'
+import { QueryCtxProvider } from 'contexts/query'
 import { useChainList } from 'hooks/use-chain-list'
 import { useChangeChainAction } from 'actions/change-chain'
 
@@ -15,7 +17,7 @@ const filterOptions = createFilterOptions<Chain>({
   stringify: (chain) => `${chain.chainId} ${chain.chainId.toString(16)} ${chain.name}`,
 });
 
-export const ChainSelector: React.FC = () => {
+const ChainSelectorCore: React.FC = () => {
   const chainCtx = useChainCtx()
 
   const { chainList } = useChainList()
@@ -46,10 +48,6 @@ export const ChainSelector: React.FC = () => {
           label='Chain'
           margin='dense'
           helperText={chainCtx.canSwitchChain ? undefined : 'Chain cannot be switched'}
-          // inputProps={{
-          //   ...params.inputProps,
-          //   value: !params.inputProps.value && chain ? chain.name : params.inputProps.value,
-          // }}
           InputProps={{
             ...params.InputProps,
             autoComplete: 'new-password',
@@ -64,3 +62,5 @@ export const ChainSelector: React.FC = () => {
     />
   )
 }
+
+export const ChainSelector = withCtx(QueryCtxProvider, ChainSelectorCore);

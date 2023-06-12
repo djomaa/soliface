@@ -1,14 +1,12 @@
 import React, { useMemo } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
-import Container from '@mui/material/Container'
+import CircularProgress from '@mui/material/CircularProgress'
 
 import { Route } from 'constants/route'
-import { AppBar } from 'components/app-bar'
 import { FallbackPage } from 'pages/fallback.page'
-import { LoadedExists, useArtifact } from 'hooks/use-artifact'
-import { CircularProgress } from '@mui/material'
 import { EditArtifact } from 'components/artifact/edit'
+import { LoadedExists, useArtifact } from 'hooks/use-artifact'
 
 export const ArtifactContent: React.FC<{ artifact: LoadedExists }> = ({ artifact }) => {
   const navigate = useNavigate();
@@ -52,11 +50,6 @@ export const EditArtifactPageContent: React.FC = () => {
 
 export const EditArtifactPage: React.FC = () => {
   return (
-    <>
-      <AppBar />
-      <Container>
-        <EditArtifactPageContent />
-      </Container>
-    </>
+    <EditArtifactPageContent />
   )
 }

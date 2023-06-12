@@ -2,7 +2,6 @@ import React from 'react';
 import { QueryClient, QueryClientProvider, setLogger } from 'react-query';
 
 import { Logger } from 'helpers/logger';
-import { IParentProps } from 'types/react';
 
 const logger = new Logger('react-query');
 setLogger({
@@ -11,7 +10,7 @@ setLogger({
   log: logger.debug.bind(logger),
 });
 
-export const QueryCtxProvider: React.FC<IParentProps> = (props) => {
+export const QueryCtxProvider: React.FC<React.PropsWithChildren> = (props) => {
   const queryClient = new QueryClient();
 
   return (

@@ -3,14 +3,12 @@ import { useParams } from 'react-router-dom'
 
 import Alert from '@mui/material/Alert'
 
-import { Data } from 'components/chain'
-import { useChainList } from 'hooks/use-chain-list/use-chain-list'
 
-import { useAppTitle } from 'hooks/use-app-title'
 import { Chain } from 'types/chain'
+import { Data } from 'components/chain'
+import { useAppTitle } from 'hooks/use-app-title'
 import { ChainCtxProvider } from 'contexts/chain'
-import { ChainPageAppBar } from './components/app-bar'
-import { PageContainer } from 'components/page-container'
+import { useChainList } from 'hooks/use-chain-list/use-chain-list'
 
 export const ValidChainPageContent: React.FC<Chain> = (chain) => {
   useAppTitle(`Chain ${chain.name}`)
@@ -59,10 +57,7 @@ export const ChainPageContent: React.FC = () => {
 export const ChainPage: React.FC = () => {
   return (
     <ChainCtxProvider>
-      <ChainPageAppBar />
-      <PageContainer>
-        <ChainPageContent />
-      </PageContainer>
+      <ChainPageContent />
     </ChainCtxProvider>
   )
 }
