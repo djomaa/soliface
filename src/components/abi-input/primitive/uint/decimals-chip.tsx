@@ -46,7 +46,4 @@ const DecimalsChipCore: React.FC<IProps> = ({ decimals, setDecimals }) => {
   );
 }
 
-// export const DecimalsChip = React.memo(DecimalsChipCore);
 export const DecimalsChip = DecimalsChipCore;
-
-// export const useDecimalsChip = (props: Props)
