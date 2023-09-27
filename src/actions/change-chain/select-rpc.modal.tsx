@@ -17,6 +17,8 @@ import { RpcList } from 'components/rpc-list'
 import { Dialog } from 'modals/base/base.dialog'
 import { AsyncModal } from 'libs/modals'
 import { useDefaultRpc } from 'hooks/use-default-rpc'
+import { withCtx } from 'contexts/ctx-factory'
+import { QueryCtxProvider } from 'contexts/query'
 
 interface IProps {
   chain: Chain;
@@ -27,7 +29,7 @@ enum TabValue {
 }
 
 
-export const SelectRpcModal: AsyncModal<string, IProps> = ({ chain, ...props }) => {
+const SelectRpcModalCore: AsyncModal<string, IProps> = ({ chain, ...props }) => {
 
   const [defaultRpc] = useDefaultRpc(chain.chainId);
 
@@ -40,7 +42,7 @@ export const SelectRpcModal: AsyncModal<string, IProps> = ({ chain, ...props }) 
   }
 
   return (
-    <>
+    <QueryCtxProvider>
       <Dialog
         open={true}
       >
@@ -85,6 +87,8 @@ export const SelectRpcModal: AsyncModal<string, IProps> = ({ chain, ...props }) 
           </TabContext>
         </DialogContent>
       </Dialog >
-    </>
+    </QueryCtxProvider>
   )
 }
+
+export const SelectRpcModal = withCtx(QueryCtxProvider, SelectRpcModalCore);

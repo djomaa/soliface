@@ -37,7 +37,7 @@ export interface ChainCtxState {
   changeChain: (chain: Chain) => Promise<void>
   addChain: (chain: Chain) => Promise<void>
   connectWallet: (wallet: IWallet) => Promise<void>
-  disconnect: () => void
+  disconnectWallet: () => void
   wallet: IWallet | null
   chainId: number | null
   web3: Web3 | undefined
@@ -176,7 +176,7 @@ export const ChainCtxProviderCore: React.FC<IProps> = (props) => {
   const value: ChainCtxState = {
     status,
     connectWallet: connect,
-    disconnect,
+    disconnectWallet: disconnect,
     web3: ctx.library as Web3 | undefined,
     wallet,
     account: ctx.account ?? '',

@@ -42,6 +42,7 @@
     "os-browserify": "^0.3.0",
     "process": "^0.11.10",
     "react": "latest",
+    "react-device-detect": "^2.2.3",
     "react-dialog-async": "^1.2.0",
     "react-dom": "latest",
     "react-hook-form": "^7.33.1",
@@ -73,7 +74,8 @@
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",
-    "eject": "craco eject"
+    "eject": "craco eject",
+    "analyze": "source-map-explorer 'build/static/js/*.js'"
   },
   "browserslist": {
     "production": [
@@ -107,6 +109,7 @@
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-react": "^7.32.1",
     "gh-pages": "^4.0.0",
-    "react-hook-form-mui": "^5.1.0"
+    "react-hook-form-mui": "^5.1.0",
+    "source-map-explorer": "^2.5.3"
   }
 }

@@ -6,15 +6,12 @@ import Alert from '@mui/material/Alert'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 
-import { AppBar } from 'components/app-bar'
-
 interface IProps {
   reason?: string
 }
 export const Page404: React.FC<IProps> = ({ reason }) => {
   return (
     <>
-      <AppBar />
       <Container>
         <Stack direction='row' justifyContent='space-around'>
           <Stack spacing={3} alignItems='center'>

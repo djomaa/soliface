@@ -28,12 +28,12 @@ function ElevationScroll(props: Props) {
     threshold: 0,
     target: target,
   });
-  console.log('SCROLL', !!target, target, trigger);
 
 
   return React.cloneElement(children, {
     style: {
-      borderBottom: trigger ? '1px solid gray' : '',
+      // borderBottom: trigger ? '1px solid gray' : '',
+      border: trigger ? '1px solid black' : '',
     }
     // elevation: trigger ? 4 : 0,
   });
@@ -58,6 +58,7 @@ export const Stepper: React.FC<IProps> = ({ containerRef: ref, ...props }) => {
       setPos(undefined);
       return;
     }
+    // const a = 
     const { y } = ref.current.getBoundingClientRect();
     setPos(y);
   }, [ref])

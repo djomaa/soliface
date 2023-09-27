@@ -18,7 +18,7 @@ import { Actions } from './actions'
 import { FunctionCtxProvider, useFunctionCtx } from './ctx'
 
 // TODO: use full fn description name(params): outputs(if overloads exists)
-export const FunctionCore: React.FC = (props) => {
+export const FunctionCore: React.FC = () => {
   const { abi, result } = useFunctionCtx();
 
   const [open, setOpen] = React.useState(false);

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sidebar and App Bar Layout</title>
+  <style>
+    /* CSS for the layout */
+    body {
+      margin: 0;
+      padding: 0;
+    }
+    
+    .appbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: #f2f2f2;
+      padding: 10px;
+      /* Add any additional styling for the app bar */
+    }
+    
+    .sidebar {
+      position: fixed;
+      top: 60px; /* Adjust this value to match the height of the app bar */
+      left: 0;
+      width: 200px;
+      height: calc(100% - 60px); /* Adjust this value to leave space for the app bar */
+      background-color: #eaeaea;
+      /* Add any additional styling for the sidebar */
+    }
+    
+    .content {
+      margin-left: 200px; /* Adjust this value to match the width of the sidebar */
+      padding: 20px;
+      /* Add any additional styling for the content area */
+    }
+  </style>
+</head>
+<body>
+  <div class="appbar">
+    <!-- Add your app bar content here -->
+    <h1>App Bar</h1>
+  </div>
+  
+  <div class="sidebar">
+    <!-- Add your sidebar content here -->
+    <ul>
+      <li>Sidebar Item 1</li>
+      <li>Sidebar Item 2</li>
+      <li>Sidebar Item 3</li>
+    </ul>
+  </div>
+  
+  <div class="content">
+    <!-- Add your main content here -->
+    <h2>Main Content</h2>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse consectetur tortor ut elit lobortis, ut bibendum mauris iaculis. Donec consectetur ultrices eros, vitae consequat sapien bibendum non. Sed non pharetra enim, nec venenatis odio. Nulla commodo fringilla metus at suscipit. Donec sit amet pellentesque mi. Phasellus lacinia feugiat odio vitae blandit.</p>
+  </div>
+</body>
+</html>

@@ -20,4 +20,4 @@ export const RouteLabel: Partial<Record<Route, string>> = {
   [Route.ChainManager]: 'Chains',
 }
 
-export const Routes = Object.entries(RouteLabel) as Array<[route: string, label: string]>
+export const Routes = Object.entries(RouteLabel) as Array<[route: Route, label: string]>

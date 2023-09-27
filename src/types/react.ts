@@ -1,5 +1,8 @@
 import React from 'react'
 
+/**
+ * @deprecated
+ */
 export interface IParentProps {
   children: React.ReactNode | React.ReactNode[];
 }
