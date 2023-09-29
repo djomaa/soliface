@@ -8,8 +8,8 @@ import { useArtifact } from 'hooks/use-artifact'
 import { EmptyContract } from './empty-contract'
 import assert from 'assert'
 import { ArtifactApi } from 'components/artifact/api'
-import { useStateWithHistory } from 'react-use'
 import { withCtx } from 'contexts/ctx-factory'
+import { ContractToolbar } from './toolbar/contract.toolbar'
 
 interface ICoreProps {
   address: string | undefined;
@@ -17,13 +17,10 @@ interface ICoreProps {
 }
 const ContractCore: React.FC<ICoreProps> = ({ artifactHash, address }) => {
   const artifact = useArtifact(artifactHash);
-  const pa = useStateWithHistory(artifact);
 
-  console.log('ConracteCore', artifact);
   if (artifact.loading) {
     return <EmptyContract />
   }
-  console.log('artifact', artifact);
   assert(artifact.isExist && !artifact.error, 'not exist or error');
   return <ArtifactApi abi={artifact.abi} address={address} />
 }
