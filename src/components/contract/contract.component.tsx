@@ -9,7 +9,7 @@ import { EmptyContract } from './empty-contract'
 import assert from 'assert'
 import { ArtifactApi } from 'components/artifact/api'
 import { withCtx } from 'contexts/ctx-factory'
-import { ContractToolbar } from './toolbar/contract.toolbar'
+// import { ContractToolbar } from './toolbar/contract.toolbar'
 
 interface ICoreProps {
   address: string | undefined;

@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { ChainList } from 'constants/chain-list'
-import { Chain } from 'types/chain'
+import { DepcrecatedChainType } from 'types/chain'
 import { hexToNumber } from 'utils/number.utils'
 import { useChainListQuery } from './chain-list.query'
 
@@ -17,7 +17,7 @@ export const useChainList = () => {
   return { chainList }
 }
 
-export function searchChain(list: Chain[], query: string) {
+export function searchChain(list: DepcrecatedChainType[], query: string) {
   // TODO:- add timings for filtering and mapping
   const regExpQuery = new RegExp(query, 'i')
   const numberQuery = Number(query)

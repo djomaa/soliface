@@ -4,7 +4,10 @@ export interface IExplorer {
   standard: string
 }
 
-export interface Chain {
+/**
+ * @deprecated
+ */
+export interface DepcrecatedChainType {
   title?: string
   name: string
   icon?: string

@@ -1,11 +1,11 @@
 import { useStore, useStoreKey } from 'contexts/store'
-import { Chain } from 'types/chain'
+import { DepcrecatedChainType } from 'types/chain'
 
-const key = (chainId: Chain['chainId']) => {
+const key = (chainId: DepcrecatedChainType['chainId']) => {
   return useStoreKey.Pure('chain', 'rpc', chainId);
 }
 
-export const useDefaultRpc = (chainId: Chain['chainId']) => {
+export const useDefaultRpc = (chainId: DepcrecatedChainType['chainId']) => {
   return useStore<string>(key(chainId))
 }
 

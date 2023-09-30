@@ -13,11 +13,11 @@ import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
 import CardActions from '@mui/material/CardActions'
 
-import { Chain } from 'types/chain'
+import { DepcrecatedChainType } from 'types/chain'
 import { createRoute, Route } from 'constants/route'
 import { getWebsiteFavicon } from 'utils/google'
 
-const CustomAvatar: React.FC<Chain> = (chain) => {
+const CustomAvatar: React.FC<DepcrecatedChainType> = (chain) => {
   const url = useMemo(() => getWebsiteFavicon(chain.infoURL), [chain]);
   return (
     <Avatar
@@ -28,7 +28,7 @@ const CustomAvatar: React.FC<Chain> = (chain) => {
   )
 }
 
-export const ChainCard: React.FC<Chain> = (chain: Chain) => {
+export const ChainCard: React.FC<DepcrecatedChainType> = (chain: DepcrecatedChainType) => {
   return (
     <Card>
       <CardHeader

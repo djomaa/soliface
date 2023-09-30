@@ -15,14 +15,14 @@ import DialogTitle from '@mui/material/DialogTitle'
 import DialogContent from '@mui/material/DialogContent'
 import CircularProgress from '@mui/material/CircularProgress'
 
-import { Chain } from 'types/chain'
+import { DepcrecatedChainType } from 'types/chain'
 import { AsyncModal } from 'contexts/modal'
 import { useChainCtx } from 'contexts/chain'
 import { JsonBox } from 'components/json-box'
 import style from 'styles/dialog.module.scss'
 
 interface IProps {
-  chain: Chain
+  chain: DepcrecatedChainType
 }
 
 enum TabValue {

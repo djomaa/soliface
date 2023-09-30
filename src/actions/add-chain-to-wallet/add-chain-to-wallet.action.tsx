@@ -1,13 +1,13 @@
 
 import { ChainCtxState, useChainCtx } from 'contexts/chain'
 
-import { Chain } from 'types/chain'
+import { DepcrecatedChainType } from 'types/chain'
 import { createStateToast } from 'modals/state.toast'
 import { Logger } from 'helpers/logger'
 import { useCallback, useMemo } from 'react'
 
 
-const addChainToWalletAction = async (chainCtx: ChainCtxState, chain: Chain) => {
+const addChainToWalletAction = async (chainCtx: ChainCtxState, chain: DepcrecatedChainType) => {
   await createStateToast(() => chainCtx.addChain(chain), {
     loading: `Adding chain ${chain.chainId}..`,
     error: `Failed to add chain ${chain.chainId}`,
@@ -17,7 +17,7 @@ const addChainToWalletAction = async (chainCtx: ChainCtxState, chain: Chain) => 
 
 export const useAddChainToWalletAction = () => {
   const chainCtx = useChainCtx();
-  const addChainToWallet = useCallback((chain: Chain) => addChainToWalletAction(chainCtx, chain), []);
+  const addChainToWallet = useCallback((chain: DepcrecatedChainType) => addChainToWalletAction(chainCtx, chain), []);
   return { addChainToWallet };
 }
 
@@ -28,7 +28,7 @@ useAddChainToWalletAction.orEmpty = () => {
     if (!chainCtx) {
       return;
     }
-    return (chain: Chain) => addChainToWalletAction(chainCtx, chain);
+    return (chain: DepcrecatedChainType) => addChainToWalletAction(chainCtx, chain);
   }, []);
   return { addChainToWallet };
 }

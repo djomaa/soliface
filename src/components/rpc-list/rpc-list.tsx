@@ -3,7 +3,7 @@ import React, { useMemo } from 'react'
 import Box from '@mui/material/Box'
 import { DataGrid } from '@mui/x-data-grid'
 
-import { Chain } from 'types/chain'
+import { DepcrecatedChainType } from 'types/chain'
 import { useLogger } from 'hooks/use-logger'
 import { useDefaultRpc } from 'hooks/use-default-rpc'
 
@@ -11,7 +11,7 @@ import { useRpcListQuery } from './query'
 import { useRpcListColumns } from './rpc-list.columns'
 import { getStatusWeight } from './rpc-list.utils'
 
-export const RpcList: React.FC<Chain> = (chain: Chain) => {
+export const RpcList: React.FC<DepcrecatedChainType> = (chain: DepcrecatedChainType) => {
   const [, { logState }] = useLogger(RpcList)
 
   const columns = useRpcListColumns(chain)

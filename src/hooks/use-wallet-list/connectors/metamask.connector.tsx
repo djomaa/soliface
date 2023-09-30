@@ -2,7 +2,7 @@ import detectEthereumProvider from '@metamask/detect-provider'
 import { AbstractConnectorArguments } from '@web3-react/types'
 import { InjectedConnector, NoEthereumProviderError } from '@web3-react/injected-connector'
 
-import { Chain } from 'types/chain'
+import { DepcrecatedChainType } from 'types/chain'
 import { numberToHex } from 'utils/number.utils'
 
 import { ISwitchChainConnector } from '../interafaces'
@@ -52,7 +52,7 @@ export class MetaMaskConnector extends InjectedConnector implements ISwitchChain
     super(opts)
   }
 
-  async setChain(chain: Chain) {
+  async setChain(chain: DepcrecatedChainType) {
     const hexChainId = numberToHex(chain.chainId)
 
     try {
@@ -68,7 +68,7 @@ export class MetaMaskConnector extends InjectedConnector implements ISwitchChain
     }
   }
 
-  async addChain(chain: Chain) {
+  async addChain(chain: DepcrecatedChainType) {
     const hexChainId = numberToHex(chain.chainId)
     await this.provider.request({
       method: 'wallet_addEthereumChain',

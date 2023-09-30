@@ -9,7 +9,7 @@ import { applyDecimals, removeDecimals } from 'utils/decimals';
 import { DecimalsChip } from './decimals-chip';
 import { IDefaultProps } from '../primitive-input';
 import { useAdornments } from '../../components/use-adornments';
-import { safe } from 'helpers/safe';
+import { safeSync } from 'helpers/safe';
 
 interface ICoreProps<T extends FieldValues = FieldValues> extends IDefaultProps {
   form: Parameters<ControllerProps<T>['render']>[0];
@@ -48,7 +48,7 @@ const UintInputCore: React.FC<ICoreProps> = (props) => {
       logger.debug('undefined')
       return value1;
     }
-    const [error, parsed] = safe(() => removeDecimals(value1, decimals));
+    const [error, parsed] = safeSync(() => removeDecimals(value1, decimals));
     logger.debug('done', { error, parsed: parsed?.toString() });
     return error ? value1 : parsed
   }, [decimals]);
@@ -60,7 +60,7 @@ const UintInputCore: React.FC<ICoreProps> = (props) => {
       logger.debug('undefined')
       return value1;
     }
-    const [error, parsed] = safe(() => applyDecimals(value1, decimals));
+    const [error, parsed] = safeSync(() => applyDecimals(value1, decimals));
     logger.debug('done', { error, parsed: parsed?.toString() });
     return error ? value1 : parsed
   }, [decimals]);

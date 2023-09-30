@@ -1,7 +1,7 @@
 import { useStoreV1 } from 'contexts/store'
 import { hashAbi } from 'helpers/abi/hash';
 import { generateAbiSignatureHash } from 'helpers/abi/signature-hash';
-import { safe, safeAsync } from 'helpers/safe';
+import { safeSync, safe } from 'helpers/safe';
 import { useLogger } from 'hooks/use-logger';
 import React from 'react';
 import { useEffect, useMemo, useState } from 'react';
@@ -44,14 +44,14 @@ export const useArtifact = (hash: string) => {
       setAbi(undefined);
       return;
     }
-    const [abiError, abi] = safe(() => JSON.parse(rawAbiStore.value!) as AbiItem[]);
+    const [abiError, abi] = safeSync(() => JSON.parse(rawAbiStore.value!) as AbiItem[]);
     if (abiError) {
       logger.warn('Abi decode failed', abiError);
       setLoading(false);
       setError(abiError);
       return;
     }
-    const [signatureHashError] = safe(() => generateAbiSignatureHash(abi!));
+    const [signatureHashError] = safeSync(() => generateAbiSignatureHash(abi!));
     if (signatureHashError) {
       logger.warn('Signature hashing failed', abiError);
       setLoading(false);
@@ -70,7 +70,7 @@ export const useArtifact = (hash: string) => {
       return;
     }
     logger.debug('Checking', abi)
-    const [actualHashError, actualHash] = await safeAsync(() => hashAbi(abi!));
+    const [actualHashError, actualHash] = await safe(() => hashAbi(abi!));
     if (!isMounted()) {
       logger.debug('Not mounted');
       return;

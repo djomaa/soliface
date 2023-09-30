@@ -1,71 +1,82 @@
-import { DependencyList, useCallback, useMemo, useRef, useState } from 'react';
-import useMountedState from 'react-use/lib/useMountedState';
-import { FunctionReturningPromise, PromiseType } from 'react-use/lib/misc/types';
+import React from 'react';
+import { useAsyncState } from './use-async-state';
 
-export type AsyncState<T> =
-  | {
-    loading: boolean;
-    error?: undefined;
-    value?: undefined;
-  }
-  | {
-    loading: true;
-    error?: Error | undefined;
-    value?: T;
-  }
-  | {
-    loading: false;
-    error: Error;
-    value?: undefined;
-  }
-  | {
-    loading: false;
-    error?: undefined;
-    value: T;
-  };
+type AsyncState<V, E> = {
+  loading: false;
+  error: undefined;
+  value: V;
+} | {
+  loading: true;
+  error: undefined;
+  value: undefined;
+} | {
+  loading: false;
+  error: E;
+  value: undefined;
+}
 
-type StateFromFunctionReturningPromise<T extends FunctionReturningPromise> = AsyncState<
-  PromiseType<ReturnType<T>>
->;
+type OnDestroyCb = () => void;
+type SetDesctructor = (onDestroy: OnDestroyCb) => void;
+type EffectCallbackParams = {
+  onDestroy: SetDesctructor;
+  isMounted: () => boolean;
+  isLatest: () => boolean;
+  check: () => boolean;
+}
+type EffectCallback<V> = (params: EffectCallbackParams) => Promise<V>;
 
-export type AsyncFnReturn<T extends FunctionReturningPromise = FunctionReturningPromise> = [
-  StateFromFunctionReturningPromise<T>,
-  T
-];
+export function useAsync<V, E = Error>(
+  effect: EffectCallback<V>,
+  deps: any[]
+): AsyncState<V, E> {
+  const state = useAsyncState<V, E>()
+  const lastCallId = React.useRef(0);
 
-export default function useAsyncFn<T extends FunctionReturningPromise>(
-  fn: T,
-  deps: DependencyList = [],
-  initialState: StateFromFunctionReturningPromise<T> = { loading: false }
-): AsyncFnReturn<T> {
-  const lastCallId = useRef(0);
-  const isMounted = useMountedState();
-  const [state, set] = useState<StateFromFunctionReturningPromise<T>>(initialState);
-
-  const callback = useCallback((...args: Parameters<T>): ReturnType<T> => {
+  React.useEffect(() => {
+    let mounted = true;
     const callId = ++lastCallId.current;
 
-    if (!state.loading) {
-      set({ loading: true });
+    let onDestroyCb: OnDestroyCb | undefined;
+    const isMounted = () => mounted;
+    const isLatest = () => callId === lastCallId.current;
+    const onDestroy = (cb: OnDestroyCb) => { onDestroyCb = cb };
+    const check = () => isMounted() && isLatest();
+    const params: EffectCallbackParams = {
+      isMounted,
+      isLatest,
+      check,
+      onDestroy
     }
 
-    return fn(...args).then(
-      (value) => {
-        isMounted() && callId === lastCallId.current && set({ value, loading: false });
+    state.setValue(undefined);
+    if (!state.loading) {
+      state.setLoading(true);
+    }
 
-        return value;
-      },
-      (error) => {
-        isMounted() && callId === lastCallId.current && set({ error, loading: false });
+    effect(params)
+      .then((v) => {
+        if (!check()) {
+          return;
+        }
+        state.setLoading(false);
+        state.setError(undefined);
+        state.setValue(v);
+      })
+      .catch((error) => {
+        if (!check()) {
+          return;
+        }
+        state.setLoading(false);
+        state.setError(error);
+      })
 
-        return error;
+    return () => {
+      if (onDestroyCb) {
+        onDestroyCb();
       }
-    ) as ReturnType<T>;
+      mounted = false;
+    };
   }, deps);
 
-  const latest = useMemo(() => {
-
-  }, deps)
-
-  return [state, callback as unknown as T];
+  return state;
 }

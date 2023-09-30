@@ -1,4 +1,4 @@
-import { Chain } from 'types/chain'
+import { DepcrecatedChainType } from 'types/chain'
 
 const List = [
   {
@@ -12317,4 +12317,4 @@ const List = [
   }
 ]
 
-export const ChainList = List as Chain[]
+export const ChainList = List as DepcrecatedChainType[]

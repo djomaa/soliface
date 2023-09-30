@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography'
 import DialogTitle from '@mui/material/DialogTitle'
 import DialogContent from '@mui/material/DialogContent'
 
-import { Chain } from 'types/chain'
+import { DepcrecatedChainType } from 'types/chain'
 
 import { RpcList } from 'components/rpc-list'
 import { Dialog } from 'modals/base/base.dialog'
@@ -22,7 +22,7 @@ import { QueryCtxProvider } from 'contexts/query'
 
 interface IProps {
   address: string;
-  chain: Chain;
+  chain: DepcrecatedChainType;
   abi: any;
 }
 

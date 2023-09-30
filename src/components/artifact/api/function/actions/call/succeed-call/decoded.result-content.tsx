@@ -4,7 +4,7 @@ import React, { useMemo } from 'react'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
 
 import { AbiItem, AbiOutput } from 'types/abi'
-import { safe } from 'helpers/safe'
+import { safeSync } from 'helpers/safe'
 import { parseError } from 'utils/error/parse'
 import { Typography } from '@mui/material'
 
@@ -70,7 +70,7 @@ export const MethodDecodedResult: React.FC<iProps> = ({ raw, abi, web3 }) => {
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const decoded = useMemo(() => {
-    const [error, value] = safe(() => web3.eth.abi.decodeParameters(abi.outputs!, raw));
+    const [error, value] = safeSync(() => web3.eth.abi.decodeParameters(abi.outputs!, raw));
     return error ?? value;
   }, [abi, raw]);
 

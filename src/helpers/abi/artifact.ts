@@ -1,4 +1,4 @@
-import { safe } from 'helpers/safe'
+import { safeSync } from 'helpers/safe'
 import { AbiItem } from 'types/abi'
 
 import { generateAbiSignatureHash } from './signature-hash'
@@ -59,7 +59,7 @@ export class Artifact {
 
   // TODO: use private constructor
   static fromString(value: string) {
-    const [jsonError, json] = safe(() => JSON.parse(value))
+    const [jsonError, json] = safeSync(() => JSON.parse(value))
     if (jsonError != null) {
       throw new Error('Artifact.fromString: invalid json: ' + jsonError.message)
     }
@@ -72,7 +72,7 @@ export class Artifact {
     if (typeof json.abi !== 'object') {
       throw new Error('Artifact.fromString: json.abi not object')
     }
-    const [hashError, hash] = safe(() => generateAbiSignatureHash(json.abi))
+    const [hashError, hash] = safeSync(() => generateAbiSignatureHash(json.abi))
     if (hashError != null) {
       throw new Error('Artifact.fromString: invalid abi: ' + hashError.message)
     }

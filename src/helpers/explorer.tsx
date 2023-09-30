@@ -1,4 +1,4 @@
-import { Chain, IExplorer } from 'types/chain'
+import { DepcrecatedChainType, IExplorer } from 'types/chain'
 
 export const generateTxLink = (explorer: IExplorer, txHash: string) => {
   if (explorer.standard === 'EIP3091') {
@@ -7,7 +7,7 @@ export const generateTxLink = (explorer: IExplorer, txHash: string) => {
   }
 }
 
-export function generateTxLinkByChain (chain: Chain, txHash: string) {
+export function generateTxLinkByChain(chain: DepcrecatedChainType, txHash: string) {
   if (chain.explorers == null) {
     return
   }

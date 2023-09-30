@@ -7,7 +7,7 @@ import { GridActionsCellItem, GridColumns } from '@mui/x-data-grid'
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked'
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
 
-import { Chain } from 'types/chain'
+import { DepcrecatedChainType } from 'types/chain'
 import { useDefaultRpc } from 'hooks/use-default-rpc'
 import { useAddChainToWalletAction } from 'actions/add-chain-to-wallet'
 
@@ -19,11 +19,11 @@ interface IRow {
   query: UseQueryResult<IData>
 }
 
-export const useRpcListColumns = (chain: Chain) => {
+export const useRpcListColumns = (chain: DepcrecatedChainType) => {
   const [defaultRpc, setDefaultRpc] = useDefaultRpc(chain.chainId)
   const { addChainToWallet } = useAddChainToWalletAction.orEmpty();
 
-  const addChain = useCallback((chain: Chain, rpc: string) => {
+  const addChain = useCallback((chain: DepcrecatedChainType, rpc: string) => {
     addChainToWallet!({ ...chain, rpc: [rpc] })
   }, []);
 

@@ -1,4 +1,4 @@
-import { Chain } from 'types/chain'
+import { DepcrecatedChainType } from 'types/chain'
 
 export enum Route {
   Home = '/',
@@ -10,7 +10,7 @@ export enum Route {
 }
 
 export const createRoute = {
-  [Route.Chain]: (id: Chain['chainId']) => Route.Chain.replace(':id', id.toString()),
+  [Route.Chain]: (id: DepcrecatedChainType['chainId']) => Route.Chain.replace(':id', id.toString()),
   [Route.EditArtifact]: (hash: string) => Route.EditArtifact.replace(':hash', hash),
 }
 

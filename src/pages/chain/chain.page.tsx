@@ -4,14 +4,14 @@ import { useParams } from 'react-router-dom'
 import Alert from '@mui/material/Alert'
 
 
-import { Chain } from 'types/chain'
+import { DepcrecatedChainType } from 'types/chain'
 import { Data } from 'components/chain'
 import { useAppTitle } from 'hooks/use-app-title'
 import { ChainCtxProvider } from 'contexts/chain'
 import { useChainList } from 'hooks/use-chain-list/use-chain-list'
 import { QueryCtxProvider } from 'contexts/query'
 
-export const ValidChainPageContent: React.FC<Chain> = (chain) => {
+export const ValidChainPageContent: React.FC<DepcrecatedChainType> = (chain) => {
   useAppTitle(`Chain ${chain.name}`)
   return <Data {...chain} />
 }

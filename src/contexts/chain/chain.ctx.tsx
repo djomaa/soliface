@@ -4,7 +4,7 @@ import { AbstractConnector } from '@web3-react/abstract-connector'
 import { Web3ReactProvider, useWeb3React } from '@web3-react/core'
 import React, { createContext, useCallback, useMemo } from 'react'
 
-import { Chain } from 'types/chain'
+import { DepcrecatedChainType } from 'types/chain'
 import { IParentProps } from 'types/react'
 import { useLogger } from 'hooks/use-logger'
 import { ChainCtxAnalytics } from 'contexts/analytics'
@@ -34,8 +34,8 @@ function canConnectorChainBeAdded<T extends AbstractConnector>(connector: T): co
 }
 
 export interface ChainCtxState {
-  changeChain: (chain: Chain) => Promise<void>
-  addChain: (chain: Chain) => Promise<void>
+  changeChain: (chain: DepcrecatedChainType) => Promise<void>
+  addChain: (chain: DepcrecatedChainType) => Promise<void>
   connectWallet: (wallet: IWallet) => Promise<void>
   disconnectWallet: () => void
   wallet: IWallet | null
@@ -132,7 +132,7 @@ export const ChainCtxProviderCore: React.FC<IProps> = (props) => {
     return result
   }, [ctx.connector])
 
-  const changeChain = useCallback((chain: Chain) => {
+  const changeChain = useCallback((chain: DepcrecatedChainType) => {
     const logger = Logger.sub('changeChain')
     logger.debug('Changing chain', { chain, wallet })
     if (wallet != null) {
@@ -155,7 +155,7 @@ export const ChainCtxProviderCore: React.FC<IProps> = (props) => {
     return ctx.activate(connector)
   }, [wallet])
 
-  const addChain = async (chain: Chain) => {
+  const addChain = async (chain: DepcrecatedChainType) => {
     const logger = Logger.sub('changeChain')
     logger.debug('Adding chain', { chain, wallet })
     if (ctx.connector == null) {

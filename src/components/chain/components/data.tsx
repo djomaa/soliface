@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton'
 import Grid from '@mui/material/Unstable_Grid2/Grid2'
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 
-import { Chain } from 'types/chain'
+import { DepcrecatedChainType } from 'types/chain'
 import { numberToHex } from 'utils/number.utils'
 
 function NameMeNormalLink(url?: string) {
@@ -34,7 +34,7 @@ function NameMeNormalLink(url?: string) {
   }
 }
 
-export const DataElement: React.FC<Chain> = (chain: Chain) => {
+export const DataElement: React.FC<DepcrecatedChainType> = (chain: DepcrecatedChainType) => {
   return (
     <Grid container spacing={1} alignItems='baseline'>
       <Grid xs={12}>

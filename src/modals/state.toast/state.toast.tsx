@@ -1,5 +1,5 @@
 import { Logger } from 'helpers/logger';
-import { safeAsync } from 'helpers/safe';
+import { safe } from 'helpers/safe';
 import React from 'react';
 import { toast, UpdateOptions } from 'react-toastify';
 import { FailureToastContent } from './failure-toast-content';
@@ -15,7 +15,7 @@ export const createStateToast = async (
   logger: Logger,
 ) => {
   const toastId = toast.loading(text.loading, { type: 'info' });
-  const [error] = await safeAsync<Error, () => Promise<void>>(action);
+  const [error] = await safe<Error, () => Promise<void>>(action);
   const sharedOptions: UpdateOptions = {
     isLoading: false,
     closeButton: true,

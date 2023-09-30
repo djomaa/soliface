@@ -17,7 +17,7 @@ export const ContractToolbar: React.FC<ICoreProps> = (props) => {
     <Button
       disabled={artifact.loading || !!artifact.error}
       onClick={() => {
-        modal.show(GenerateLinkModal, { address: props.address, abi: artifact.abi });
+        // modal.show(GenerateLinkModal, { address: props.address, abi: artifact.abi });
       }}
     >Generate link</Button>
   )

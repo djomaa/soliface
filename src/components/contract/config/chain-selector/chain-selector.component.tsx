@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField'
 import InputAdornment from '@mui/material/InputAdornment'
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete'
 
-import { Chain } from 'types/chain'
+import { DepcrecatedChainType } from 'types/chain'
 import { useChainCtx } from 'contexts/chain'
 import { withCtx } from 'contexts/ctx-factory'
 import { QueryCtxProvider } from 'contexts/query'
@@ -13,7 +13,7 @@ import { useChangeChainAction } from 'actions/change-chain'
 
 import { State } from './chain-selector.state'
 
-const filterOptions = createFilterOptions<Chain>({
+const filterOptions = createFilterOptions<DepcrecatedChainType>({
   stringify: (chain) => `${chain.chainId} ${chain.chainId.toString(16)} ${chain.name}`,
 });
 

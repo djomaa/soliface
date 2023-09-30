@@ -8,7 +8,7 @@ import Tooltip from '@mui/material/Tooltip';
 import CircularProgress from '@mui/material/CircularProgress';
 
 import { useWeb3 } from 'contexts/chain'
-import { safeAsync } from 'helpers/safe';
+import { safe } from 'helpers/safe';
 import { useLogger } from 'hooks/use-logger';
 import { useIsMounted } from 'hooks/use-is-mounted';
 
@@ -27,7 +27,7 @@ export const GasPriceInput: React.FC = () => {
     const logger = Logger.sub('fetch');
     logger.debug('Started');
     assert(web3);
-    const [error, gasPrice] = await safeAsync(() => web3.eth.getGasPrice());
+    const [error, gasPrice] = await safe(() => web3.eth.getGasPrice());
     logger.debug('Fetched', { gasPrice, error })
     if (!isMounted) {
       logger.debug('Not mounted');

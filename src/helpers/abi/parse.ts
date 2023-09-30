@@ -1,6 +1,6 @@
 import { AbiItem } from 'types/abi'
 import { SafeError } from 'types/common'
-import { safe, safeObj } from 'helpers/safe'
+import { safeSync, safeObj } from 'helpers/safe'
 
 import { generateAbiSignatureHash } from './signature-hash'
 
@@ -9,7 +9,7 @@ interface DecodeAndValidateAbiResult {
   hash: string
 }
 export function safeAbiFromString(value: string): [undefined, DecodeAndValidateAbiResult] | [SafeError, undefined] {
-  const [jsonError, json] = safe(() => JSON.parse(value))
+  const [jsonError, json] = safeSync(() => JSON.parse(value))
   if (jsonError != null) {
     const error = { message: 'Invalid JSON', details: jsonError.message }
     return [error, undefined]

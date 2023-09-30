@@ -9,7 +9,10 @@ export function safeJsonParse(obj: string) {
   }
 }
 
-export function safe<
+/**
+ * @deprecated
+ */
+export function safeSync<
   T extends TypedFunction,
 >(
   fn: T,
@@ -24,7 +27,13 @@ export function safe<
   }
 }
 
+/**
+ * @deprecated
+ */
 export type SafeObj<T> = { result: T, error: null } | { result: null, error: Error };
+/**
+ * @deprecated
+ */
 export function safeObj<
   T extends TypedFunction,
 >(
@@ -39,6 +48,9 @@ export function safeObj<
   }
 }
 
+/**
+ * @deprecated
+ */
 export function safeValue<
   TReturn,
   T extends TypedFunction<[], TReturn>
@@ -46,11 +58,15 @@ export function safeValue<
   fn: TypedFunction,
   ...args: Parameters<T>
 ): ReturnType<T> | undefined {
-  const [, value] = safe(fn, ...args)
+  const [, value] = safeSync(fn, ...args)
 
   return value
 }
 
+
+/**
+ * @deprecated
+ */
 export async function safeObjAsync<
   T extends TypedFunction,
 >(
@@ -65,7 +81,11 @@ export async function safeObjAsync<
   }
 }
 
-export async function safeAsync<
+
+/**
+ * @deprecated
+ */
+export async function safe<
   TErr extends Error,
   TFn extends TypedFunction,
 >(

@@ -1,9 +1,9 @@
-import { Chain } from 'types/chain'
+import { DepcrecatedChainType } from 'types/chain'
 
 export interface ISwitchChainConnector {
-  setChain: (chain: Chain) => Promise<void>
+  setChain: (chain: DepcrecatedChainType) => Promise<void>
 }
 
 export interface IAddChainConnector {
-  addChain: (chain: Chain) => Promise<void>
+  addChain: (chain: DepcrecatedChainType) => Promise<void>
 }

@@ -22,6 +22,7 @@ import { reactLazyComponent } from 'libs/react-dynamic-load';
 import { AnalyticsCtxProvider, useAnalytics } from 'contexts/analytics'
 
 import 'react-toastify/dist/ReactToastify.css';
+import { DbProvider } from 'contexts/db/db.ctx-provider';
 
 
 const Layout: React.FC = () => {
@@ -38,14 +39,16 @@ const Layout: React.FC = () => {
     <>
       <CssBaseline />
       <StorageCtxProvider>
-        <main>
-          <PageComponents />
-          <PageContainer>
-            <Cookies />
-            <Outlet />
-          </PageContainer>
-        </main>
-        <ModalContainer />
+        <DbProvider>
+          <main>
+            <PageComponents />
+            <PageContainer>
+              <Cookies />
+              <Outlet />
+            </PageContainer>
+          </main>
+          <ModalContainer />
+        </DbProvider>
       </StorageCtxProvider >
       <ToastContainer
         position="bottom-left"

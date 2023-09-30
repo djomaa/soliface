@@ -12,7 +12,7 @@ import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 
-import { Chain } from 'types/chain'
+import { DepcrecatedChainType } from 'types/chain'
 import { JsonBox } from 'components/json-box'
 
 import { DataElement } from './data'
@@ -60,7 +60,7 @@ const TabLabel: Record<TabValue, string> = {
 
 const Tabs = Object.entries(TabLabel) as Array<[value: string, label: string]>
 
-export const Data: React.FC<Chain> = (chain: Chain) => {
+export const Data: React.FC<DepcrecatedChainType> = (chain: DepcrecatedChainType) => {
   const [tab, setTab] = useState<TabValue>(TabValue.Data)
 
   const icon = React.useMemo(() => {

@@ -3,7 +3,7 @@ import { useCallback } from 'react'
 import { useChainCtx } from 'contexts/chain'
 
 import { useLogger } from 'hooks/use-logger'
-import { Chain } from 'types/chain'
+import { DepcrecatedChainType } from 'types/chain'
 import { useStoreCtx } from 'contexts/store'
 import { useDefaultRpc } from 'hooks/use-default-rpc'
 import { modal } from 'libs/modals'
@@ -17,7 +17,7 @@ export const useChangeChainAction = () => {
   const chainCtx = useChainCtx();
   const storeCtx = useStoreCtx();
 
-  const changeChain = useCallback(async (chain: Chain) => {
+  const changeChain = useCallback(async (chain: DepcrecatedChainType) => {
     const storeKey = useDefaultRpc.key(chain.chainId);
     let defaultRpc = storeCtx.getState(storeKey);
     if (!defaultRpc) {
