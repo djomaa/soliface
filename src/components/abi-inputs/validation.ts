@@ -53,6 +53,9 @@ export function createInputSchema(input: AbiInput): yup.Schema {
     return createStructSchema(input);
   }
   if (!isArray && !hasChildren) {
+    if (input.type === 'bool') {
+      return yup.bool().required();
+    }
     return yup.string().required();
   }
 
